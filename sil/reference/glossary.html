@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Глоссарий — Функциональная безопасность, SIL, ПАЗ</title>
 <link rel="stylesheet" href="../assets/course.css">
@@ -18,8 +18,8 @@
 
 <p>Этот документ — единый источник терминологии курса. Все уроки используют эти термины
 в точности так, как здесь. Определения опираются на
-<a class="print-url" href="https://meganorm.ru/mega_doc/norm/gost-r_gosudarstvennyj-standart/22/gost_r_mek_61511-1-2011_natsionalnyy_standart_rossiyskoy.html">ГОСТ Р МЭК 61511-1-2011</a>
-(разд. 3) и <a class="print-url" href="https://www.ida.liu.se/~simna73/teaching/SCRTS/IEC61508_Guide.pdf">гид IEC по МЭК 61508</a>.</p>
+<a class="print-url" href="../materials/gost-r-mek-61511-1-2011.pdf">ГОСТ Р МЭК 61511-1-2011</a>
+(разд. 3) и <a class="print-url" href="../materials/iec-61508-basic-guide.pdf">гид IEC по МЭК 61508</a> — обе копии на нашем сервере, в <a href="../materials/">materials/</a>.</p>
 
 <h2>Базовые понятия</h2>
 <dl class="gloss">
@@ -74,7 +74,7 @@
 <p>Приборы на схемах автоматизации подписывают буквами: первая — измеряемая величина, дальше — функции прибора;
 цифры внизу — позиция (номер контура). Например, <strong>PIAH-101</strong> читается как «давление · показывающий ·
 сигнализация · верхний предел, контур 101». Полные правила — в
-<a class="print-url" href="https://meganorm.ru/Data/566/56652.pdf">ГОСТ 21.208-2013</a>
+<a class="print-url" href="../materials/gost-21.208-2013.pdf">ГОСТ 21.208-2013</a>
 (табл. 2, пп. 5.8–5.11, прил. Б; <a href="https://normativ.kontur.ru/document?documentId=391807&amp;moduleId=9">текст в Контур.Норматив</a>).
 Ниже — сокращённая выжимка, нужная для чтения ПАЗ-схем и SIL-документов.</p>
 
@@ -174,6 +174,12 @@
   <dt id="lopa">LOPA <span class="en">(layer of protection analysis)</span></dt>
   <dd>Полуколичественный анализ защитных слоёв: частота инициатора × факторы всех независимых слоёв = остаточная частота. Не хватает до допустимой — разница задаёт требуемый SIL.</dd>
 
+  <dt id="initiator">Инициирующее событие <span class="en">(initiating event)</span></dt>
+  <dd>Отказ или внешнее воздействие, которое <em>запускает</em> сценарий аварии: отказ регулятора, потеря энергии, ошибка оператора. Характеризуется частотой (1/год); с него начинается любая LOPA.</dd>
+
+  <dt id="target">Допустимая частота <span class="en">(tolerable frequency)</span></dt>
+  <dd>Корпоративный критерий приемлемого риска для данного типа последствий: максимально допустимая частота сценария (например 1·10⁻⁴/год для тяжёлых выбросов — пример из прил. B ГОСТ Р МЭК 61511-3-2011). Сравнение с ней даёт требуемое снижение риска.</dd>
+
   <dt id="srs">SRS / ТЗ на SIF <span class="en">(safety requirements specification)</span></dt>
   <dd>Технические требования к функции безопасности: что измеряем, при каком значении, что закрываем/останавливаем, за какое время, с каким SIL, как проверяем.</dd>
 
@@ -195,7 +201,7 @@
 
 <footer class="lesson-nav">
   <a href="../lessons/0001-zachem-sil-sloi-zashchity-i-sif.html">← Урок 1: зачем SIL</a>
-  <a class="next" href="#">Глоссарий пополняется с уроками</a>
+  <a class="next" href="../lessons/0002-kak-naznachayut-sil-lopa.html">Урок 2: как назначают SIL →</a>
 </footer>
 </main>
 </body>

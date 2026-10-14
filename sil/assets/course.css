@@ -114,6 +114,60 @@ code, .mono {
   border-radius: 4px;
 }
 
+
+/* lopa calculator */
+.lopa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+@media (max-width: 640px) { .lopa-grid { grid-template-columns: 1fr; } }
+.lopa-field { display: block; margin-bottom: 0.9rem; }
+.lopa-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.lopa-select {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--fg);
+}
+.lopa-ipls { display: grid; gap: 0.4rem; }
+.lopa-ipl {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.lopa-out {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 0.9rem 1rem;
+}
+.lopa-line { margin-bottom: 0.55rem; font-size: 0.95rem; }
+.lopa-line strong { font-size: 1.05rem; }
+.lopa-line-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lopa-formula-wrap { margin: 0.2rem 0 0.7rem; }
+.lopa-formula { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); }
+.lopa-sil { color: var(--accent); }
+.lopa-sil-line strong { font-size: 1.25rem; }
+.lopa-note { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin-left: 0.4rem; }
 hr {
   border: none;
   border-top: 1px solid var(--border);
