@@ -158,8 +158,8 @@
       state.ipls.forEach(function (it) {
         if (it.on) { pfd *= it.cfg.pfd; names.push(it.cfg.label + " (" + it.cfg.pfd + ")"); }
       });
-      var fres = state.fInit * pfd;
-      var rrf = fres / state.target;
+      var fres = Number((state.fInit * pfd).toPrecision(6));
+      var rrf = Number((fres / state.target).toPrecision(6));
       var sil = silOf(rrf);
       vRes.textContent = fmt(fres) + " /год";
       formula.textContent = fmt(state.fInit) +
