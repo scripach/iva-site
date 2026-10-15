@@ -168,6 +168,10 @@ code, .mono {
 .lopa-sil { color: var(--accent); }
 .lopa-sil-line strong { font-size: 1.25rem; }
 .lopa-note { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin-left: 0.4rem; }
+
+/* pfd calculator: verdict colors (layout reuses .lopa-*) */
+.pfd-verdict.ok { color: var(--success); }
+.pfd-verdict.bad { color: var(--error); }
 hr {
   border: none;
   border-top: 1px solid var(--border);
