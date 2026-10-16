@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Глоссарий — Функциональная безопасность, SIL, ПАЗ</title>
 <link rel="stylesheet" href="../assets/course.css">
@@ -157,7 +156,16 @@
   <dd>Запрос на защиту возникает реже раза в год (процессная отрасль — почти всегда так). Метрика — PFD. Высокий спрос (чаще раза в год) — метрика PFH.</dd>
 
   <dt id="hft">HFT <span class="en">(hardware fault tolerance)</span></dt>
-  <dd>Отказоустойчивость: сколько отказов аппаратуры функция выдерживает, не теряя способность выполнить защиту. 1oo2 → HFT = 1.</dd>
+  <dd>Отказоустойчивость: сколько отказов аппаратуры функция выдерживает, не теряя способность выполнить защиту. Для голосованной группы <a href="#moon">MooN</a>: HFT = N − M, то есть 1oo2 и 2oo3 → HFT = 1, а 1oo1 и 2oo2 → HFT = 0.</dd>
+
+  <dt id="moon">Архитектура MooN <span class="en">(M-out-of-N voting)</span></dt>
+  <dd>Голосованная группа из N каналов: защитное действие выполняется, когда «за» проголосовало не менее M каналов. 1oo2 — по любому из двух (PFD ≈ p², ложные ×2), 2oo2 — только по обоим, 2oo3 — по любым двум из трёх (PFD ≈ 3p², ложные редко) — рабочая архитектура для SIL 2–3.</dd>
+
+  <dt id="spurious-trip">Ложное срабатывание <span class="en">(spurious trip)</span></dt>
+  <dd>Срабатывание защиты без опасности: остановка производства по отказу в безопасную сторону. Экономический ущерб и угроза доверию персонала к ПАЗ; растёт с числом каналов в архитектурах 1ooN.</dd>
+
+  <dt id="ccf">Отказ по общей причине <span class="en">(CCF — common cause failure)</span></dt>
+  <dd>Один дефект, отключающий сразу несколько резервированных каналов: общая импульсная линия, питание, ошибка конфигурации. Ограничивает выигрыш резервирования (идеальные p² на практике не будет); учитывается β-фактором, типично 5–10% для полевых датчиков.</dd>
 
   <dt id="dc">Коэффициент диагностики <span class="en">(DC — diagnostic coverage)</span></dt>
   <dd>Доля опасных отказов, выявляемых автоматической самодиагностикой. Чем выше DC, тем ниже PFD и слабее архитектурные ограничения.</dd>
@@ -207,7 +215,7 @@
 
 <footer class="lesson-nav">
   <a href="../lessons/0001-zachem-sil-sloi-zashchity-i-sif.html">← Урок 1: зачем SIL</a>
-  <a class="next" href="../lessons/0002-kak-naznachayut-sil-lopa.html">Урок 2: как назначают SIL →</a>
+  <a class="next" href="../lessons/0004-arhitektury-moon-golosovanie-i-hft.html">Урок 4: архитектуры MooN и HFT →</a>
 </footer>
 </main>
 </body>
