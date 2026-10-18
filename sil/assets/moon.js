@@ -158,7 +158,9 @@
         "p = λ<sub>DU</sub>·TI/2 = <strong>" + fmt(p) + "</strong>"));
       out.appendChild(line("Отказоустойчивость HFT = N − M",
         "<strong>" + a.hft + "</strong>" +
-        (a.hft === 0 ? " — любой отказ канала глушит SIF" : " — держит " + a.hft + " отказ(а) каналов")));
+        (a.hft === 0 ? " — любой отказ канала глушит SIF"
+                     : a.hft === 1 ? " — держит один отказ канала"
+                                   : " — держит " + a.hft + " отказа")));
       out.appendChild(line("PFD<sub>avg</sub> узла",
         "<strong>" + fmt(pfd) + "</strong>" +
         ' <span class="lopa-note">формула: ' + (FORMULAS[a.id] || "Σ C(n,k)·pᵏ") +
@@ -167,19 +169,23 @@
       var band = F.bandOf(rrf);
       out.appendChild(line("Полоса по PFD (без HFT)",
         '<span class="lopa-sil"><strong>' + silOf(rrf) + '</strong></span>' +
+        (band === 4 ? ' <span class="lopa-note">вне рамок курса</span>' : "") +
         ' <span class="lopa-note">число вероятности, структура — ниже</span>'));
 
-      var need = F.hftField(band);
+      /* Table 6 fixes the minimum HFT by the SIL of the SIF, i.e. by the
+         target from LOPA — not by the band the node happens to reach: a node
+         whose PFD is better than required must not be failed by the gate. */
+      var need = F.hftField(F.bandOf(target));
       var gateText = need === null
-        ? '<span class="pfd-verdict bad">SIL 4 — вне рамок курса</span>'
+        ? '<span class="pfd-verdict bad">целевой SIL 4 — вне рамок курса</span>'
         : (a.hft >= need
             ? '<span class="pfd-verdict ok">проходит: HFT ' + a.hft + " ≥ " + need + "</span>"
             : '<span class="pfd-verdict bad">не проходит: HFT ' + a.hft + " &lt; " + need + "</span>");
       out.appendChild(line("Структурный гейт (полевой узел, табл. 6)",
         gateText +
         ' <span class="lopa-note">' + (need === null
-          ? "для SIL 4 стандарт отправляет к МЭК 61508"
-          : "для SIL " + band + " нужно HFT " + need +
+          ? "для целевого SIL 4 стандарт отправляет к МЭК 61508"
+          : "для целевого SIL " + F.bandOf(target) + " нужно HFT " + need +
             (a.hft === 1 && need === 2 ? "; 11.4.4 допускает HFT 1 при четырёх условиях" : "")) + "</span>"));
       out.appendChild(line("Ложные срабатывания", a.spurious));
 
@@ -190,7 +196,7 @@
             : '<span class="pfd-verdict bad">не выполняется</span>')));
       out.appendChild(el("div", "lopa-formula-wrap",
         '<span class="lopa-formula">SIF проходит на требуемый SIL, только если выполнены ОДНОВРЕМЕННО ' +
-        "и вероятность (RRF), и структурные ограничения по HFT — см. урок, §3.</span>"));
+        "и\u00a0вероятность (RRF), и\u00a0структурные ограничения по\u00a0HFT — см. урок, §3.</span>"));
     }
 
     recalc();
