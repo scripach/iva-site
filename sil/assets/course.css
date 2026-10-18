@@ -237,6 +237,12 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 60%, tr
 
 figure { margin: 1.6rem 0; text-align: center; }
 figure svg { max-width: 100%; height: auto; }
+@media (max-width: 640px) {
+  /* Scaled to a 300px column the SVG labels fall to ~5px. Let the diagram
+     keep a readable size and scroll inside the figure instead. */
+  figure { overflow-x: auto; }
+  figure svg { min-width: 700px; }
+}
 figcaption {
   font-family: var(--sans);
   font-size: 0.82rem;
