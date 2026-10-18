@@ -17,8 +17,10 @@
   "use strict";
 
   function jsonOf(root) {
+    if (root.__quizData !== undefined) return root.__quizData;   /* survives the retry re-render */
     var s = root.querySelector('script[type="application/json"]');
-    return s ? JSON.parse(s.textContent) : null;
+    root.__quizData = s ? JSON.parse(s.textContent) : null;
+    return root.__quizData;
   }
 
   var LETTERS = ["а", "б", "в", "г", "д"];
@@ -27,6 +29,7 @@
     var data = jsonOf(root);
     if (!data) return;
     root.innerHTML = "";
+    root.classList.add("widget");
 
     if (data.title) {
       var t = document.createElement("p");
@@ -78,6 +81,7 @@
 
       var ex = document.createElement("div");
       ex.className = "q-explain";
+      ex.setAttribute("aria-live", "polite");
       item.appendChild(ex);
 
       function answer(j) {
@@ -103,6 +107,7 @@
 
     var result = document.createElement("div");
     result.className = "q-result";
+    result.setAttribute("aria-live", "polite");
     root.appendChild(result);
 
     function finish() {
@@ -120,7 +125,10 @@
       again.className = "btn";
       again.style.marginLeft = "0.8rem";
       again.textContent = "Пройти ещё раз";
-      again.addEventListener("click", function () { render(root); });
+      again.addEventListener("click", function () {
+        render(root);
+        if (root.scrollIntoView) root.scrollIntoView({ block: "start", behavior: "smooth" });
+      });
       result.appendChild(document.createTextNode(" "));
       result.appendChild(again);
     }

@@ -33,31 +33,18 @@
     return s ? JSON.parse(s.textContent) : null;
   }
 
-  function fmt(x) {
-    if (x === 0) return "0";
-    var e = Math.floor(Math.log10(x));
-    if (e >= -1) return x.toFixed(e >= 2 ? 0 : 2);
-    var m = x / Math.pow(10, e);
-    return m.toFixed(1).replace(/\.0$/, "") + "·10" + sup(e);
-  }
-  function sup(n) {
-    var map = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
-    return String(n).split("").map(function (c) { return map[c] || c; }).join("");
-  }
+  var F = window.SilFmt;
+  var fmt = F.fmt;
+  var fmtRRF = F.rrf;
 
   /* SIL band by achieved RRF; boundaries read as “RRF ≥ 100 ⇒ SIL 2”. */
-  function silOf(rrf) {
-    if (rrf >= 10000) return { sil: "SIL 4", note: "RRF ≥ 10 000" };
-    if (rrf >= 1000)  return { sil: "SIL 3", note: "RRF 1 000–10 000" };
-    if (rrf >= 100)   return { sil: "SIL 2", note: "RRF 100–1 000" };
-    if (rrf >= 10)    return { sil: "SIL 1", note: "RRF 10–100" };
-    return { sil: "—", note: "RRF < 10 — вне шкалы SIL" };
-  }
+  function silOf(rrf) { return F.silOf(rrf); }
 
   function render(root) {
     var cfg = jsonOf(root);
     if (!cfg) return;
     root.innerHTML = "";
+    root.classList.add("widget");
 
     var title = document.createElement("p");
     title.className = "widget-title";
@@ -124,6 +111,7 @@
     /* ---- output ---- */
     var out = document.createElement("div");
     out.className = "lopa-out";
+    out.setAttribute("aria-live", "polite");
     right.appendChild(out);
 
     function line(cls, label, valueEl) {
@@ -163,7 +151,7 @@
       formula.textContent = pfds.map(function (p) { return fmt(Number(p.toPrecision(6))); }).join(" + ") +
         " = " + fmt(sum) + "   (каждая ветвь: λ_DU·TI/2)";
       vSum.textContent = fmt(sum);
-      vRRF.textContent = "RRF ≈ " + (rrf >= 10 ? fmt(rrf) : rrf.toFixed(1));
+      vRRF.textContent = "RRF ≈ " + (rrf >= 10 ? fmtRRF(rrf) : fmt(rrf));
       vSil.textContent = sil.sil;
       vNote.textContent = "— " + sil.note;
       verdictLine.firstChild.textContent = "Требуется PFD ≤ " + fmt(Number(need.toPrecision(6))) +

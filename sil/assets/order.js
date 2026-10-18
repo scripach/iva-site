@@ -35,6 +35,7 @@
     if (!data) return;
     var correct = data.items;           // authored order == correct order
     root.innerHTML = "";
+    root.classList.add("widget");
 
     var title = document.createElement("p");
     title.className = "widget-title";
@@ -52,6 +53,7 @@
 
     var fb = document.createElement("p");
     fb.className = "order-feedback";
+    fb.setAttribute("role", "status");
     root.appendChild(fb);
 
     var resetBtn = document.createElement("button");

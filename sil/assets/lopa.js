@@ -23,31 +23,20 @@
     return s ? JSON.parse(s.textContent) : null;
   }
 
-  function fmt(x) {
-    if (x === 0) return "0";
-    var e = Math.floor(Math.log10(x));
-    if (e >= -1) return x.toFixed(e >= 2 ? 0 : 2);
-    var m = x / Math.pow(10, e);
-    return m.toFixed(1).replace(/\.0$/, "") + "·10" + sup(e);
-  }
-  function sup(n) {
-    var map = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
-    return String(n).split("").map(function (c) { return map[c] || c; }).join("");
-  }
+  var F = window.SilFmt;
+  var fmt = F.fmt;
+  var fmtRRF = F.rrf;
 
   function silOf(rrf) {
-    if (rrf <= 1)   return { sil: "—", note: "снижение риска не требуется" };
-    if (rrf <= 10)  return { sil: "SIL не нормируется (< 10)", note: "обычная блокировка достаточна" };
-    if (rrf <= 100) return { sil: "SIL 1", note: "RRF 10–100" };
-    if (rrf <= 1000) return { sil: "SIL 2", note: "RRF 100–1 000" };
-    if (rrf <= 10000) return { sil: "SIL 3", note: "RRF 1 000–10 000" };
-    return { sil: "SIL 4 / пересмотр", note: "RRF > 10 000 — в процессной отрасли обычно пересматривают процесс, а не строят SIF" };
+    if (rrf <= 1) return { sil: "—", note: "снижение риска не требуется" };
+    return F.silOf(rrf);
   }
 
   function render(root) {
     var cfg = jsonOf(root);
     if (!cfg) return;
     root.innerHTML = "";
+    root.classList.add("widget");
 
     var title = document.createElement("p");
     title.className = "widget-title";
@@ -81,10 +70,15 @@
       return g;
     }
 
+    function picked(list) {
+      var hit = list.filter(function (o) { return o.selected; })[0];
+      return hit || list[0];
+    }
+
     var state = {
-      fInit: cfg.fInit.options[0].v,
+      fInit: picked(cfg.fInit.options).v,
       ipls: cfg.ipls.map(function (i) { return { cfg: i, on: !!i.checked }; }),
-      target: cfg.targets[0].v
+      target: picked(cfg.targets).v
     };
 
     var gF = group(left, cfg.fInit.label || "Инициирующее событие");
@@ -94,6 +88,7 @@
       var op = document.createElement("option");
       op.value = String(o.v);
       op.textContent = o.label;
+      if (o.selected) op.selected = true;
       selF.appendChild(op);
     });
     selF.addEventListener("change", function () { state.fInit = parseFloat(selF.value); update(); });
@@ -106,6 +101,7 @@
       var op = document.createElement("option");
       op.value = String(o.v);
       op.textContent = o.label;
+      if (o.selected) op.selected = true;
       selT.appendChild(op);
     });
     selT.addEventListener("change", function () { state.target = parseFloat(selT.value); update(); });
@@ -122,7 +118,7 @@
       cb.checked = it.on;
       cb.addEventListener("change", function () { state.ipls[idx].on = cb.checked; update(); });
       lab.appendChild(cb);
-      lab.appendChild(document.createTextNode(it.cfg.label + " (PFD " + it.cfg.pfd + ")"));
+      lab.appendChild(document.createTextNode(it.cfg.label + " (PFD " + fmt(it.cfg.pfd) + ")"));
       box.appendChild(lab);
     });
     gI.appendChild(box);
@@ -130,6 +126,7 @@
     /* ---- output ---- */
     var out = document.createElement("div");
     out.className = "lopa-out";
+    out.setAttribute("aria-live", "polite");
     right.appendChild(out);
 
     function line(cls, label, valueEl) {
@@ -154,18 +151,19 @@
 
     function update() {
       var pfd = 1;
-      var names = [];
+      var parts = [];
       state.ipls.forEach(function (it) {
-        if (it.on) { pfd *= it.cfg.pfd; names.push(it.cfg.label + " (" + it.cfg.pfd + ")"); }
+        if (it.on) { pfd *= it.cfg.pfd; parts.push(fmt(it.cfg.pfd)); }
       });
       var fres = Number((state.fInit * pfd).toPrecision(6));
       var rrf = Number((fres / state.target).toPrecision(6));
       var sil = silOf(rrf);
       vRes.textContent = fmt(fres) + " /год";
       formula.textContent = fmt(state.fInit) +
-        (names.length ? " × " + names.map(function (n) { return n.match(/\(([^)]+)\)/)[1]; }).join(" × ") : "") +
+        (parts.length ? " × " + parts.join(" × ") : "") +
         " = " + fmt(fres) + " /год";
-      vF.textContent = fmt(fres) + " / " + fmt(state.target) + " = RRF " + (rrf >= 10 ? fmt(rrf) : rrf.toFixed(1));
+      vF.textContent = fmt(fres) + " / " + fmt(state.target) + " = RRF " +
+        (rrf >= 10 ? fmtRRF(rrf) : fmt(rrf));
       vSil.textContent = sil.sil;
       vNote.textContent = "— " + sil.note;
     }

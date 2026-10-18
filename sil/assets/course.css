@@ -13,7 +13,7 @@
   --accent-soft: #e7eff5;
   --success: #1e7a3c;
   --success-soft: #e9f4ec;
-  --warning: #8a6d1a;
+  --warning: #7d6213;
   --warning-soft: #f7f0dc;
   --error: #a03030;
   --error-soft: #f8eaea;
@@ -226,6 +226,12 @@ th {
   border-bottom: 2px solid var(--border);
 }
 tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 60%, transparent); }
+
+/* Wide tables scroll inside their own box instead of widening the page.
+   display:block keeps the column widths; the page itself never overflows. */
+@media (max-width: 640px) {
+  table { display: block; overflow-x: auto; }
+}
 
 /* ---------- figures ---------- */
 
@@ -442,9 +448,23 @@ footer.lesson-nav .next { margin-left: auto; font-weight: 600; }
           --success-soft: #fff; --warning: #6b5510; --warning-soft: #fff;
           --error: #7a2020; --error-soft: #fff; }
   body { font-size: 11pt; padding: 0; background: #fff; }
-  .widget, .ask-teacher, .screen-only { display: none !important; }
+  .ask-teacher { display: none !important; }
+  /* Widgets print as read-only sheets: task text, quiz options and the
+     live summary stay; anything you can click or choose does not. */
+  .widget { border: none; background: none; padding: 0; margin: 1rem 0; }
+  .widget select, .widget input, .widget .btn, .widget .lopa-formula-wrap { display: none !important; }
+  .widget .lopa-field { display: none !important; }
+  .lopa-grid { display: block; }
+  .lopa-out { border-left: 2px solid var(--border); padding-left: 0.8rem; }
+  .q-opt {
+    display: block; border: none; background: none; padding: 0.1rem 0;
+    cursor: auto; font-size: 0.95rem;
+  }
+  .q-opt.correct, .q-opt.incorrect, .q-opt.reveal { background: none; border: none; }
+  .q-opt.incorrect { text-decoration: line-through; }
+  .order-slot { border: none; background: none; padding: 0.1rem 0; cursor: auto; }
   a { color: inherit; text-decoration: none; }
   .print-url::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #444; }
   h2 { break-after: avoid; }
-  table, figure { break-inside: avoid; }
+  table, figure, .widget { break-inside: avoid; }
 }

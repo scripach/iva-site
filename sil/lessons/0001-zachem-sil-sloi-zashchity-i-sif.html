@@ -9,9 +9,9 @@
 <body>
 <main>
 <header class="lesson-head">
-  <p class="kicker">Урок 1 · ~12 минут</p>
+  <p class="kicker">Урок 1 · 5 минут чтения + практика</p>
   <h1>Зачем SIL: риск, слои защиты и место ПАЗ</h1>
-  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефттегаз / МЭК 61511</p>
+  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
 </header>
 
 <div class="note">
@@ -42,24 +42,42 @@
 от удержания нормы в центре до ликвидации последствий снаружи. Классическая картинка — «луковица»:</p>
 
 <figure>
-<svg viewBox="0 0 760 430" role="img" aria-label="Луковица защитных слоёв: от технологического процесса в центре до планов ликвидации снаружи">
-  <path d="M 75 400 A 305 305 0 0 1 685 400" fill="var(--success)" opacity="0.35" stroke="var(--border)"/>
-  <path d="M 125 400 A 255 255 0 0 1 635 400" fill="var(--success)" opacity="0.55" stroke="var(--border)"/>
-  <path d="M 175 400 A 205 205 0 0 1 585 400" fill="var(--warning)" opacity="0.75" stroke="var(--border)"/>
-  <path d="M 225 400 A 155 155 0 0 1 535 400" fill="var(--accent)" opacity="0.55" stroke="var(--border)"/>
-  <path d="M 275 400 A 105 105 0 0 1 485 400" fill="var(--accent)" opacity="0.75" stroke="var(--border)"/>
-  <circle cx="380" cy="400" r="55" fill="var(--accent)" stroke="var(--border)"/>
-  <line x1="75" y1="400" x2="685" y2="400" stroke="var(--border)" stroke-width="2"/>
-  <g font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="var(--fg)" text-anchor="middle" font-weight="400">
-    <text x="380" y="332">Технологический процесс</text>
-    <text x="380" y="282">РСУ: регулирование</text>
-    <text x="380" y="232">Оператор: сигнализация</text>
-    <text x="380" y="182" font-weight="700" font-size="15">ПАЗ / SIS — здесь живёт SIF</text>
-    <text x="380" y="132">Механическая защита: ППК</text>
-    <text x="380" y="82">Локализация последствий, ЛРН</text>
+<svg viewBox="0 0 900 430" role="img" aria-label="Луковица защитных слоёв: от технологического процесса в центре до планов ликвидации снаружи">
+  <!-- cx=300 cy=400: half-annuli; labels sit on the page background to the right -->
+  <path d="M 0 400 A 300 300 0 0 1 600 400 L 550 400 A 250 250 0 0 0 50 400 Z" fill="var(--success)" opacity="0.35" stroke="var(--border)"/>
+  <path d="M 50 400 A 250 250 0 0 1 550 400 L 500 400 A 200 200 0 0 0 100 400 Z" fill="var(--success)" opacity="0.55" stroke="var(--border)"/>
+  <path d="M 100 400 A 200 200 0 0 1 500 400 L 450 400 A 150 150 0 0 0 150 400 Z" fill="var(--warning)" opacity="0.75" stroke="var(--border)"/>
+  <path d="M 150 400 A 150 150 0 0 1 450 400 L 400 400 A 100 100 0 0 0 200 400 Z" fill="var(--accent)" opacity="0.55" stroke="var(--border)"/>
+  <path d="M 200 400 A 100 100 0 0 1 400 400 L 350 400 A 50 50 0 0 0 250 400 Z" fill="var(--accent)" opacity="0.75" stroke="var(--border)"/>
+  <path d="M 250 400 A 50 50 0 0 1 350 400 Z" fill="var(--accent)" stroke="var(--border)"/>
+  <line x1="0" y1="400" x2="600" y2="400" stroke="var(--border)" stroke-width="2"/>
+
+  <g stroke="var(--muted)" stroke-width="1" fill="none">
+    <path d="M 408 120 L 612 120"/>
+    <path d="M 409 175 L 612 175"/>
+    <path d="M 405 230 L 612 230"/>
+    <path d="M 396 285 L 612 285"/>
+    <path d="M 380 340 L 612 340"/>
+    <path d="M 350 395 L 612 395"/>
   </g>
-</svg>
-<figcaption>Слои защиты срабатывают изнутри наружу: чем правее сценарий развивается, тем более «грубые» и независимые барьеры вступают в игру.</figcaption>
+  <g fill="var(--muted)">
+    <circle cx="408" cy="120" r="2.5"/>
+    <circle cx="409" cy="175" r="2.5"/>
+    <circle cx="405" cy="230" r="2.5"/>
+    <circle cx="396" cy="285" r="2.5"/>
+    <circle cx="380" cy="340" r="2.5"/>
+    <circle cx="350" cy="395" r="2.5"/>
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="var(--fg)" text-anchor="start">
+    <text x="620" y="125">Локализация последствий, ЛРН</text>
+    <text x="620" y="180">Механическая защита: ППК</text>
+    <text x="620" y="235" font-weight="700" font-size="15">ПАЗ / SIS — здесь живёт SIF</text>
+    <text x="620" y="290">Оператор: сигнализация</text>
+    <text x="620" y="345">РСУ: регулирование</text>
+    <text x="620" y="400">Технологический процесс</text>
+  </g></svg>
+<figcaption>Слои защиты срабатывают изнутри наружу: чем дальше от центра развивается сценарий, тем более «грубые» и независимые барьеры вступают в игру.</figcaption>
 </figure>
 
 <table>
@@ -67,11 +85,11 @@
     <tr><th>Слой</th><th>Что делает при росте давления</th><th>Автоматика?</th></tr>
   </thead>
   <tbody>
-    <tr><td>Технологический процесс</td><td>Само оборудование рассчитано на запас до 10 бар</td><td>—</td></tr>
-    <tr><td>РСУ (БСУ)</td><td>Регулятор сбрасывает давление, всплывает обратное действие</td><td>да</td></tr>
-    <tr><td>Оператор + сигнализация</td><td><a href="../reference/glossary.html#letter-codes">PIAH</a> сработала — оператор по регламенту открывает сброс</td><td>нет</td></tr>
-    <tr><td><strong>ПАЗ (SIS)</strong></td><td><strong>SIF: <a href="../reference/glossary.html#letter-codes">PSHH</a> &gt; уставки → закрыть отсечные клапаны, остановить подачу</strong></td><td><strong>да</strong></td></tr>
-    <tr><td>ППК (механика)</td><td>Предохранительный клапан сбрасывает давление в факел</td><td>нет</td></tr>
+    <tr><td>Технологический процесс</td><td>Аппарат рассчитан на 10 бар; рабочее давление — 6 бар</td><td>—</td></tr>
+    <tr><td>РСУ (БСУ)</td><td>Регулятор держит 6 бар: приоткрывает сброс, когда давление растёт</td><td>да</td></tr>
+    <tr><td>Оператор + сигнализация</td><td><a href="../reference/glossary.html#letter-codes">PIAH</a>-101 на 7,5 бар: оператор по регламенту открывает ручной сброс</td><td>нет</td></tr>
+    <tr><td><strong>ПАЗ (SIS)</strong></td><td><strong>SIF: <a href="../reference/glossary.html#letter-codes">PSHH</a>-101 &gt; 8 бар → закрыть отсечные клапаны, остановить подачу</strong></td><td><strong>да</strong></td></tr>
+    <tr><td>ППК (механика)</td><td>Предохранительный клапан на 10,5 бар сбрасывает в факел — последний рубеж</td><td>нет</td></tr>
     <tr><td>Локализация, ЛРН</td><td>Дамба удерживает разлив, орошение, планы ликвидации</td><td>нет</td></tr>
   </tbody>
 </table>
@@ -91,8 +109,8 @@
 
 <p>По <a class="print-url" href="../materials/gost-r-mek-61511-1-2011.pdf">ГОСТ Р МЭК 61511-1-2011</a>:</p>
 <ul>
-  <li><a href="../reference/glossary.html#sis"><strong>СИС / ПАЗ</strong></a> — приборная система безопасности: отдельные датчики, отдельный логический преобразователь, отдельные исполнительные механизмы, чья задача — перевести процесс в безопасное состояние;</li>
-  <li><a href="../reference/glossary.html#sif"><strong>SIF</strong></a> — одна функция этой системы с <em>назначенным уровнем полноты безопасности</em>: «по <a href="../reference/glossary.html#letter-codes">PSHH</a>-101 &gt; 12 бар закрыть XV-101/102, остановить P-101 — SIL 2».</li>
+  <li><a href="../reference/glossary.html#sis"><strong>ПСБ (SIS) / ПАЗ</strong></a> — приборная система безопасности: отдельные датчики, отдельный логический преобразователь, отдельные исполнительные механизмы, чья задача — перевести процесс в безопасное состояние;</li>
+  <li><a href="../reference/glossary.html#sif"><strong>SIF</strong></a> — одна функция этой системы с <em>назначенным уровнем полноты безопасности</em>: «по <a href="../reference/glossary.html#letter-codes">PSHH</a>-101 &gt; 8 бар закрыть XV-101/102, остановить P-101 — SIL 2».</li>
 </ul>
 
 <p>Вы пишете блокировки в РСУ каждый день. Чем SIF принципиально отличается от привычной техблокировки?</p>
@@ -233,8 +251,9 @@
 <div class="primary-source">
   <p class="widget-title">Первоисточник к уроку · прочитать</p>
   <p><a class="print-url" href="../materials/iec-61508-basic-guide.pdf">IEC: «Functional safety and IEC 61508 — A basic guide»</a> —
-  официальный бесплатный гид МЭК (~30 стр.). Читать: разделы про риск, защитные слои и жизненный цикл.
-  Это каркас, на который ляжет всё дальнейшее. Копия — на нашем сервере.</p>
+  официальный бесплатный гид МЭК, 11 страниц. Читать: §2 «Functional safety» (что такое функция безопасности),
+  §3.4 «Safety integrity levels» и §3.8 (жизненный цикл). Это каркас, на который ляжет всё дальнейшее.
+  Копия — на нашем сервере.</p>
   <p class="src">По-русски, ближе к практике ПАЗ: <a class="print-url" href="../materials/zhukov-sil-analiz-paz.pdf">Жуков И.С., SIL-анализ систем ПАЗ на нефтегазовых ОПО</a>.</p>
 </div>
 
@@ -249,6 +268,7 @@
   <a class="next" href="0002-kak-naznachayut-sil-lopa.html">Урок 2: как назначают SIL (LOPA) →</a>
 </footer>
 </main>
+<script src="../assets/format.js"></script>
 <script src="../assets/quiz.js"></script>
 <script src="../assets/order.js"></script>
 </body>

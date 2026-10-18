@@ -41,31 +41,11 @@
     return s ? JSON.parse(s.textContent) : null;
   }
 
-  var SUP = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
-              "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
-  function sup(n) { return String(n).split("").map(function (c) { return SUP[c] || c; }).join(""); }
-
-  function fmt(x) {
-    if (!isFinite(x) || x <= 0) return "—";
-    var e = Math.floor(Math.log10(x));
-    var m = x / Math.pow(10, e);
-    var ms = m.toFixed(2).replace(/0+$/, "").replace(/\.$/, "").replace(".", ",");
-    return ms + "·10" + sup(e);
-  }
-
-  function fmtRRF(x) {
-    if (!isFinite(x) || x <= 0) return "—";
-    return Math.round(x).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  }
-
-  /* SIL band by achieved RRF; boundaries read as “RRF ≥ 100 ⇒ SIL 2”. */
-  function silOf(rrf) {
-    if (rrf >= 10000) return "SIL 4";
-    if (rrf >= 1000) return "SIL 3";
-    if (rrf >= 100) return "SIL 2";
-    if (rrf >= 10) return "SIL 1";
-    return "ниже SIL 1";
-  }
+  var F = window.SilFmt;
+  var sup = F.sup;
+  var fmt = F.fmt;
+  var fmtRRF = F.rrf;
+  function silOf(rrf) { return F.silOf(rrf).sil; }
 
   function C(n, k) {
     var r = 1;
@@ -111,8 +91,9 @@
     var data = jsonOf(root);
     if (!data) return;
     root.innerHTML = "";
+    root.classList.add("widget");
 
-    var wrap = el("div", "widget");
+    var wrap = el("div", "");
     if (data.title) wrap.appendChild(el("p", "widget-title", data.title));
     if (data.instruction) wrap.appendChild(el("p", "instruction", data.instruction));
 
@@ -147,6 +128,7 @@
     field(null, data.target, "target");
 
     var out = el("div", "lopa-out");
+    out.setAttribute("aria-live", "polite");
     right.appendChild(out);
 
     grid.appendChild(left);
@@ -182,8 +164,23 @@
         ' <span class="lopa-note">формула: ' + (FORMULAS[a.id] || "Σ C(n,k)·pᵏ") +
         (a.ccf ? "; идеализация: каналы независимы, без CCF" : "") + "</span>"));
       out.appendChild(line("RRF узла", "<strong>≈ " + fmtRRF(rrf) + "</strong>"));
-      out.appendChild(line("Достигнутый уровень (по PFD)",
-        '<span class="lopa-sil"><strong>' + silOf(rrf) + "</strong></span>"));
+      var band = F.bandOf(rrf);
+      out.appendChild(line("Полоса по PFD (без HFT)",
+        '<span class="lopa-sil"><strong>' + silOf(rrf) + '</strong></span>' +
+        ' <span class="lopa-note">число вероятности, структура — ниже</span>'));
+
+      var need = F.hftField(band);
+      var gateText = need === null
+        ? '<span class="pfd-verdict bad">SIL 4 — вне рамок курса</span>'
+        : (a.hft >= need
+            ? '<span class="pfd-verdict ok">проходит: HFT ' + a.hft + " ≥ " + need + "</span>"
+            : '<span class="pfd-verdict bad">не проходит: HFT ' + a.hft + " &lt; " + need + "</span>");
+      out.appendChild(line("Структурный гейт (полевой узел, табл. 6)",
+        gateText +
+        ' <span class="lopa-note">' + (need === null
+          ? "для SIL 4 стандарт отправляет к МЭК 61508"
+          : "для SIL " + band + " нужно HFT " + need +
+            (a.hft === 1 && need === 2 ? "; 11.4.4 допускает HFT 1 при четырёх условиях" : "")) + "</span>"));
       out.appendChild(line("Ложные срабатывания", a.spurious));
 
       var ok = rrf >= target;
