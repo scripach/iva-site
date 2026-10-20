@@ -2,12 +2,14 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Урок 1 — Зачем SIL: риск, слои защиты и место ПАЗ</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Урок 1 · 5 минут чтения + практика</p>
   <h1>Зачем SIL: риск, слои защиты и место ПАЗ</h1>
@@ -54,6 +56,7 @@
 от удержания нормы в центре до ликвидации последствий снаружи. Классическая картинка — «луковица»:</p>
 
 <figure>
+<div class="figure-scroll" role="region" aria-label="Схема: Луковица защитных слоёв" tabindex="0">
 <svg viewBox="0 0 900 430" role="img" aria-label="Луковица защитных слоёв: от технологического процесса в центре до планов ликвидации снаружи">
   <!-- cx=300 cy=400: half-annuli; labels sit on the page background to the right -->
   <path d="M 0 400 A 300 300 0 0 1 600 400 L 550 400 A 250 250 0 0 0 50 400 Z" fill="var(--success)" opacity="0.35" stroke="var(--border)"/>
@@ -89,9 +92,11 @@
     <text x="620" y="345">РСУ: регулирование</text>
     <text x="620" y="400">Технологический процесс</text>
   </g></svg>
+</div>
 <figcaption>Слои защиты срабатывают изнутри наружу: чем дальше от центра развивается сценарий, тем грубее барьеры, вступающие в игру, и тем строже требование их независимости.</figcaption>
 </figure>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
   <thead>
     <tr><th>Слой</th><th>Что делает при росте давления</th><th>Автоматика?</th></tr>
@@ -105,6 +110,7 @@
     <tr><td>Локализация, ЛРН</td><td>Дамба удерживает разлив, орошение, планы ликвидации</td><td>нет</td></tr>
   </tbody>
 </table>
+</div>
 
 <div class="key">
   <span class="tag">Ключевая идея урока</span>
@@ -127,6 +133,7 @@
 
 <p>Вы пишете блокировки в РСУ каждый день. Чем SIF принципиально отличается от привычной техблокировки?</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
   <thead>
     <tr><th>Признак</th><th>Техблокировка в РСУ</th><th>SIF в ПАЗ</th></tr>
@@ -140,6 +147,7 @@
     <tr><td>Проверяемость</td><td>По мере необходимости</td><td>Плановые проверки (proof test) с интервалом TI</td></tr>
   </tbody>
 </table>
+</div>
 
 <p class="src">Российская практика: требования ФНП к ПАЗ и опыт SIL-анализа —
 <a class="print-url" href="../materials/zhukov-sil-analiz-paz.pdf">Жуков И. С., «Нормативные требования ПБ и опыт SIL-анализа систем ПАЗ»</a> (копия на нашем сервере).</p>
@@ -152,6 +160,7 @@
 производств (режим низкого спроса) метрика — <a href="../reference/glossary.html#pfd">PFD<sub>avg</sub></a>,
 обратная ей величина — <a href="../reference/glossary.html#rrf">RRF</a>:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
   <thead>
     <tr><th>SIL</th><th>Снижение риска, RRF</th><th>PFD<sub>avg</sub></th><th>Смысл</th></tr>
@@ -162,6 +171,7 @@
     <tr><td>SIL 3</td><td>1 000–10 000</td><td>10<sup>−4</sup> … 10<sup>−3</sup></td><td>Режет риск минимум в 1 000 раз</td></tr>
   </tbody>
 </table>
+</div>
 
 <p>То есть SIL — не «класс качества железа» и не разряд взрывозащиты. Это <strong>категория требуемого
 снижения риска конкретной защитной функции</strong>, которую вы должны подтвердить расчётом.

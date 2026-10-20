@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Справочник · SIL-курс</p>
   <h1>Жизненный цикл и систематические отказы</h1>
@@ -20,6 +21,7 @@
 
 <h2>1. Два вида отказов</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th></th><th>Случайный (random hardware)</th><th>Систематический (systematic)</th></tr>
@@ -31,12 +33,14 @@
 <tr><td>Источник по ГОСТ</td><td>п. 3.2.62 (примечание 2 — предсказуемость)</td><td>п. 3.2.85 (устраняется только модификацией)</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Полнота безопасности включает обе части (п. 3.2.73, примечания 3–4). SIL задаёт строгость процесса
 именно потому, что систематику нельзя измерить числом.</p>
 
 <h2>2. Восемь стадий (табл. 2 ГОСТ Р МЭК 61511-1)</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>№</th><th>Стадия</th><th>Ключевой выход</th><th>Разд.</th></tr>
@@ -52,12 +56,14 @@
 <tr><td>8</td><td>Снятие с эксплуатации</td><td>сохранение функций на время вывода</td><td>18</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Сквозные проверки: <strong>верификация</strong> на каждой стадии (разд. 7) и <strong>оценка функциональной
 безопасности</strong> независимым специалистом, не участвовавшим в проектировании (п. 5.2.6.1.2).</p>
 
 <h2>3. Шесть допущений за формулой PFD</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Допущение</th><th>Чем закрывается</th><th>Пункт</th></tr>
@@ -71,9 +77,11 @@
 <tr><td>Обслуживание компетентным персоналом</td><td>компетенции (9 позиций), независимый оценщик</td><td>5.2.2.2, 5.2.6.1.2</td></tr>
 </tbody>
 </table>
+</div>
 
 <h2>4. Что спрашивают в обосновании</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Артефакт</th><th>Доказательство</th><th>Пункт</th></tr>
@@ -87,6 +95,7 @@
 <tr><td>Отчёт независимой оценки</td><td>SIL подтверждён не тем, кто проектировал</td><td>5.2.6.1.2</td></tr>
 </tbody>
 </table>
+</div>
 
 <h2>5. Быстрая проверка контура</h2>
 

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Справочник — Сборка контура из сертифицированных элементов</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
+<header class="lesson-head">
+  <p class="kicker">Справочник · SIL-курс</p>
+  <h1>Сборка контура из сертифицированных элементов</h1>
+  <p class="meta">Выжимка урока 7<span class="sep">·</span>ГОСТ Р МЭК 61511-1, п. 3.2.86, 11.4, 11.5, 11.9</p>
+</header>
+
+<nav class="lesson-nav top" aria-label="Навигация по курсу">
+  <div class="nav-row">
+    <a href="../index.html">Содержание курса</a>
+    <a class="next" href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 7: Сборка контура →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Справочники:</span>
+    <a href="glossary.html">Глоссарий</a>
+    <a href="shared-equipment.html">Общие изделия</a>
+    <a href="beta-factor.html">β-фактор</a>
+  </div>
+</nav>
+
+<p>Одна страница на печать: что подтверждает сертификат элемента, как считаются три гейта и почему
+охват проверки меняет PFD сильнее, чем замена изделия. Термины — в
+<a href="glossary.html#ptc">глоссарии</a>.</p>
+
+<h2>1. Что даёт сертификат элемента</h2>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Строка сертификата</th><th>Что это</th><th>Как использовать</th></tr></thead>
+<tbody>
+<tr><td>Systematic Capability, SC <em>n</em></td><td>Потолок по процессу изготовителя (п. 3.2.86)</td><td>Минимум по всем элементам — потолок SIL контура</td></tr>
+<tr><td>SIL <em>n</em> @ HFT = <em>m</em></td><td>Структурная способность изделия (п. 11.4.5)</td><td>Своя колонка вместо табл. 6; читается как потолок</td></tr>
+<tr><td>λ<sub>SD</sub>, λ<sub>SU</sub>, λ<sub>DD</sub>, λ<sub>DU</sub> в FIT</td><td>Интенсивности отказов, 1 FIT = 10⁻⁹ 1/ч</td><td>λ<sub>DU</sub> идёт в PFD, λ<sub>DD</sub> — в PFH и диагностику</td></tr>
+<tr><td>SFF / ДБО</td><td>Доля безопасных и выявленных отказов</td><td>Выбор строки табл. 5 для логики</td></tr>
+<tr><td>«PFD/PFH must be verified for each application»</td><td>Граница ответственности</td><td>Расчёт — ваш; сертификат его не заменяет</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Второй путь взять компонент — без сертификата, по опыту предшествующего применения
+(п. 11.5.3): доказательство пригодности, рассмотрение системы качества изготовителя, объём
+эксплуатации. Тогда структурный минимум берётся из таблиц 5 и 6, а не из сертификата.</p>
+
+<h2 id="gates">2. Три гейта и правило минимума</h2>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Гейт</th><th>Вопрос</th><th>Источник</th><th>Результат</th></tr></thead>
+<tbody>
+<tr><td>1. Число</td><td>Хватит ли надёжности?</td><td>П. 11.9.1, 11.9.2; Σ PFD подсистем</td><td>Полоса SIL по RRF</td></tr>
+<tr><td>2. Структура</td><td>Какой SIL разрешает резерв?</td><td>Табл. 5 (логика, от SFF), табл. 6 (поле); сертификат по п. 11.4.5; п. 11.4.4 — на ступень</td><td>Потолок SIL по HFT</td></tr>
+<tr><td>3. Процесс</td><td>Можно ли обещать этот SIL?</td><td>SC каждого элемента (п. 3.2.86)</td><td>Потолок SIL по процессу</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>SIL контура = min(гейт 1, гейт 2, гейт 3).</strong> Гейты не складываются и не заменяют
+друг друга. Четвёртое условие — время срабатывания по п. 10.3.1 — в гейты не входит и задаётся
+в SRS отдельно.</p>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Архитектура</th><th>HFT</th><th>Табл. 6 (без своей оценки)</th><th>Сертификат «SIL 2 @ HFT=0»</th><th>Логика, SFF 90 %</th><th>Логика, SFF &gt; 90 %</th></tr></thead>
+<tbody>
+<tr><td>1oo1</td><td>0</td><td>SIL 1</td><td>SIL 2</td><td>SIL 1</td><td>SIL 2</td></tr>
+<tr><td>1oo2, 2oo3</td><td>1</td><td>SIL 2</td><td>SIL 3</td><td>SIL 2</td><td>SIL 3</td></tr>
+<tr><td>1oo3</td><td>2</td><td>SIL 3</td><td>SIL 3</td><td>SIL 3</td><td>SIL 3</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>3. Формула: охват проверки и срок службы</h2>
+
+<div class="lopa-formula-wrap">
+  <span class="lopa-formula">p = λ<sub>DU</sub> · [ PTC·TI/2 + (1−PTC)·TL/2 ]</span>
+</div>
+
+<ul>
+<li><strong>PTC</strong> (proof test coverage) — доля скрытых опасных отказов, которые выявляет
+процедура проверки. При PTC = 1 формула сводится к λ·TI/2 из урока 3.</li>
+<li><strong>TL</strong> — срок службы до замены. Непроверенная часть (1−PTC) не ловится ни одной
+проверкой этой процедуры и живёт весь TL; за его пределами расчёт недействителен
+(МЭК 61508-2, п. 7.4.9.5).</li>
+<li><strong>Группа:</strong> 1oo2 → [(1−β)·p]² + β·p; 2oo3 → 3[(1−β)·p]² + β·p. Слагаемое β·p —
+см. <a href="beta-factor.html">справочник «β-фактор»</a>.</li>
+<li><strong>Контур:</strong> PFD = Σ PFD подсистем (последовательно), плюс трасса из
+<a href="shared-equipment.html">справочника «Общие изделия»</a>.</li>
+</ul>
+
+<h2 id="ptc">4. Пример: один датчик, разные процедуры</h2>
+
+<p>Rosemount 3051S Advanced HART Diagnostics, λ<sub>DU</sub> = 34 FIT, TI 1 год, TL 20 лет
+(<a class="print-url" href="../materials/exida-rosemount-3051s-fmeda.pdf">FMEDA exida, ROS 08-11-17 R002</a>,
+прил. A и B.4).</p>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Процедура проверки</th><th>PTC</th><th>PFD</th><th>RRF</th></tr></thead>
+<tbody>
+<tr><td>Частичная: аналоговый тест петли, проверка диапазона</td><td>41 %</td><td>1,8·10⁻³</td><td>550</td></tr>
+<tr><td>Частичная при включённой диагностике PATC</td><td>78 %</td><td>7,7·10⁻⁴</td><td>1 296</td></tr>
+<tr><td>Полная: два канала и калибровка по двум точкам</td><td>87 %</td><td>5,2·10⁻⁴</td><td>1 935</td></tr>
+<tr><td>Идеал формулы урока 3</td><td>100 %</td><td>1,5·10⁻⁴</td><td>6 715</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Изделие, TI и цена — одни и те же. Меняется документ, который описывает проверку, и вместе с
+ним PFD в 3,5 раза.</p>
+
+<h2>5. Чек-лист сборки контура</h2>
+
+<ol>
+<li>Выписать по каждому элементу: λ<sub>DU</sub>, PTC, TL, SC, SIL при HFT 0 из сертификата.</li>
+<li>Выбрать архитектуру и посчитать p по формуле с PTC; собрать PFD = Σ.</li>
+<li>Проверить гейт 2: HFT против табл. 5/6 или против сертификата; послабление п. 11.4.4 —
+   только если все четыре условия выполнены и это записано.</li>
+<li>Проверить гейт 3: минимум SC по всем элементам.</li>
+<li>Взять минимум трёх гейтов и сравнить с целевым SIL из LOPA.</li>
+<li>Отдельным пунктом SRS — время срабатывания (п. 10.3.1) и частота ложных срабатываний.</li>
+<li>Проверить, что TI в расчёте совпадает с регламентом проверок, а TL — с практикой замен.</li>
+</ol>
+
+<h2>6. Где это ломается</h2>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Симптом</th><th>Причина</th><th>Что делать</th></tr></thead>
+<tbody>
+<tr><td>PFD из паспорта не сходится с вашим</td><td>Изготовитель считал при PTC 100 % и своём TL</td><td>Пересчитать со своей процедурой и своим TL</td></tr>
+<tr><td>Все элементы «SIL 3», контур не проходит</td><td>Один элемент не той архитектуры или с SC 2</td><td>Найти гейт, который держит, а не пересчитывать PFD</td></tr>
+<tr><td>Добавили канал — ничего не изменилось</td><td>Упёрлись в β-пол (урок 6) или в HFT-потолок</td><td>Снижать β или поднимать HFT, а не число копий</td></tr>
+<tr><td>RRF вырос на 10 %, цена — вдвое</td><td>Полоса уже была пройдена, работали на структуру</td><td>Сначала гейт 2 и 3, потом число</td></tr>
+</tbody>
+</table>
+</div>
+
+<p class="src">Нормативная часть: ГОСТ Р МЭК 61511-1-2011 — 3.2.86 (систематическая полнота),
+11.4.2–11.4.5 (HFT, табл. 5 и 6), 11.5.2–11.5.3 (выбор компонентов и опыт применения),
+11.9.1–11.9.2 (проверка расчётом и состав расчёта). Урок — <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">«Сборка контура из сертифицированных элементов»</a>.</p>
+
+<nav class="lesson-nav bottom" aria-label="Навигация по курсу">
+  <div class="nav-row">
+    <a href="../index.html">Содержание курса</a>
+    <a class="next" href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 7: Сборка контура →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Справочники:</span>
+    <a href="glossary.html">Глоссарий</a>
+    <a href="shared-equipment.html">Общие изделия</a>
+    <a href="beta-factor.html">β-фактор</a>
+  </div>
+</nav>
+</main>
+</body>
+</html>

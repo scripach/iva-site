@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Урок 6 · 9 минут чтения + практика</p>
   <h1>Общие для всех каналов изделия: питание, клеммы и β-пол</h1>
@@ -19,7 +20,7 @@
   <div class="nav-row">
     <a href="0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">← Урок 5: SIL как класс требований</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <span class="nav-dummy next">Урок 7 — в подготовке</span>
+    <a class="next" href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 7: Сборка контура →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
@@ -60,6 +61,7 @@
 <em>все</em> каналы. Это не ещё один канал, которому можно добавить пару — это последовательное звено.</p>
 
 <figure>
+<div class="figure-scroll" role="region" aria-label="Схема: Общая часть контура" tabindex="0">
 <svg viewBox="0 0 880 400" role="img" aria-label="Общая часть контура: ввод, блок питания и шина 24 В питают все три канала датчиков; отказ любого звена трассы отключает всю функцию">
   <text x="20" y="26" font-size="15" font-weight="700" fill="currentColor">Общая часть (трасса)</text>
   <text x="470" y="26" font-size="15" font-weight="700" fill="currentColor">Голосованная группа 2oo3</text>
@@ -111,6 +113,7 @@
     <text x="48" y="364" font-size="12.5" fill="var(--muted)">резервировать первым: звено даёт основную долю PFD трассы</text>
   </g>
 </svg>
+</div>
 <figcaption>Общая часть — последовательное звено перед голосованной группой. Голосование защищает от отказа канала,
 но ничего не делает с отказом трассы: она питает все каналы разом.</figcaption>
 </figure>
@@ -121,6 +124,7 @@
 или смертелен, и зависит это от <a href="../reference/glossary.html#failure-direction">направления отказа</a>,
 заложенного в проект.</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Проект выхода</th><th>Пропало питание 24 В</th><th>Куда идёт в расчёте</th></tr>
@@ -140,6 +144,7 @@
 <td><strong>в PFD</strong></td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Вывод, который стоит записать в SRS: <strong>направление отказа выбирают так, чтобы потеря питания попадала
 в безопасную сторону</strong>. Именно поэтому в ПАЗ норма — de-energize-to-trip. И именно поэтому блок питания
@@ -165,6 +170,7 @@
 даёт отказ обеих. Так считать можно только при развязке:</p>
 
 <figure id="decoupling">
+<div class="figure-scroll" role="region" aria-label="Схема: Сравнение двух блоков питания на общей шине 24 В" tabindex="0">
 <svg viewBox="0 0 900 392" role="img" aria-label="Сравнение двух блоков питания на общей шине 24 В: без развязки пробой выхода одного блока закорачивает шину и обесточивает все каналы; с развязывающими диодами отказавший блок отсекается, шина держит 24 В">
   <text x="80" y="30" font-size="15" font-weight="700" fill="currentColor">Без развязки</text>
   <text x="530" y="30" font-size="15" font-weight="700" fill="currentColor">1+1 с развязкой</text>
@@ -266,6 +272,7 @@
     <text x="216" y="378" font-size="12.5" fill="var(--muted)">развязка: диод, OR-ing-модуль</text>
   </g>
 </svg>
+</div>
 <figcaption>Пробой выхода БП-1 замыкает шину: каналы обесточены, хотя БП-2 исправен. Диод разрывает связь,
 и отказ одной копии перестаёт быть отказом второй. Именно этот отказ стоит в квадратных скобках
 формулы. Общее у копий остаётся: ввод, среда, тип изделия; эту долю снимают разделением вводов,
@@ -292,6 +299,7 @@
 в числах — впервые): датчики 2oo3 дают 9,1·10⁻⁴, клапан 1oo2 — 5,2·10⁻⁴, логика 1oo1 — 4,4·10⁻⁴.
 Итого 1,9·10⁻³ вместо идеальных 8,7·10⁻⁴, RRF 538 вместо 1 150. Добавляем трассу:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Схема общей части</th><th>PFD трассы</th><th>PFD контура</th><th>RRF</th><th>Полоса</th></tr>
@@ -304,6 +312,7 @@
 <tr><td>вся трасса 1+1, β 1 %</td><td>7,2·10⁻⁵</td><td>1,9·10⁻³</td><td>518</td><td>SIL 2</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Ответ таблицы неожиданный: <strong>никакая из схем не даёт SIL 3</strong>.
 Даже полностью резервированная трасса при β = 5 % упирается в 2,1·10⁻³, потому что пол задаёт уже не она,
@@ -401,7 +410,7 @@ CCF для той группы, которую вы только что зар�
 <h2>5. Что на самом деле доказывает сертификат «SIL 3 capable»</h2>
 
 <p>Сертификат «SIL 3 capable» выдан на одну функцию, а проект читает его как гарантию питания. Возьмём реальный документ: блок питания
-<a class="print-url" href="../materials/phoenix-quint4-sil3-safety-manual.pdf">QUINT4-PS/1AC/24DC/20/+
+<a class="print-url" href="../materials/phoenix-quint4-sil3-safety-manual.pdf"><span class="partno">QUINT4-PS/1AC/24DC/20/+</span>
 (2904617), Safety Manual</a>, Phoenix Contact, 2019. В нём написано: SIL 3, HFT = 1,
 PFH = 9,1·10⁻¹⁰ 1/ч, PFD<sub>avg</sub> = 5,58·10⁻⁵ при TI = 15 лет, SFF &gt; 60 %.</p>
 
@@ -554,8 +563,8 @@ PFH = 9,1·10⁻¹⁰ 1/ч, PFD<sub>avg</sub> = 5,58·10⁻⁵ при TI = 15 
   Копия на нашем сервере.</p>
   <p class="src">Нормативная часть: <a class="print-url" href="../materials/gost-r-mek-61511-1-2011.pdf">ГОСТ Р МЭК
   61511-1-2011</a> — п. 3.2.84 (состав ПСБ), 9.5 (CCF между слоями), 11.2.10 (общее питание с ОСУП), 11.2.11
-  (потеря питания), 11.9.2 d (CCF в расчёте). Пример сертификатных данных:
-  <a class="print-url" href="../materials/phoenix-quint4-sil3-safety-manual.pdf">Safety Manual QUINT4-PS/1AC/24DC/20/+</a>
+  (потеря питания), 11.9.2 d (CCF в расчёте). Пример сертификатных данных:
+  <a class="print-url" href="../materials/phoenix-quint4-sil3-safety-manual.pdf">Safety Manual <span class="partno">QUINT4-PS/1AC/24DC/20/+</span></a>
   (<a class="print-url" href="../materials/phoenix-quint4-sil3-safety-manual-RU.pdf">перевод</a>).
   Сводки на одну страницу — <a href="../reference/shared-equipment.html">справочник «Общие изделия»</a>
 и <a href="../reference/beta-factor.html">справочник «β-фактор»</a>.</p>
@@ -572,7 +581,7 @@ PFH = 9,1·10⁻¹⁰ 1/ч, PFD<sub>avg</sub> = 5,58·10⁻⁵ при TI = 15 
   <div class="nav-row">
     <a href="0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">← Урок 5: SIL как класс требований</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <span class="nav-dummy next">Урок 7 — в подготовке</span>
+    <a class="next" href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 7: Сборка контура →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>

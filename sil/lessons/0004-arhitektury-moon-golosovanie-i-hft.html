@@ -2,12 +2,14 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Урок 4 — Архитектуры MooN: 1oo1, 2oo3 и голосование</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Урок 4 · 6 минут чтения + практика</p>
   <h1>Архитектуры MooN: 1oo1, 2oo3 и голосование</h1>
@@ -39,6 +41,7 @@
 когда «за» проголосовало не менее M каналов. Запись — это голосование, и голосуют копии одного и того же измерения:</p>
 
 <figure>
+<div class="figure-scroll" role="region" aria-label="Схема: Архитектуры 1oo1, 1oo2, 2oo2 и 2oo3" tabindex="0">
 <svg viewBox="0 0 780 320" role="img" aria-label="Архитектуры 1oo1, 1oo2, 2oo2, 2oo3: каналы и минимальное число голосов для срабатывания">
   <g>
     <text x="16" y="34" font-size="16" font-weight="700" fill="currentColor">1oo1</text>
@@ -81,6 +84,7 @@
     <text x="150" y="301" font-size="12.5" fill="var(--muted)">минимум сигналов «за», чтобы защита сработала; CH — канал измерения</text>
   </g>
 </svg>
+</div>
 <figcaption>Голосование MooN. Подсветка показывает минимальный кворум: 1oo2 сработает от одного канала, 2oo2 — только от обоих, 2oo3 — от любых двух из трёх.</figcaption>
 </figure>
 
@@ -89,6 +93,7 @@
 срабатывать <em>без причины</em>. Обозначим p = PFD одного канала (из <a href="0003-pfdavg-raschet-kontura-paz.html">урока 3</a>:
 p ≈ λ<sub>DU</sub>·TI/2), а λ<sub>S</sub> — поток его безопасных отказов:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Узел</th><th>Опасный отказ (SIF молчит)</th><th>Ложное срабатывание</th><th>Характер</th></tr>
@@ -100,6 +105,7 @@ p ≈ λ<sub>DU</sub>·TI/2), а λ<sub>S</sub> — поток его безо�
 <tr><td><strong>2oo3</strong></td><td>≈ 3p² — нужны любые два</td><td>нужны любые два — сильно реже</td><td>лучше 1oo1 по обеим сторонам</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Отсюда два инженерных факта. <strong>Первый:</strong> 1oo2 квадратично снижает PFD (p → p²): датчиковый узел из
 урока 3 с p = 1,1·10⁻² дав бы 1,2·10⁻⁴, RRF узла ≈ 8 300. <strong>Второй:</strong> за это платят ложными
@@ -145,6 +151,7 @@ p ≈ λ<sub>DU</sub>·TI/2), а λ<sub>S</sub> — поток его безо�
 <p><strong>Логические устройства с программируемой электроникой</strong> (п. 11.4.2, табл. 5) — HFT зависит
 от доли безопасных отказов <a href="../reference/glossary.html#sff">SFF</a>:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Целевой SIL</th><th>SFF &lt; 60 %</th><th>SFF 60–90 %</th><th>SFF &gt; 90 %</th></tr>
@@ -156,10 +163,12 @@ p ≈ λ<sub>DU</sub>·TI/2), а λ<sub>S</sub> — поток его безо�
 <tr><td>SIL 4</td><td colspan="3">специальные требования (МЭК 61508)</td></tr>
 </tbody>
 </table>
+</div>
 
 <p><strong>Датчики, исполнительные элементы и логика без программируемой электроники</strong>
 (п. 11.4.3, табл. 6):</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Целевой SIL</th><th>Минимальный HFT</th><th>Минимальная архитектура узла</th></tr>
@@ -171,6 +180,7 @@ p ≈ λ<sub>DU</sub>·TI/2), а λ<sub>S</sub> — поток его безо�
 <tr><td>SIL 4</td><td colspan="2">специальные требования (МЭК 61508)</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Полевой узел может жить и с меньшим HFT: п. 11.4.4 разрешает <strong>уменьшить табличное значение на единицу</strong>,
 если выполнены все четыре условия — аппаратные средства выбраны на основе предшествующего опыта применения;

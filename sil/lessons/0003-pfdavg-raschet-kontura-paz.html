@@ -2,12 +2,14 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Урок 3 — PFDavg: подтверждаем контур расчётом</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Урок 3 · 5 минут чтения + практика</p>
   <h1>PFDavg: подтверждаем контур расчётом</h1>
@@ -41,6 +43,7 @@
 слагаются:</p>
 
 <figure>
+<div class="figure-scroll" role="region" aria-label="Схема: Последовательный контур ПАЗ" tabindex="0">
 <svg viewBox="0 0 780 170" role="img" aria-label="Последовательный контур ПАЗ: датчик, ПЛК, клапан">
   <defs></defs>
   <rect x="20" y="34" width="212" height="66" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
@@ -60,6 +63,7 @@
   <text x="390" y="140" text-anchor="middle" font-size="15" font-weight="600" fill="currentColor">PFD контура ≈ PFD₁ + PFD₂ + PFD₃</text>
   <text x="390" y="160" text-anchor="middle" font-size="12.5" fill="var(--muted)">обрыв любого звена рвёт цепочку — вероятности складываются</text>
 </svg>
+</div>
 <figcaption>Контур SIF — последовательная цепочка. Точный расчёт даёт PFD = 1 − (1−PFD₁)(1−PFD₂)(1−PFD₃), но при малых PFD произведениями пренебрегают.</figcaption>
 </figure>
 
@@ -74,6 +78,7 @@
 <p>Отказы элемента делятся на четыре категории — по двум признакам: опасный отказ или безопасный,
 и видит его диагностика или нет. Для PFD важна ровно одна категория:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th></th><th>Диагностика видит</th><th>Диагностика не видит</th></tr>
@@ -83,6 +88,7 @@
 <tr><td><strong>Безопасный</strong> (ложное срабатывание)</td><td>λ<sub>SD</sub> — экономика, не авария</td><td>λ<sub>SU</sub> — тоже экономика</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Скрытый опасный отказ «живёт» от момента возникновения до ближайшей
 <a href="../reference/glossary.html#proof-test">плановой проверки</a>. Если отказ равновозможен в любой момент
@@ -115,6 +121,7 @@
 <p>Соберём типовой контур отсечки по давлению: λ<sub>DU</sub> из сертификатов, TI = 1 год = 8 760 ч.
 Все числа типовые, ход расчёта тот же, что в реальном SIL-обосновании:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead>
 <tr><th>Элемент</th><th>λ<sub>DU</sub>, 1/ч</th><th>TI, ч</th><th>PFD<sub>avg</sub> = λ·TI/2</th></tr>
@@ -126,6 +133,7 @@
 <tr><td><strong>Контур 1oo1</strong></td><td></td><td></td><td><strong>Σ = 2,0·10⁻²</strong></td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Итог: PFD = 2,0·10⁻² → RRF ≈ 50 → <strong>достигнут SIL 1</strong>. Требовалось PFD ≤ 5·10⁻³
 (RRF ≥ 200) — <strong>не проходит: расчётный PFD превышает требование в четыре раза</strong>.</p>

@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Справочник · SIL-курс</p>
   <h1>β-фактор: откуда берётся число</h1>
@@ -46,6 +47,7 @@
 
 <h2>2. Три способа получить значение</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead><tr><th>Способ</th><th>Когда годится</th><th>Чем плох</th></tr></thead>
 <tbody>
@@ -54,12 +56,14 @@
 <tr><td><strong>Данные эксплуатации</strong></td><td>есть статистика отказов этой конфигурации</td><td>редко доступна; чужая статистика легко врёт</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>На практике чек-лист служит основным инструментом, а данные эксплуатации — обратной связью,
 которая его корректирует.</p>
 
 <h2>3. Диапазоны МЭК 61508-6, прил. D</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead><tr><th>Что оценивается</th><th>Диапазон β</th><th>Комментарий</th></tr></thead>
 <tbody>
@@ -68,6 +72,7 @@
 <tr><td>Блок питания, шина, клеммы</td><td>обычно 5 % и выше</td><td>общая часть: разделение слабое по построению</td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Для выявленных отказов есть отдельная формула β<sub>D</sub>: ΣXSF·(Z + 1) + ΣYSF, где Z берётся
 из таблицы стандарта (Rausand, слайд 40).</p>
@@ -77,6 +82,7 @@
 <p>Восемь подфакторов, пять уровней от «a» (худший) до «e» (лучший). Сумма баллов делится на 50 000.
 Крайние точки: все «a» → β = 0,302; все «e» → β = 0,001.</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead><tr><th>Фактор</th><th>Подфактор</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th></tr></thead>
 <tbody>
@@ -91,6 +97,7 @@
 <tr><td colspan="2"><strong>Сумма по столбцу</strong></td><td><strong>15 100</strong></td><td>3 650</td><td>875</td><td>210</td><td><strong>51</strong></td></tr>
 </tbody>
 </table>
+</div>
 
 <p>Проверка: 15 100 / 50 000 = 0,302 и 51 / 50 000 ≈ 0,001 — те самые опорные точки. Промежуточные суммы дают
 β 7,3 % (все «b»), 1,75 % (все «c»), 0,42 % (все «d»).</p>
@@ -124,6 +131,7 @@ Lundteigen, гл. 10, слайд 37</a> (<a class="print-url" href="../materials
 при том же TI это 1,07 %, у клапана с λ 1·10⁻⁶ /ч — те же 0,44 %. Ниже порога рост β
 бьёт по результату сильнее, чем добавление копий; выше — наоборот.</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
 <thead><tr><th>Значение β</th><th>Независимая часть</th><th>Слагаемое CCF</th><th>Во сколько раз CCF больше</th></tr></thead>
 <tbody>
@@ -132,6 +140,7 @@ Lundteigen, гл. 10, слайд 37</a> (<a class="print-url" href="../materials
 <tr><td>44 %</td><td>6,0·10⁻⁶</td><td>1,9·10⁻³</td><td>320</td></tr>
 </tbody>
 </table>
+</div>
 
 <p class="src">Расчёт при λ<sub>DU</sub> = 1·10⁻⁶ /ч и TI = 8 760 ч.</p>
 

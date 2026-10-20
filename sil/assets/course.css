@@ -2,9 +2,24 @@
    SIL Course — shared stylesheet
    Tufte-inspired: serif body, generous measure, quiet chrome.
    Used by every lesson and reference document.
+
+   Geometry lives in three variables, and everything else is derived
+   from them — that is what keeps the heading scale, the page gutter
+   and the card width from drifting apart:
+     --card-pad  inner padding of a callout/panel
+     --page-pad  page gutter, always wider than --card-pad
+     --fit       largest heading size that still fits the column
    ============================================================ */
 
 :root {
+  /* Нативные контролы и скроллбары следуют теме ОС. Тема остаётся
+     системной: ручного переключателя на сайте нет. */
+  color-scheme: light dark;
+
+  --card-pad: clamp(0.6rem, 2.2vw, 1.35rem);
+  --page-pad: max(1.25rem, calc(var(--card-pad) + 0.75rem));
+  --fit: calc((100vw - 2 * var(--page-pad)) / 9.6);
+
   --fg: #1c1b18;
   --muted: #6e6a63;
   --border: #dcd7ce;
@@ -49,11 +64,14 @@ body {
   background: var(--surface);
   line-height: 1.65;
   margin: 0;
-  padding: 2rem 1.25rem 4rem;
+  padding: 2rem var(--page-pad) 4rem;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* 41rem ≈ 82 знака при 18px. Исходные 46rem давали 92 — глаз теряет
+   строку на тексте с формулами и индексами (λDU, PFDavg, 10⁻⁶). */
 main {
-  max-width: 46rem;
+  max-width: 41rem;
   margin: 0 auto;
 }
 
@@ -70,11 +88,20 @@ header.lesson-head { margin-bottom: 2.2rem; }
   margin: 0 0 0.4rem;
 }
 
+/* Шкала заголовков выводится из --fit, поэтому иерархия не может
+   перевернуться ни на одной ширине: h1 > h2 > h3 по построению.
+   Верхний предел — 2.5x тела (18px → 45px); ниже он падает ровно
+   настолько, чтобы самое длинное слово курса («последовательное»,
+   9.18 кегля) влезало в колонку целиком. */
 h1 {
-  font-size: 1.9rem;
-  line-height: 1.25;
+  font-size: min(2.5rem, var(--fit));
+  line-height: 1.14;
+  letter-spacing: -0.012em;
   font-weight: 600;
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.7rem;
+  text-wrap: balance;
+  hyphens: manual;
+  overflow-wrap: break-word;
 }
 
 .meta {
@@ -84,19 +111,39 @@ h1 {
   margin: 0;
 }
 
-.meta .sep { margin: 0 0.45rem; color: var(--border); }
+/* --border is a surface token (1.31:1 here) and the separator is a TEXT glyph,
+   so it must clear the 4.5:1 text rule, not the 3:1 non-text one. */
+.meta .sep { margin: 0 0.45rem; color: var(--muted); }
 
 /* ---------- typography ---------- */
 
 h2 {
-  font-size: 1.32rem;
+  font-size: min(1.5rem, calc(0.93 * var(--fit)));
+  line-height: 1.28;
   font-weight: 600;
-  margin: 2.6rem 0 0.8rem;
-  padding-bottom: 0.35rem;
+  margin: 3rem 0 0.9rem;
+  padding-bottom: 0.45rem;
   border-bottom: 1px solid var(--border);
+  text-wrap: balance;
+  hyphens: manual;
+  overflow-wrap: break-word;
 }
 
-h3 { font-size: 1.08rem; font-weight: 600; margin: 1.6rem 0 0.5rem; }
+h3 {
+  font-size: min(1.12rem, calc(0.82 * var(--fit)));
+  line-height: 1.35;
+  font-weight: 600;
+  margin: 1.9rem 0 0.55rem;
+  hyphens: manual;
+  overflow-wrap: break-word;
+}
+
+/* Переносов в теле нет: hyphens:auto на кириллице режет короткие
+   слова посреди смысла («на-шем»), а курс читают и глазами, и вслух. */
+p, li, dd, td, blockquote { hyphens: manual; }
+
+/* Подзаголовок не отрывается от своего первого абзаца. */
+h2 + p, h2 + figure, h2 + table, h2 + .widget { margin-top: 0; }
 
 p { margin: 0 0 1rem; }
 
@@ -149,10 +196,10 @@ code, .mono {
   cursor: pointer;
 }
 .lopa-out {
-  border-left: 3px solid var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
   background: var(--accent-soft);
-  border-radius: 0 8px 8px 0;
-  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  padding: 0.95rem 1.05rem;
 }
 .lopa-line { margin-bottom: 0.55rem; font-size: 0.95rem; }
 .lopa-line strong { font-size: 1.05rem; }
@@ -191,27 +238,67 @@ hr {
 
 /* ---------- callouts ---------- */
 
+/* Полоса слева (border-left: 3px) — самый узнаваемый признак
+   сгенерированного интерфейса. Статус несут рамка по кругу, заливка,
+   точка-маркер и текст подписи: цвет нигде не единственный сигнал. */
 .note, .warn, .key {
-  border-left: 3px solid var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
   background: var(--accent-soft);
-  padding: 0.85rem 1.1rem;
+  padding: 0.95rem 1.15rem 1rem;
   margin: 1.4rem 0;
-  border-radius: 0 6px 6px 0;
-  font-size: 0.96rem;
+  border-radius: 10px;
+  font-size: 0.97rem;
 }
 .note .tag, .warn .tag, .key .tag {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   font-family: var(--sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.45rem;
   color: var(--accent);
 }
-.warn { border-left-color: var(--warning); background: var(--warning-soft); }
+.note .tag::before, .warn .tag::before, .key .tag::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+.warn {
+  border-color: color-mix(in srgb, var(--warning) 40%, var(--border));
+  background: var(--warning-soft);
+}
 .warn .tag { color: var(--warning); }
-.key { border-left-color: var(--success); background: var(--success-soft); }
+.key {
+  border-color: color-mix(in srgb, var(--success) 40%, var(--border));
+  background: var(--success-soft);
+}
 .key .tag { color: var(--success); }
+
+/* Одна ширина у всех карточек: карточка = колонка текста + поле с двух
+   сторон. Раньше .primary-source и .widget вылетали шире, а
+   .note/.warn/.key/.ask-teacher стояли в колонке — рядом это читалось
+   как ошибка вёрстки. Выступ включает толщину рамки (+1px), иначе
+   текст внутри встаёт на пиксель правее прозы снаружи. */
+.note,
+.warn,
+.key,
+.ask-teacher,
+.primary-source,
+.widget {
+  box-sizing: border-box;
+  --card-frame: 1px;
+  width: calc(100% + 2 * (var(--card-pad) + var(--card-frame)));
+  margin-inline: calc(-1 * (var(--card-pad) + var(--card-frame)));
+  padding-inline: var(--card-pad);
+}
+/* Вложенный вывод виджета не расширяется второй раз: он уже внутри
+   карточки, поле вокруг — часть её набора. */
+.widget .lopa-out { width: auto; margin-inline: 0; }
 
 /* ---------- tables ---------- */
 
@@ -242,10 +329,16 @@ th {
 tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 60%, transparent); }
 
 /* Wide tables scroll inside their own box instead of widening the page.
-   display:block keeps the column widths; the page itself never overflows. */
+   The scroll container is the wrapper .table-scroll (tabindex="0",
+   role="region"), not the table itself: display:block on a <table>
+   breaks its column layout AND leaves a scroll region that keyboard
+   users cannot reach (axe scrollable-region-focusable). */
 @media (max-width: 640px) {
-  table { display: block; overflow-x: auto; }
+  table { display: table; overflow: visible; }
+  .table-scroll { overflow-x: auto; }
 }
+.table-scroll:focus-visible,
+.figure-scroll:focus-visible { outline-offset: 4px; }
 
 /* ---------- figures ---------- */
 
@@ -253,9 +346,12 @@ figure { margin: 1.6rem 0; text-align: center; }
 figure svg { max-width: 100%; height: auto; }
 @media (max-width: 640px) {
   /* Scaled to a 300px column the SVG labels fall to ~5px. Let the diagram
-     keep a readable size and scroll inside the figure instead. */
-  figure { overflow-x: auto; }
-  figure svg { min-width: 700px; }
+     keep a readable size and scroll inside .figure-scroll instead — the
+     wrapper can take focus, a bare <figure> cannot. */
+  figure { overflow: visible; }
+  figure svg { min-width: 0; }
+  .figure-scroll { overflow-x: auto; }
+  .figure-scroll svg { min-width: 700px; }
 }
 figcaption {
   font-family: var(--sans);
@@ -263,6 +359,26 @@ figcaption {
   color: var(--muted);
   margin-top: 0.5rem;
   text-align: center;
+}
+
+/* Wide screens: data carriers (tables, figures) get their own, wider
+   measure — editorial "narrow prose, wide graphics". Centering is done
+   with negative margins, not transform, so focus rings and print keep
+   working. Cards stay at the text measure (see the callout rules). */
+@media (min-width: 60rem) {
+  table,
+  figure,
+  .table-scroll,
+  .figure-scroll {
+    --bleed: min(calc(100vw - 2rem), 56rem);
+    width: var(--bleed);
+    margin-inline: calc((100% - var(--bleed)) / 2);
+  }
+  figcaption,
+  .src {
+    width: auto;
+    margin-inline: 0;
+  }
 }
 
 /* ---------- glossary ---------- */
@@ -282,8 +398,11 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
   border: 1px solid var(--border);
   border-radius: 10px;
   background: color-mix(in srgb, var(--surface) 50%, transparent);
-  padding: 1.2rem 1.3rem 1.35rem;
-  margin: 1.8rem 0;
+  /* Horizontal padding is set by the shared card rule above, so that the
+     text inside lines up with the prose outside. */
+  padding-top: 1.2rem;
+  padding-bottom: 1.35rem;
+  margin-block: 1.8rem;
 }
 .widget-title {
   font-family: var(--sans);
@@ -308,6 +427,23 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
 }
 .btn:hover:not(:disabled) { border-color: var(--accent); }
 .btn:disabled { cursor: default; opacity: 0.55; }
+
+/* Видимый фокус в обеих темах. UA-outline — 1px rgb(16,16,16): на
+   светлом фоне это 17:1, на тёмном (#23211d) — 1.18:1, то есть кольца
+   практически не видно. Кольцо из accent проходит в обеих. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.btn:focus-visible,
+.q-opt:focus-visible,
+.sort-choice:focus-visible,
+.order-slot:focus-visible,
+.lopa-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
 /* quiz */
 .q-item { margin-bottom: 1.4rem; }
@@ -412,6 +548,16 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
   animation: shake 0.35s;
 }
 .order-slot.hint { border-color: var(--warning); background: var(--warning-soft); }
+/* Тряска при ошибке — единственная анимация в курсе; её нельзя
+   проигрывать тем, кто просил уменьшить движение в системе. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
@@ -493,22 +639,62 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
   font-family: var(--sans);
   font-size: 0.8rem;
   color: var(--muted);
+  /* Мера сноски — в знаках: при мелком кегле та же ширина даёт больше
+     символов, чем у тела, и сноска читается хуже прозы. */
+  max-width: 82ch;
+}
+
+/* Служебные подписи набраны uppercase с трекингом; 0.14em на
+   кириллице слишком разрежен, 0.11em читается ровнее. */
+.kicker, .widget-title { letter-spacing: 0.11em; }
+
+/* Артикул держится целым средствами разметки, а не неразрывным
+   дефисом U+2011: тот неотличим на глаз, но ломает поиск по каталогу
+   изготовителя — обозначение копируется и не находится. Обычный дефис
+   в span.nowrap копируется как есть. */
+.partno { white-space: nowrap; }
+p .partno { font-size: 0.92em; }
+@media (max-width: 15rem) {
+  /* На предельно узком экране целостность не стоит горизонтальной
+     прокрутки: лучше разрыв, чем вылет. */
+  .partno { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* Ссылка «к содержанию»: видна только при фокусе с клавиатуры. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+}
+.skip-link:focus {
+  position: static;
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface);
+  font-family: var(--sans);
+  font-size: 0.9rem;
 }
 
 .primary-source {
   border: 1.5px solid var(--accent);
   border-radius: 10px;
   background: var(--accent-soft);
-  padding: 1rem 1.2rem;
-  margin: 2rem 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-block: 2rem;
 }
 .primary-source .widget-title { margin-bottom: 0.4rem; }
 
 .ask-teacher {
   border: 1.5px dashed var(--accent);
   border-radius: 10px;
-  padding: 0.9rem 1.2rem;
-  margin: 2rem 0;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+  margin-block: 2rem;
   font-size: 0.95rem;
 }
 
@@ -535,7 +721,14 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
   align-items: baseline;
   gap: 0.4rem 1.4rem;
 }
-.nav-row .next { margin-left: auto; font-weight: 600; }
+/* margin-left:auto выталкивал «Урок N+1» на отдельную строку с провалом —
+   на узком экране это читается как обрыв. «Дальше» идёт обычным потоком. */
+.nav-row { gap: 0.35rem 1.2rem; }
+.nav-row .next { margin-left: 0; font-weight: 600; }
+@media (max-width: 30rem) {
+  .nav-row { gap: 0.3rem 0.9rem; }
+  .nav-refs { gap: 0.3rem 0.8rem; }
+}
 .nav-row .toc {
   color: var(--muted);
   border-bottom: 1px dotted var(--border);
@@ -560,14 +753,32 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
           --success-soft: #fff; --warning: #6b5510; --warning-soft: #fff;
           --error: #7a2020; --error-soft: #fff; }
   body { font-size: 11pt; padding: 0; background: #fff; }
+  /* Карточки на экране вылезают в поле страницы отрицательными полями.
+     На бумаге это означало бы рамку за границей набора, поэтому выступ
+     снят, а внутреннее поле сохранено. */
+  .note, .warn, .key, .ask-teacher, .primary-source, .widget {
+    width: auto;
+    margin-inline: 0;
+  }
+  table, figure, .table-scroll, .figure-scroll { width: auto; margin-inline: 0; }
+  .figure-scroll svg { min-width: 0; }
+  .skip-link { display: none !important; }
   .ask-teacher { display: none !important; }
+  /* На экране статус несут заливка и цветная рамка; на бумаге заливка
+     снята (чернила), и color-mix даёт почти белый контур — врезка
+     сливается со страницей. На печати рамка берёт цвет статуса целиком,
+     чтобы блок остался видимым и узнаваемым. */
+  .note { border: 1px solid var(--accent); }
+  .warn { border: 1px solid var(--warning); }
+  .key { border: 1px solid var(--success); }
+  .note .tag::before, .warn .tag::before, .key .tag::before { print-color-adjust: exact; }
   /* Widgets print as read-only sheets: task text, quiz options and the
      live summary stay; anything you can click or choose does not. */
   .widget { border: none; background: none; padding: 0; margin: 1rem 0; }
   .widget select, .widget input, .widget .btn, .widget .lopa-formula-wrap { display: none !important; }
   .widget .lopa-field { display: none !important; }
   .lopa-grid { display: block; }
-  .lopa-out { border-left: 2px solid var(--border); padding-left: 0.8rem; }
+  .lopa-out { border: 1px solid var(--border); }
   .q-opt {
     display: block; border: none; background: none; padding: 0.1rem 0;
     cursor: auto; font-size: 0.95rem;
@@ -589,4 +800,113 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
   .print-url::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #444; }
   h2 { break-after: avoid; }
   table, figure, .widget { break-inside: avoid; }
+  /* Врезка не рвётся между страницами: рамка по кругу, разрезанная
+     пополам, читается как обрезанный блок, а не как продолжение. */
+  .note, .warn, .key, .primary-source { break-inside: avoid; }
+}
+
+
+/* ============================================================
+   Course contents (index.html) — index list, not a wall of links
+   Each row is one link: lesson number, title, reading time and a
+   one-line description. The whole row is clickable, so the target
+   does not depend on how long the title happens to be.
+   ============================================================ */
+
+.lesson-list {
+  list-style: none;
+  margin: 0 0 2.4rem;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+.lesson-item { border-bottom: 1px solid var(--border); }
+
+.lesson-link {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr) auto;
+  grid-template-areas:
+    "num title time"
+    "num desc  time";
+  gap: 0.2rem 1rem;
+  align-items: baseline;
+  padding: 0.95rem 0.3rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 6px;
+}
+.lesson-link:hover { background: var(--accent-soft); }
+.lesson-link:focus-visible { outline-offset: 0; }
+
+.lesson-num {
+  grid-area: num;
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.lesson-title {
+  grid-area: title;
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.lesson-link:hover .lesson-title { text-decoration-thickness: 2px; }
+.lesson-time {
+  grid-area: time;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lesson-desc {
+  grid-area: desc;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+/* Current page: the number takes the accent and the title loses its
+   underline, so the marker survives without relying on colour alone. */
+.lesson-link[aria-current="page"] .lesson-num { color: var(--accent); font-weight: 700; }
+.lesson-link[aria-current="page"] .lesson-title {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+@media (max-width: 34rem) {
+  .lesson-link {
+    grid-template-columns: 3.6rem minmax(0, 1fr);
+    grid-template-areas:
+      "num title"
+      "num time"
+      "num desc";
+    gap: 0.15rem 0.75rem;
+  }
+}
+@media (max-width: 22rem) {
+  .lesson-link {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "num" "title" "time" "desc";
+    gap: 0.1rem 0;
+  }
+  .lesson-num { margin-bottom: 0.15rem; }
+}
+
+.ref-list { padding-left: 1.1rem; }
+.ref-list li { margin-bottom: 0.5rem; }
+.ref-list li::marker { color: var(--border); }
+
+@media print {
+  .lesson-link { display: grid; padding: 0.4rem 0; }
+  .lesson-link:hover { background: none; }
+  .lesson-title { color: inherit; }
+  .lesson-link[aria-current="page"] .lesson-num { font-weight: 700; }
 }

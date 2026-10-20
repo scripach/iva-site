@@ -2,12 +2,14 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Урок 2 — Как назначают SIL: LOPA на одном листе</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
-<main>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
 <header class="lesson-head">
   <p class="kicker">Урок 2 · 5 минут чтения + практика</p>
   <h1>Как назначают SIL: LOPA на одном листе</h1>
@@ -40,6 +42,7 @@
 <p>LOPA берёт один сценарий из <a href="../reference/glossary.html#hazop">HAZOP</a> (например,
 «отказ регулятора → рост давления → разрыв сепаратора») и задаёт к нему ровно три вопроса:</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
   <thead>
     <tr><th>№</th><th>Вопрос</th><th>Где берём ответ</th></tr>
@@ -50,12 +53,14 @@
     <tr><td>3</td><td><strong>Какая частота последствия допустима?</strong></td><td><a href="../reference/glossary.html#target">Критерий допустимого риска</a> компании (или матрица риска)</td></tr>
   </tbody>
 </table>
+</div>
 
 <p>Типовые PFD независимых слоёв, которые берут «в кредит» (значения: устоявшаяся практика CCPS LOPA;
 нормативный пример с критерием 10⁻⁴ /год и деревом событий —
 <a class="print-url" href="../materials/gost-r-mek-61511-3-2011.pdf">ГОСТ Р МЭК 61511-3-2011, прил. B</a>;
 терминология и порядок работы — <a href="../materials/lopa-intro-icheme.pdf">IChemE, LOPA Introduction</a>; есть <a href="../materials/LOPA-Intro-Rus.pdf">русский перевод</a>):</p>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
   <thead>
     <tr><th>Слой защиты</th><th>Типовая PFD</th><th>Когда можно брать в кредит</th></tr>
@@ -67,6 +72,7 @@
     <tr><td>Гидрозатвор, огнепреградитель, дамба</td><td>0,01–0,001</td><td>Пассивный барьер, рассчитан на сценарий</td></tr>
   </tbody>
 </table>
+</div>
 
 <div class="warn">
   <span class="tag">Ловушка</span>
@@ -101,6 +107,7 @@
 
 <h2>3. Разбор: сепаратор из урока 1</h2>
 
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
 <table>
   <thead>
     <tr><th>Шаг</th><th>Значение</th><th>Обоснование</th></tr>
@@ -115,6 +122,7 @@
     <tr><td>Назначенный уровень</td><td><strong>SIL 2</strong></td><td>диапазон RRF 100–1 000</td></tr>
   </tbody>
 </table>
+</div>
 
 <div class="key">
   <span class="tag">Ключевая идея урока</span>
