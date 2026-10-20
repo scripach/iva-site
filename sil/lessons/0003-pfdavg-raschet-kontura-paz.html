@@ -14,6 +14,18 @@
   <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
 </header>
 
+<nav class="lesson-nav top" aria-label="Навигация по курсу">
+  <div class="nav-row">
+    <a href="0002-kak-naznachayut-sil-lopa.html">← Урок 2: Как назначают SIL</a>
+    <a class="toc" href="../index.html">Содержание курса</a>
+    <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 4: Архитектуры MooN →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Справочники:</span>
+    <a href="../reference/glossary.html">Глоссарий</a>
+  </div>
+</nav>
+
 <div class="note">
   <span class="tag">Мостик от урока 2</span>
   <a href="0002-kak-naznachayut-sil-lopa.html">LOPA</a> потребовала для сепаратора SIL 2 со снижением риска
@@ -136,20 +148,20 @@
   "elements": [
     { "name": "Датчик", "label": "Датчик PSHH: λ_DU",
       "options": [
-        { "v": 5e-6,   "label": "5·10⁻⁶ /ч — общий датчик с преобразователем" },
-        { "v": 2.5e-6, "label": "2,5·10⁻⁶ /ч — сертификат МЭК 61508 (взят в §3)", "selected": true },
-        { "v": 1e-6,   "label": "1·10⁻⁶ /ч — сертифицированный + диагностика контура" }
+        { "v": 5e-6,   "label": "5·10⁻⁶ /ч — общий датчик с преобразователем" },
+        { "v": 2.5e-6, "label": "2,5·10⁻⁶ /ч — сертификат МЭК 61508 (взят в §3)", "selected": true },
+        { "v": 1e-6,   "label": "1·10⁻⁶ /ч — сертифицированный + диагностика контура" }
       ] },
     { "name": "Логика", "label": "Логика (ПЛК ПАЗ): λ_DU",
       "options": [
-        { "v": 1e-6,  "label": "1·10⁻⁶ /ч — обычный ПЛК (для ПАЗ не допускается)" },
-        { "v": 1e-7,  "label": "1·10⁻⁷ /ч — ПЛК безопасности (взят в §3)", "selected": true }
+        { "v": 1e-6,  "label": "1·10⁻⁶ /ч — обычный ПЛК (для ПАЗ не допускается)" },
+        { "v": 1e-7,  "label": "1·10⁻⁷ /ч — ПЛК безопасности (взят в §3)", "selected": true }
       ] },
     { "name": "Исполнение", "label": "Соленоид + отсечник: λ_DU",
       "options": [
-        { "v": 5e-6,  "label": "5·10⁻⁶ /ч — типовой отсечник" },
-        { "v": 2e-6,  "label": "2·10⁻⁶ /ч — отсечник с лучшим приводом (взят в §3)", "selected": true },
-        { "v": 1e-6,  "label": "1·10⁻⁶ /ч — плюс регулярные ходовые испытания" }
+        { "v": 5e-6,  "label": "5·10⁻⁶ /ч — типовой отсечник" },
+        { "v": 2e-6,  "label": "2·10⁻⁶ /ч — отсечник с лучшим приводом (взят в §3)", "selected": true },
+        { "v": 1e-6,  "label": "1·10⁻⁶ /ч — плюс регулярные ходовые испытания" }
       ] }
   ],
   "ti": {
@@ -265,11 +277,17 @@
   разберём на ваших примерах.
 </div>
 
-<footer class="lesson-nav">
-  <a href="0002-kak-naznachayut-sil-lopa.html">← Урок 2: LOPA</a>
-  <a href="../reference/glossary.html">Глоссарий</a>
-  <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 4: архитектуры MooN и HFT →</a>
-</footer>
+<nav class="lesson-nav bottom" aria-label="Навигация по курсу">
+  <div class="nav-row">
+    <a href="0002-kak-naznachayut-sil-lopa.html">← Урок 2: Как назначают SIL</a>
+    <a class="toc" href="../index.html">Содержание курса</a>
+    <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 4: Архитектуры MooN →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Справочники:</span>
+    <a href="../reference/glossary.html">Глоссарий</a>
+  </div>
+</nav>
 </main>
 <script src="../assets/format.js"></script>
 <script src="../assets/quiz.js"></script>

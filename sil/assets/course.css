@@ -512,19 +512,45 @@ dl.gloss dd { margin: 0.15rem 0 0 0; }
   font-size: 0.95rem;
 }
 
-footer.lesson-nav {
-  margin-top: 3rem;
-  padding-top: 1.2rem;
+/* Lesson navigation: same block at the top and at the bottom of every lesson —
+   previous lesson, course contents, next lesson, plus a row of the reference
+   pages that lesson leans on. Reference pages reuse the .nav-row inside a
+   footer, so one set of rules serves both. */
+.lesson-nav {
+  margin: 1.5rem 0;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--border);
   font-family: var(--sans);
-  font-size: 0.88rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  font-size: 0.86rem;
 }
-footer.lesson-nav a { text-decoration: none; }
-footer.lesson-nav .next { margin-left: auto; font-weight: 600; }
+.lesson-nav.bottom {
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+}
+.lesson-nav a { text-decoration: none; }
+.nav-row,
+.lesson-nav > .nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.4rem;
+}
+.nav-row .next { margin-left: auto; font-weight: 600; }
+.nav-row .toc {
+  color: var(--muted);
+  border-bottom: 1px dotted var(--border);
+}
+.nav-dummy { color: var(--muted); }
+.nav-refs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+  margin-top: 0.55rem;
+  font-size: 0.82rem;
+}
+.nav-refs-label { color: var(--muted); }
+.nav-refs a { color: var(--accent); }
 
 /* ---------- print ---------- */
 
@@ -557,6 +583,9 @@ footer.lesson-nav .next { margin-left: auto; font-weight: 600; }
   }
   .sort-explain { display: block; }
   a { color: inherit; text-decoration: none; }
+  /* Navigation is a screen affordance: printed sheets carry the source URLs
+     of the lesson body only, not a row of dead links on every page. */
+  .lesson-nav { display: none !important; }
   .print-url::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #444; }
   h2 { break-after: avoid; }
   table, figure, .widget { break-inside: avoid; }
