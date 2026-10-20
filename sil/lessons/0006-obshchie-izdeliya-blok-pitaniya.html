@@ -147,6 +147,117 @@
 
 <p class="mono" style="text-align:center;">p<sub>1+1</sub> = [(1 − β) · λ<sub>DU</sub> · TI / 2]² + β · λ<sub>DU</sub> · TI / 2</p>
 
+<p>Слагаемое в квадратных скобках — PFD одной копии по независимым отказам; в квадрате оно
+даёт отказ обеих. Так считать можно только при развязке:</p>
+
+<figure id="decoupling">
+<svg viewBox="0 0 900 392" role="img" aria-label="Сравнение двух блоков питания на общей шине 24 В: без развязки пробой выхода одного блока закорачивает шину и обесточивает все каналы; с развязывающими диодами отказавший блок отсекается, шина держит 24 В">
+  <text x="80" y="30" font-size="15" font-weight="700" fill="currentColor">Без развязки</text>
+  <text x="530" y="30" font-size="15" font-weight="700" fill="currentColor">1+1 с развязкой</text>
+  <line x1="450" y1="14" x2="450" y2="380" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 5"/>
+
+  <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+    <line x1="145" y1="84" x2="145" y2="96"/>
+    <line x1="56" y1="96" x2="145" y2="96"/>
+    <line x1="56" y1="96" x2="56" y2="221"/>
+    <line x1="56" y1="141" x2="80" y2="141"/>
+    <line x1="56" y1="221" x2="80" y2="221"/>
+    <line x1="210" y1="141" x2="250" y2="141"/>
+    <line x1="210" y1="221" x2="250" y2="221"/>
+    <line x1="250" y1="141" x2="250" y2="221"/>
+    <line x1="250" y1="181" x2="290" y2="181"/>
+    <line x1="290" y1="120" x2="330" y2="120"/>
+    <line x1="290" y1="181" x2="330" y2="181"/>
+    <line x1="290" y1="242" x2="330" y2="242"/>
+  </g>
+  <line x1="290" y1="96" x2="290" y2="242" stroke="var(--error)" stroke-width="3"/>
+
+  <g>
+    <rect x="80" y="52" width="130" height="32" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="145" y="73" text-anchor="middle" font-size="13" fill="currentColor">Ввод 220 В</text>
+  </g>
+  <g>
+    <rect x="80" y="120" width="130" height="42" rx="7" fill="var(--error-soft)" stroke="var(--error)" stroke-width="2.5"/>
+    <text x="145" y="139" text-anchor="middle" font-size="12.5" fill="currentColor">БП-1</text>
+    <text x="145" y="154" text-anchor="middle" font-size="11.5" fill="var(--error)">пробой выхода</text>
+    <rect x="80" y="200" width="130" height="42" rx="7" fill="var(--warning-soft)" stroke="var(--warning)" stroke-width="2"/>
+    <text x="145" y="219" text-anchor="middle" font-size="12.5" fill="currentColor">БП-2</text>
+    <text x="145" y="234" text-anchor="middle" font-size="11.5" fill="var(--muted)">исправен</text>
+  </g>
+  <g>
+    <rect x="330" y="100" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="373" y="125" text-anchor="middle" font-size="12.5" fill="var(--muted)">канал 1</text>
+    <rect x="330" y="161" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="373" y="186" text-anchor="middle" font-size="12.5" fill="var(--muted)">канал 2</text>
+    <rect x="330" y="222" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="373" y="247" text-anchor="middle" font-size="12.5" fill="var(--muted)">канал 3</text>
+  </g>
+  <text x="290" y="272" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--error)">шина 0 В</text>
+  <text x="60" y="312" font-size="12.5" fill="currentColor">Пробой выхода закорачивает шину 24 В.</text>
+  <text x="60" y="332" font-size="12.5" fill="var(--muted)">Ток БП-2 уходит в замыкание.</text>
+
+  <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+    <line x1="595" y1="84" x2="595" y2="96"/>
+    <line x1="506" y1="96" x2="595" y2="96"/>
+    <line x1="506" y1="96" x2="506" y2="221"/>
+    <line x1="506" y1="141" x2="530" y2="141"/>
+    <line x1="506" y1="221" x2="530" y2="221"/>
+    <line x1="660" y1="141" x2="666" y2="141"/>
+    <line x1="686" y1="141" x2="700" y2="141"/>
+    <line x1="660" y1="221" x2="666" y2="221"/>
+    <line x1="686" y1="221" x2="700" y2="221"/>
+    <line x1="700" y1="141" x2="700" y2="221"/>
+    <line x1="700" y1="181" x2="740" y2="181"/>
+    <line x1="740" y1="120" x2="780" y2="120"/>
+    <line x1="740" y1="181" x2="780" y2="181"/>
+    <line x1="740" y1="242" x2="780" y2="242"/>
+  </g>
+  <line x1="740" y1="96" x2="740" y2="242" stroke="var(--accent)" stroke-width="3"/>
+
+  <g>
+    <rect x="530" y="52" width="130" height="32" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="595" y="73" text-anchor="middle" font-size="13" fill="currentColor">Ввод 220 В</text>
+  </g>
+  <g>
+    <rect x="530" y="120" width="130" height="42" rx="7" fill="var(--error-soft)" stroke="var(--error)" stroke-width="2.5"/>
+    <text x="595" y="139" text-anchor="middle" font-size="12.5" fill="currentColor">БП-1</text>
+    <text x="595" y="154" text-anchor="middle" font-size="11.5" fill="var(--error)">пробой выхода</text>
+    <rect x="530" y="200" width="130" height="42" rx="7" fill="var(--warning-soft)" stroke="var(--warning)" stroke-width="2"/>
+    <text x="595" y="219" text-anchor="middle" font-size="12.5" fill="currentColor">БП-2</text>
+    <text x="595" y="234" text-anchor="middle" font-size="11.5" fill="var(--muted)">исправен</text>
+  </g>
+  <g fill="var(--accent)" stroke="var(--accent)" stroke-width="1.6">
+    <polygon points="666,134 666,148 684,141" fill="var(--accent-soft)"/>
+    <line x1="684" y1="133" x2="684" y2="149"/>
+    <polygon points="666,214 666,228 684,221" fill="var(--accent-soft)"/>
+    <line x1="684" y1="213" x2="684" y2="229"/>
+  </g>
+  <text x="676" y="172" text-anchor="middle" font-size="11" fill="var(--muted)">диод</text>
+  <g>
+    <rect x="780" y="100" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="823" y="125" text-anchor="middle" font-size="12.5" fill="currentColor">канал 1</text>
+    <rect x="780" y="161" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="823" y="186" text-anchor="middle" font-size="12.5" fill="currentColor">канал 2</text>
+    <rect x="780" y="222" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="823" y="247" text-anchor="middle" font-size="12.5" fill="currentColor">канал 3</text>
+  </g>
+  <text x="740" y="272" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--accent)">шина 24 В</text>
+  <text x="510" y="312" font-size="12.5" fill="currentColor">Диод закрыт, отказавший блок отсечён.</text>
+  <text x="510" y="332" font-size="12.5" fill="var(--muted)">БП-2 держит шину 24 В, каналы живы.</text>
+
+  <g>
+    <rect x="20" y="366" width="18" height="14" rx="3" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <text x="48" y="378" font-size="12.5" fill="var(--muted)">отказавшее звено</text>
+    <rect x="188" y="366" width="18" height="14" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+    <text x="216" y="378" font-size="12.5" fill="var(--muted)">развязка: диод, OR-ing-модуль</text>
+  </g>
+</svg>
+<figcaption>Пробой выхода БП-1 замыкает шину: каналы обесточены, хотя БП-2 исправен. Диод разрывает связь,
+и отказ одной копии перестаёт быть отказом второй. Именно этот отказ стоит в квадратных скобках
+формулы. Общее у копий остаётся: ввод, среда, тип изделия; эту долю снимают разделением вводов,
+разнообразием и раздельными трассами.</figcaption>
+</figure>
+
 <p>Возьмите блок питания с λ<sub>DU</sub> = 1·10⁻⁶ /ч и TI = 1 год. Один блок: p = 4,4·10⁻³.
 Два блока при β = 5 %: 2,4·10⁻⁴, то есть в 18 раз лучше. <strong>Третий блок: 2,2·10⁻⁴</strong> — почти
 ничего. Это и есть β-пол: квадратичный член ушёл в 10⁻⁷, и в сумме осталось только β·λ·TI/2, которое
@@ -193,7 +304,8 @@
 
 <ul>
 <li><strong>1+1 с развязкой</strong> — два блока на шину 24 В, развязанные диодами, OR-ing-модулями
-или встроенным MOSFET. Без развязки отказ одного блока тянет шину вниз вместе с исправным соседом.</li>
+или встроенным MOSFET. Без неё отказ одного блока тянет шину вниз вместе с исправным соседом —
+та же схема, что в <a href="#decoupling">§3</a>.</li>
 <li><strong>Раздельные вводы и автоматы</strong> — два блока от одного ввода — это не резерв ввода,
 а удвоение блока.</li>
 <li><strong>Раздельные клеммы и автоматы по каналам</strong> — иначе одна клемма становится источником
