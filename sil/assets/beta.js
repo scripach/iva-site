@@ -130,7 +130,7 @@
       var worst = scores.slice().sort(function (a, b) { return b.score - a.score; })[0];
 
       function group(n) {
-        return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+        return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
       }
 
       line("Сумма баллов")
@@ -145,7 +145,7 @@
       else if (beta > 0.05) note = "диапазон полевых узлов по МЭК 61508-6 — для питания обычно";
       else if (beta > 0.005) note = "в диапазоне и логики, и полевых узлов";
       else note = "лучше диапазона МЭК: проверьте, не занижены ли оценки";
-      bLine.appendChild(el("span", "lopa-note", note));
+      bLine.appendChild(el("span", "lopa-note-block", note));
 
       line("Главный вклад: " + worst.label.toLowerCase())
         .appendChild(el("span", "lopa-note",
@@ -155,19 +155,19 @@
         .appendChild(el("strong", null, fmt(Number(pi.toPrecision(6)))));
 
       var indLine = line("Независимая часть");
-      indLine.appendChild(el("span", "lopa-note",
-        "[(1−β)·p]² = " + fmt(Number(indep.toPrecision(6)))));
+      indLine.appendChild(el("strong", null, fmt(Number(indep.toPrecision(6)))));
+      indLine.appendChild(el("span", "lopa-note-block", "[(1−β)·p]²"));
 
       var ccfLine = line("Слагаемое общей причины");
       ccfLine.appendChild(el("strong", null, fmt(Number(ccf.toPrecision(6)))));
-      ccfLine.appendChild(el("span", "lopa-note", "β·p"));
+      ccfLine.appendChild(el("span", "lopa-note-block", "β·p"));
 
       line("PFD звена 1+1")
         .appendChild(el("strong", "lopa-sil", fmt(Number(p11.toPrecision(6)))));
 
       var gain = line("Выигрыш от второго блока");
       gain.appendChild(el("strong", null, "×\u00a0" + String((pi / p11).toFixed(1)).replace(".", ",")));
-      gain.appendChild(el("span", "lopa-note",
+      gain.appendChild(el("span", "lopa-note-block",
         "при β 5\u00a0% из формулы урока — ×\u00a0" +
         String((pi / (((1 - 0.05) * pi) * ((1 - 0.05) * pi) + 0.05 * pi)).toFixed(1)).replace(".", ",")));
 

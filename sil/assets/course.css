@@ -119,12 +119,13 @@ code, .mono {
 .lopa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
 @media (max-width: 640px) { .lopa-grid { grid-template-columns: 1fr; } }
 .lopa-field { display: block; margin-bottom: 0.9rem; }
+/* Same reason as th: a field label carries notation — «Блок питания 24 В
+   (λ 1·10⁻⁶ /ч)» — and uppercase turns λ into Λ and /ч into /Ч. */
 .lopa-label {
   display: block;
   font-family: var(--sans);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 0.35rem;
 }
@@ -155,12 +156,13 @@ code, .mono {
 }
 .lopa-line { margin-bottom: 0.55rem; font-size: 0.95rem; }
 .lopa-line strong { font-size: 1.05rem; }
+/* Same reason as th: line labels repeat the widget data («PFD звена 1+1»,
+   «Шина и клеммы 24 В (λ 1·10⁻⁷ /ч)») and uppercase mangles λ and /ч. */
 .lopa-line-label {
   display: block;
   font-family: var(--sans);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--muted);
 }
 .lopa-formula-wrap { margin: 0.2rem 0 0.7rem; }
@@ -168,6 +170,15 @@ code, .mono {
 .lopa-sil { color: var(--accent); }
 .lopa-sil-line strong { font-size: 1.25rem; }
 .lopa-note { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin-left: 0.4rem; }
+/* Long explanatory note under a value: the inline .lopa-note wraps mid-sentence
+   in a narrow column, so multi-line notes get their own row instead. */
+.lopa-note-block {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
 
 /* pfd calculator: verdict colors (layout reuses .lopa-*) */
 .pfd-verdict.ok { color: var(--success); }
@@ -217,10 +228,13 @@ th, td {
   border-bottom: 1px solid var(--border);
   vertical-align: top;
 }
+/* Headers keep their original case: uppercase mangles the notation the course
+   is built on — λDU → ΛDU, PFDavg → PFD AVG, 1/ч → 1/Ч, and the Humphreys
+   levels a..e → A..E, which the source prints in lowercase. Small size,
+   weight and muted colour separate a header from a cell without touching case. */
 th {
   font-weight: 600;
   font-size: 0.8rem;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--muted);
   border-bottom: 2px solid var(--border);
