@@ -361,19 +361,35 @@ figcaption {
   text-align: center;
 }
 
-/* Wide screens: data carriers (tables, figures) get their own, wider
-   measure — editorial "narrow prose, wide graphics". Centering is done
-   with negative margins, not transform, so focus rings and print keep
-   working. Cards stay at the text measure (see the callout rules). */
+/* Wide screens: figures get their own, wider measure — editorial "narrow
+   prose, wide graphics". Centering is done with negative margins, not
+   transform, so focus rings and print keep working. Cards stay at the text
+   measure (see the callout rules). */
 @media (min-width: 60rem) {
-  table,
   figure,
-  .table-scroll,
   .figure-scroll {
     --bleed: min(calc(100vw - 2rem), 56rem);
     width: var(--bleed);
     margin-inline: calc((100% - var(--bleed)) / 2);
   }
+  /* Tables are NOT given the full bleed unconditionally. A three-column
+     table stretched to 56rem left 150px empty on the right while its text
+     touched the far-left edge — read as "the table is shifted left" even
+     though the wrapper was centred. Now the box hugs its content and
+     centres on whatever width it actually needs: a table that fits the
+     prose column sits exactly on it, and only a wider one bleeds
+     symmetrically into the margins. */
+  .table-scroll {
+    --bleed: min(calc(100vw - 2rem), 56rem);
+    width: fit-content;
+    /* At least the prose measure, so columns keep room to breathe; wider
+       only when the content genuinely needs it. */
+    min-width: 100%;
+    max-width: var(--bleed);
+    margin-inline: auto;
+    overflow-x: auto;
+  }
+  .table-scroll table { width: 100%; }
   figcaption,
   .src {
     width: auto;

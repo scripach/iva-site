@@ -77,7 +77,12 @@
     return Math.max(0, Math.min(3, (typeof sil0 === "number" ? sil0 : 1) + hft));
   }
 
-  function supportedLogic(hft, sff) {
+  function supportedLogic(hft, sff, sil0) {
+    /* П. 11.4.5 is not limited to field devices: a safety PLC assessed against
+       МЭК 61508-2, таблицы 2 и 3 prints its own structural rating and many do
+       claim SIL 3 at HFT 0. When such a rating exists it governs; табл. 5 is
+       only the fallback for a PLC without one. */
+    if (typeof sil0 === "number") return Math.max(0, Math.min(3, sil0 + hft));
     var row = sff > 90 ? LOGIC_HFT.high : (sff >= 60 ? LOGIC_HFT.mid : LOGIC_HFT.low);
     var best = 0;
     for (var sil = 1; sil <= 3; sil++) if (hft >= row[sil - 1]) best = sil;
@@ -221,7 +226,7 @@
       var ceilings = parts.map(function (t) {
         var sff = typeof t.d.sff === "number" ? t.d.sff : 90;
         var base = t.sub.kind === "logic"
-          ? supportedLogic(t.arch.hft, sff)
+          ? supportedLogic(t.arch.hft, sff, t.d.sil0)
           : supportedField(t.arch.hft, t.d.sil0);
         return { sub: t.sub, arch: t.arch, sff: sff, base: base, sil0: t.d.sil0 };
       });
@@ -232,11 +237,11 @@
         structSil >= 1 ? "SIL " + structSil : "ниже SIL 1"));
       structLine.appendChild(el("span", "lopa-note-block",
         "держит " + weakest.sub.label + " " + weakest.arch.v + " (HFT " + weakest.arch.hft +
-        (weakest.sub.kind === "logic"
-          ? ", SFF " + weakest.sff + " % по табл. 5"
-          : (typeof weakest.sil0 === "number"
-              ? ", SIL " + weakest.sil0 + " при HFT 0 из сертификата"
-              : ", табл. 6: HFT 0 даёт SIL 1")) + ")"));
+        (typeof weakest.sil0 === "number"
+          ? ", SIL " + weakest.sil0 + " при HFT 0 из сертификата"
+          : (weakest.sub.kind === "logic"
+              ? ", SFF " + weakest.sff + " % по табл. 5 — своей оценки нет"
+              : ", табл. 6 — своей оценки нет: HFT 0 даёт SIL 1")) + ")"));
 
       /* Gate 3 — systematic capability ceiling. No number buys SIL above it. */
       var scMin = Math.min.apply(null, parts.map(function (t) { return t.d.sc; }));
