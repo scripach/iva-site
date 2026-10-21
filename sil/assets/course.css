@@ -375,15 +375,23 @@ figcaption {
   /* Tables are NOT given the full bleed unconditionally. A three-column
      table stretched to 56rem left 150px empty on the right while its text
      touched the far-left edge — read as "the table is shifted left" even
-     though the wrapper was centred. Now the box hugs its content and
-     centres on whatever width it actually needs: a table that fits the
-     prose column sits exactly on it, and only a wider one bleeds
-     symmetrically into the margins. */
+     though the wrapper was centred. Now the box hugs the prose measure and
+     `auto` centres it, so an ordinary table sits exactly on the column.
+     Behaviour at the edges, measured rather than assumed:
+       · content wider than the prose measure → the box grows to its
+         min-content width; left edge stays on the prose, right edge runs
+         past the column. It grows to the RIGHT, not symmetrically: with
+         `margin-inline: auto` and a box already at its fit width there is
+         no free space to distribute.
+       · content wider than --bleed → max-width caps the box, overflow-x
+         turns the wrapper into a scroll region, and the cap keeps the page
+         itself from widening.
+     If a table ever needs to sit centred and wider than the prose, that
+     needs explicit negative margins, not this rule. */
   .table-scroll {
     --bleed: min(calc(100vw - 2rem), 56rem);
     width: fit-content;
-    /* At least the prose measure, so columns keep room to breathe; wider
-       only when the content genuinely needs it. */
+    /* At least the prose measure, so columns keep room to breathe. */
     min-width: 100%;
     max-width: var(--bleed);
     margin-inline: auto;
