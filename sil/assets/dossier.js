@@ -12,6 +12,7 @@
          "title": "...", "instruction": "...",
          "items": [
            { "id": "cert1", "gate": "select",  "label": "...", "have": true,
+             "ok": true,     // optional: false = документ есть, но не годится
              "short": "необязательно: подпись в выводе, если label длинный",
              "note": "что этот документ реально даёт" },
            ...
@@ -27,10 +28,16 @@
        </script>
      </div>
 
-   Model: a gate is closed only when every item mapped to it is present.
-   There is no partial credit — that is the entire point of the three
-   gates in lesson 7, and the reason a single missing number cannot be
-   compensated by a thick stack of other papers.
+   Model: a gate is closed only when every item mapped to it is both
+   present and usable. There is no partial credit — that is the entire
+   point of the three gates in lesson 7, and the reason a single missing
+   number cannot be compensated by a thick stack of other papers.
+
+   «Usable» matters as much as «present»: a λDU printed in a safety
+   manual but contradicted by that same manual's own PFD table does not
+   close the number gate. Set "ok": false for a document that exists and
+   still cannot be used; the verdict names it as present-but-unfit
+   instead of hiding it among the missing ones.
 
    The widget answers one question an engineer actually asks: «можно ли
    этим комплектом обосновать элемент в функции с целевым SIL n».
@@ -70,6 +77,8 @@
     var state = {};
     data.items.forEach(function (it) { state[it.id] = !!it.have; });
 
+    function usable(it) { return state[it.id] && it.ok !== false; }
+
     /* ---- controls: one checkbox per document ---- */
     var box = el("div", "lopa-ipls");
     data.items.forEach(function (it) {
@@ -100,7 +109,8 @@
       data.gates.forEach(function (g) {
         var own = data.items.filter(function (it) { return it.gate === g.id; });
         var missing = own.filter(function (it) { return !state[it.id]; });
-        var closed = own.length > 0 && missing.length === 0;
+        var unfit = own.filter(function (it) { return state[it.id] && it.ok === false; });
+        var closed = own.length > 0 && missing.length === 0 && unfit.length === 0;
         if (!closed) open.push(g);
 
         var d = el("div", "lopa-line");
@@ -128,6 +138,12 @@
           m.appendChild(el("span", "lopa-note-block", it.note ? txt + " — " + it.note : txt));
           out.appendChild(m);
         });
+        unfit.forEach(function (it) {
+          var m = el("div", "lopa-line");
+          var txt = "есть, но не годится: " + (it.short || it.label);
+          m.appendChild(el("span", "lopa-note-block", it.note ? txt + " — " + it.note : txt));
+          out.appendChild(m);
+        });
       });
 
       var v = el("div", "lopa-line");
@@ -141,12 +157,12 @@
         why = "Все четыре условия выполнены по отдельности и ни одно не подменяет другое. " +
           "Теперь считается PFD и сравнивается с целью из LOPA.";
       } else if (open.length === data.gates.length) {
-        why = "Ни одно условие пока не закрыто. Паспорт с надписью «УПБ 3 (SIL3)» " +
-          "и сертификат без чисел — это заявка, а не обоснование.";
+        why = "Ни одно условие пока не закрыто. Стопка документов с надписью «SIL» " +
+          "и числами, которые не сходятся между собой, — это заявка, а не обоснование.";
       } else {
         why = "Открыто " + open.length + " из " + data.gates.length +
           ": обоснование держится на самом слабом звене, а не на числе закрытых. " +
-          "Сертификат с надписью SIL не заменяет отсутствующее число.";
+          "Документ, который есть, но не годится, закрывает гейт не лучше отсутствующего.";
       }
       out.appendChild(el("span", "lopa-note-block", why));
     }
