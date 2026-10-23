@@ -11,39 +11,62 @@
        {
          "title": "...", "instruction": "...",
          "items": [
-           { "id": "cert1", "gate": "select",  "label": "...", "have": true,
-             "ok": true,     // optional: false = документ есть, но не годится
-             "short": "необязательно: подпись в выводе, если label длинный",
-             "note": "что этот документ реально даёт" },
+           { "id": "cert", "gate": "select", "label": "...",
+             "state": "unfit",           // начальное состояние, см. ниже
+
+             "unfitNote": "...",         // почему имеющийся документ не годится
+             "needNote":  "..." },       // что должно быть в годном
            ...
          ],
          "gates": [
            { "id": "select", "label": "Выбор компонента",
              "ref": "п. 11.5.2.1",
-             "whenMissing": "..." }
-         ],
-         "target": { "label": "Целевой SIL функции",
-                     "options": [ {"v": 2, "label": "SIL 2"}, ... ] }
+             "whenMissing": "что запросить у изготовителя" }
+         ]
        }
        </script>
      </div>
 
-   Model: a gate is closed only when every item mapped to it is both
-   present and usable. There is no partial credit — that is the entire
-   point of the three gates in lesson 7, and the reason a single missing
-   number cannot be compensated by a thick stack of other papers.
+   Model: each item has one of three states, and the learner picks it:
 
-   «Usable» matters as much as «present»: a λDU printed in a safety
-   manual but contradicted by that same manual's own PFD table does not
-   close the number gate. Set "ok": false for a document that exists and
-   still cannot be used; the verdict names it as present-but-unfit
-   instead of hiding it among the missing ones.
+     fit    «есть и годится»      — документ закрывает свой гейт
+     unfit  «есть, но не годится» — документ есть, требованиям не отвечает
+     none   «нет документа»       — его нет вовсе
 
-   The widget answers one question an engineer actually asks: «можно ли
-   этим комплектом обосновать элемент в функции с целевым SIL n».
+   Three states, not two, because the difference between an absent
+   document and a present-but-unfit one is the whole point of the audit:
+   they are different entries in the justification, and only the second
+   one can sometimes be repaired by a letter to the supplier.
+
+   A gate is closed only when every item mapped to it is «есть и годится».
+   There is no partial credit — the three gates of lesson 7 hold that a
+   thick stack of other papers cannot compensate for one missing number.
+
+   Early versions had a boolean pair ("have" + "ok") in the data, with
+   "ok": false written in by the author. Ticking every box then still read
+   the verdict «обосновать нельзя», because the learner was not answering
+   about their dossier at all — the file already carried the answer about
+   the specific relay. A widget whose control cannot change its outcome
+   teaches the opposite of what it shows, and the state «комплект полон»
+   was unreachable by construction. The current model lets the learner
+   reach both verdicts and see which document flips the result.
    ============================================================ */
 (function () {
   "use strict";
+
+  /* Order matters: «есть и годится» first so a fresh item with no default
+     starts on the only state that closes its gate — never on a state the
+     learner did not choose. */
+  var STATES = [
+    { v: "fit", label: "есть и годится", note: "есть и годится" },
+    { v: "unfit", label: "есть, но не годится", note: "есть, но не годится" },
+    { v: "none", label: "нет документа", note: "нет" }
+  ];
+
+  function stateOf(v) {
+    for (var i = 0; i < STATES.length; i++) if (STATES[i].v === v) return STATES[i];
+    return STATES[2];
+  }
 
   function jsonOf(root) {
     var s = root.querySelector('script[type="application/json"]');
@@ -75,24 +98,38 @@
     root.appendChild(grid);
 
     var state = {};
-    data.items.forEach(function (it) { state[it.id] = !!it.have; });
+    data.items.forEach(function (it) { state[it.id] = it.state || "fit"; });
 
-    function usable(it) { return state[it.id] && it.ok !== false; }
-
-    /* ---- controls: one checkbox per document ---- */
+    /* ---- controls: one three-state choice per document ---- */
     var box = el("div", "lopa-ipls");
+    var stateSpans = {};
+
     data.items.forEach(function (it) {
-      var lab = el("label", "lopa-ipl");
-      var cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.checked = state[it.id];
-      cb.addEventListener("change", function () {
-        state[it.id] = cb.checked;
+      var wrap = el("div", "dossier-item");
+      wrap.appendChild(el("span", "dossier-label", it.label));
+
+      var s = el("select", "lopa-select");
+      s.setAttribute("aria-label", it.label);
+      STATES.forEach(function (st) {
+        var op = el("option", null, st.label);
+        op.value = st.v;
+        if (st.v === state[it.id]) op.selected = true;
+        s.appendChild(op);
+      });
+      s.addEventListener("change", function () {
+        state[it.id] = s.value;
         recalc();
       });
-      lab.appendChild(cb);
-      lab.appendChild(document.createTextNode(it.label));
-      box.appendChild(lab);
+      wrap.appendChild(s);
+
+      /* Printed sheet has no controls, so the chosen state is written out
+         as text. On screen the select already says it; showing both would
+         be the same content twice. */
+      var text = el("span", "dossier-state", "");
+      stateSpans[it.id] = text;
+      wrap.appendChild(text);
+
+      box.appendChild(wrap);
     });
     left.appendChild(box);
 
@@ -104,12 +141,18 @@
     function recalc() {
       out.innerHTML = "";
 
+      data.items.forEach(function (it) {
+        if (stateSpans[it.id]) {
+          stateSpans[it.id].textContent = stateOf(state[it.id]).note;
+        }
+      });
+
       var open = [];
 
       data.gates.forEach(function (g) {
         var own = data.items.filter(function (it) { return it.gate === g.id; });
-        var missing = own.filter(function (it) { return !state[it.id]; });
-        var unfit = own.filter(function (it) { return state[it.id] && it.ok === false; });
+        var missing = own.filter(function (it) { return state[it.id] === "none"; });
+        var unfit = own.filter(function (it) { return state[it.id] === "unfit"; });
         var closed = own.length > 0 && missing.length === 0 && unfit.length === 0;
         if (!closed) open.push(g);
 
@@ -124,26 +167,28 @@
         }
         out.appendChild(d);
 
-        /* One wrapped line per missing item. A three-row block (label,
-           value, note) per item made the output column twice the height of
-           the checkbox column it explains, so the panel read as a wall of
-           text next to five short lines. */
-        /* One line per missing item: name, then the reason in the same
-           paragraph. Two rows per item (a separate "нет" label and then the
-           name again) doubled the height for nothing, and repeating the
-           name once per row made a five-line checklist look like a wall. */
-        missing.forEach(function (it) {
-          var m = el("div", "lopa-line");
-          var txt = "нет: " + (it.short || it.label);
-          m.appendChild(el("span", "lopa-note-block", it.note ? txt + " — " + it.note : txt));
-          out.appendChild(m);
-        });
         unfit.forEach(function (it) {
           var m = el("div", "lopa-line");
           var txt = "есть, но не годится: " + (it.short || it.label);
-          m.appendChild(el("span", "lopa-note-block", it.note ? txt + " — " + it.note : txt));
+          m.appendChild(el("span", "lopa-note-block",
+            it.unfitNote ? txt + " — " + it.unfitNote : txt));
           out.appendChild(m);
         });
+        missing.forEach(function (it) {
+          var m = el("div", "lopa-line");
+          var txt = "нет: " + (it.short || it.label);
+          m.appendChild(el("span", "lopa-note-block",
+            it.needNote ? txt + " — " + it.needNote : txt));
+          out.appendChild(m);
+        });
+
+        /* What to ask for. Placed under the item list rather than in it: the
+           same sentence serves every item of the gate that is still open. */
+        if (!closed && g.whenMissing) {
+          var a = el("div", "lopa-line");
+          a.appendChild(el("span", "lopa-note-block", "Что нужно: " + g.whenMissing));
+          out.appendChild(a);
+        }
       });
 
       var v = el("div", "lopa-line");
@@ -154,7 +199,7 @@
 
       var why;
       if (open.length === 0) {
-        why = "Все четыре условия выполнены по отдельности и ни одно не подменяет другое. " +
+        why = "Все четыре условия выполнены по отдельности, и ни одно не подменяет другое. " +
           "Теперь считается PFD и сравнивается с целью из LOPA.";
       } else if (open.length === data.gates.length) {
         why = "Ни одно условие пока не закрыто. Стопка документов с надписью «SIL» " +

@@ -195,6 +195,17 @@ code, .mono {
   font-size: 0.9rem;
   cursor: pointer;
 }
+/* Dossier audit (dossier.js): a document row pairs its label with the
+   three-state choice. The chosen state is repeated as text only on paper,
+   where the select is hidden and the choice would otherwise vanish. */
+.dossier-item { display: grid; gap: 0.3rem; margin-bottom: 0.7rem; }
+.dossier-label {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+.dossier-state { display: none; font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+
 .lopa-out {
   border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
   background: var(--accent-soft);
@@ -801,6 +812,9 @@ p .partno { font-size: 0.92em; }
   .widget { border: none; background: none; padding: 0; margin: 1rem 0; }
   .widget select, .widget input, .widget .btn, .widget .lopa-formula-wrap { display: none !important; }
   .widget .lopa-field { display: none !important; }
+  /* The dossier choice is the answer, so on paper the select goes and the
+     state it held is printed in its place. */
+  .dossier-state { display: block; }
   .lopa-grid { display: block; }
   .lopa-out { border: 1px solid var(--border); }
   .q-opt {
