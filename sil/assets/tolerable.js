@@ -159,6 +159,20 @@
     return many;
   }
 
+  /* Подпись, которая сходится при перемножении на калькуляторе:
+     критерий печатается как 1,22, но считается от 1,21667, и 1,22 × 3
+     даёт 3,66 вместо 3,65. Пять значащих — 1,2167, и 1,2167 × 3 = 3,6501,
+     то есть в четырёхзначном ответе те же 3,65. */
+  function factor(x) {
+    if (!isFinite(x) || x === 0) return "0";
+    var sign = x < 0 ? "−" : "";
+    x = Math.abs(x);
+    var parts = Number(x.toPrecision(12)).toExponential(5).split("e");
+    var m = Number(Number(parts[0]).toPrecision(5)).toString()
+      .replace(".", ",").replace(/(,\d*?)0+$/, "$1").replace(/,$/, "");
+    return sign + m + "·10" + F.sup(parseInt(parts[1], 10));
+  }
+
   function render(root) {
     var cfg = jsonOf(root);
     if (!cfg) return;
@@ -307,10 +321,14 @@
       value("То же в 1/год на человека", sci(fPerson),
         "индивидуальный риск, а не частота аварии");
 
+      /* Подпись показывает сомножитель с четырьмя значащими: критерий
+         печатается как 1,22, а считается от 1,2167, и читатель, умножив
+         напечатанное, получил бы 3,66 вместо 3,65. Одна строка должна
+         воспроизводиться на калькуляторе. */
       var fEvent = fPerson * state.people;
       value("Лимит на событие", sci(fEvent) + NB + "/год",
-        "умножение на " + state.people + " " + plural(state.people, "человек", "человека", "человек") +
-        " в зоне поражения");
+        factor(fPerson) + " × " + state.people + " " +
+        plural(state.people, "человек", "человека", "человек") + " в зоне поражения");
 
       var fScenario = fEvent / state.scenarios;
       value("Частота на один сценарий", sci(fScenario) + NB + "/год",
