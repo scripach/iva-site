@@ -103,6 +103,12 @@
 <li>ниже λ<sub>DU</sub> (лучшее железо, выше <a href="../reference/glossary.html#dc">диагностика</a>) → ниже PFD.</li>
 </ul>
 
+<p>Связь между диагностикой и λ<sub>DU</sub> задаёт коэффициент диагностики:
+DC = λ<sub>DD</sub>/λ<sub>D</sub>, где λ<sub>D</sub> = λ<sub>DD</sub> + λ<sub>DU</sub>. Отсюда
+λ<sub>DU</sub> = λ<sub>D</sub>·(1 − DC): у реле АСТРА с λ<sub>D</sub> 600 FIT и DC 99 %
+остаётся 6 FIT скрытых, и именно они дают 2,6·10⁻⁵ при TI год. Диагностика не убирает отказ,
+а переводит его из скрытых в выявленные. Разбор — <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">урок 9</a>.</p>
+
 <p><strong>Откуда брать λ<sub>DU</sub>.</strong> Сертификат изделия по МЭК 61508 (раздел с интенсивностями отказов),
 отраслевые справочники (OREDA, Exida PDS Handbook); в российской практике значения попадают в обоснование
 безопасности (<a class="print-url" href="../materials/zhukov-sil-analiz-paz.pdf">Жуков, SIL-анализ систем ПАЗ</a>, копия на нашем сервере).</p>
