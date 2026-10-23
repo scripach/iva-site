@@ -197,13 +197,27 @@
         open.length ? "обосновать нельзя" : "комплект полон"));
       out.appendChild(v);
 
+      /* The explanation must follow what is actually in the dossier, not the
+         gate count. «Ни одно условие не закрыто» is true in two quite
+         different dossiers — one empty, one stuffed with papers that do not
+         qualify — and the same sentence would misdescribe the first. */
+      var nUnfit = 0, nNone = 0;
+      data.items.forEach(function (it) {
+        if (state[it.id] === "unfit") nUnfit++;
+        else if (state[it.id] === "none") nNone++;
+      });
+
       var why;
       if (open.length === 0) {
         why = "Все четыре условия выполнены по отдельности, и ни одно не подменяет другое. " +
           "Теперь считается PFD и сравнивается с целью из LOPA.";
-      } else if (open.length === data.gates.length) {
-        why = "Ни одно условие пока не закрыто. Стопка документов с надписью «SIL» " +
-          "и числами, которые не сходятся между собой, — это заявка, а не обоснование.";
+      } else if (nNone === 0) {
+        why = "Все документы комплекта на месте, но часть из них требованию не отвечает: " +
+          "обоснование держится на самом слабом звене. Строки «есть, но не годится» " +
+          "закрывает письмо изготовителю или замена изделия, а не ещё одна папка.";
+      } else if (nUnfit === 0) {
+        why = "Ни одного документа из комплекта нет. Считать нечего, пока изготовитель " +
+          "не пришлёт документы, а TI, MTTR и β не появятся из вашего объекта.";
       } else {
         why = "Открыто " + open.length + " из " + data.gates.length +
           ": обоснование держится на самом слабом звене, а не на числе закрытых. " +
