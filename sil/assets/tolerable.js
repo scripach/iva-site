@@ -17,6 +17,9 @@
                                                                 {"v": "techno", "label": "..."} ] },
          "population":{ "label": "Для кого критерий", "options": [ {"v": 1, "label": "персонал", "selected": true},
                                                                   {"v": 100, "label": "население — в 100 раз меньше"} ] },
+         "people":   { "label": "Сколько человек в зоне поражения", "options": [ {"v": 3, "label": "...", "selected": true}, ... ] },
+         "fatal":    { "label": "Сколько из них погибают в одном событии",
+                       "options": [ {"v": 3, "label": "все трое", "selected": true}, {"v": 1, "label": "один"} ] },
          "scenarios": { "label": "Доля на эту SIF", "options": [ {"v": 1, "label": "..."}, ... ] },
          "initiator": { "label": "Частота инициатора", "options": [ {"v": 0.1, "label": "...", "selected": true}, ... ] }
        }
@@ -30,9 +33,18 @@
 
    Units matter more than the arithmetic here: Rд is a risk per person
    (ppm killed out of a million exposed), NOT a frequency of an accident.
-   Reaching a frequency for one scenario takes a multiplication by the
-   number of people in the zone (a lethal event kills all of them) and a
-   division by the number of scenarios sharing that level.
+   Multiplying it by the number of people in the zone gives DEATHS PER
+   YEAR (persons × risk per person), which is still not a frequency:
+   an event that kills k of the N people exposed happens deaths/k times
+   per year. Only then does the division by the number of scenarios
+   sharing that level produce a frequency, and only that frequency is
+   comparable with a target frequency from annex B.
+
+   The earlier model stopped at deaths/year and labelled it "лимит на
+   событие, 1/год". With k = N the missing divisor hid inside the
+   multiplication and the answer looked right; with k < N the frequency
+   came out N/k times too high, and the dimension "в год" looked
+   correct the whole way. That is the failure this widget now blocks.
 
    The widget prints that ladder to the end on purpose: it always lands
    far above SIL 3, and that overshoot IS the lesson. A criterion on
@@ -197,6 +209,7 @@
       extra: picked(cfg.extra.options).v,
       population: parseFloat(picked(cfg.population.options).v),
       people: parseFloat(picked(cfg.people.options).v),
+      fatal: parseFloat(picked(cfg.fatal.options).v),
       scenarios: parseFloat(picked(cfg.scenarios.options).v),
       initiator: parseFloat(picked(cfg.initiator.options).v),
       target: parseFloat(picked(cfg.target.options).v)
@@ -237,6 +250,9 @@
     });
     select("people", cfg.people, state.people, function (v) {
       state.people = parseFloat(v);
+    });
+    select("fatal", cfg.fatal, state.fatal, function (v) {
+      state.fatal = parseFloat(v);
     });
     select("scenarios", cfg.scenarios, state.scenarios, function (v) {
       state.scenarios = parseFloat(v);
@@ -325,10 +341,25 @@
          печатается как 1,22, а считается от 1,2167, и читатель, умножив
          напечатанное, получил бы 3,66 вместо 3,65. Одна строка должна
          воспроизводиться на калькуляторе. */
-      var fEvent = fPerson * state.people;
-      value("Лимит на событие", sci(fEvent) + NB + "/год",
+      /* k не может быть больше N: один человек из зоны не даёт трёх
+         погибших. Выбор «все трое» при N = 1 ужимается до одного. */
+      var fatal = Math.min(state.fatal, state.people);
+
+      var budget = fPerson * state.people;
+      value("Допустимо смертей в год", sci(budget) + NB + "смертей/год",
         factor(fPerson) + " × " + state.people + " " +
         plural(state.people, "человек", "человека", "человек") + " в зоне поражения");
+
+      /* Смертей в год — ещё не частота события. Событие убивает k человек
+         из N, поэтому частота = бюджет / k. При k = N делитель совпадает
+         с числом людей, и пропуск шага маскируется; при k < N частота
+         завышается ровно в N/k раз. */
+      var fEvent = budget / fatal;
+      value("Частота события", sci(fEvent) + NB + "/год",
+        fatal === state.people
+          ? "в событии погибают все " + state.people + " " +
+            plural(state.people, "человек", "человека", "человек") + ": ÷" + fatal
+          : "в событии погибают " + fatal + " из " + state.people + ": ÷" + fatal);
 
       var fScenario = fEvent / state.scenarios;
       value("Частота на один сценарий", sci(fScenario) + NB + "/год",
@@ -336,9 +367,10 @@
           : "делим на " + state.scenarios + " " + plural(state.scenarios, "сценарий", "сценария", "сценариев") +
             " этого уровня тяжести");
 
-      /* Шаг 6 — от полной точности шага 5. sci() нормализует двойную
-         погрешность (9,1249999… → 9,13) одинаково на обоих шагах, поэтому
-         столбец «9,13·10⁻⁷ / 0,1» и ответ рядом совпадают. */
+      /* Шаг 7 — от полной точности шага 6, а не от напечатанного
+         округления: sci() печатает 1,22·10⁻⁶, и деление этого числа на 0,1
+         дало бы 1,2·10⁻⁵ вместо 1,21667·10⁻⁵. Ответ и подпись считаются
+         от одной величины, поэтому совпадают. */
       var pfd = fScenario / state.initiator;
       var rrf = state.initiator / fScenario;
       value("Сколько остаётся на SIF", "PFD ≤ " + sci(pfd),
