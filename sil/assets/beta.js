@@ -121,7 +121,7 @@
       var lam = cfg.lambda;
       var ti = cfg.ti;
       var pi = lam * ti / 2;
-      var indep = Math.pow((1 - beta) * pi, 2);
+      var indep = 4 / 3 * Math.pow((1 - beta) * pi, 2);
       var ccf = beta * pi;
       var p11 = indep + ccf;
 

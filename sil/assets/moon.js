@@ -25,11 +25,12 @@
        }
        </script>
      </div>
-   Idealized math (low demand, perfect proof test, independent
-   channels — NO common-cause failures):
+   Math (low demand, perfect proof test):
      p      = λ_DU × TI / 2                       (one channel, lesson 3)
-     PFD    = Σ_{k=n−m+1..n} C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ   (fewer than m healthy
-                                                     channels = SIF silent)
+     q      = (1 − β)·p                           (independent part)
+     PFD    = Σ_{k=n−m+1..n} C(n,k)·qᵏ·(1−q)ⁿ⁻ᵏ + β·p
+              (fewer than m healthy channels = SIF silent; β·p is the
+               common-cause floor that no amount of voting removes)
      RRF    = 1 / PFD  → achieved SIL band + verdict vs required RRF
      HFT    = n − m    (shown, judged in the lesson text, not here)
    ============================================================ */
@@ -53,19 +54,26 @@
     return Math.round(r * 1e9) / 1e9;
   }
 
-  /* PFD of a MooN voted group: dangerous when healthy channels < m. */
-  function pfdOf(m, n, p) {
-    var s = 0;
-    for (var k = n - m + 1; k <= n; k++) s += C(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
-    return s;
+  /* Canonical course formulas (reference/pfd-contract.html §5): first-order
+     average over the proof-test interval. q = (1-beta)p splits the channel
+     PFD; beta*p hits every channel at once, so voting cannot remove it.
+     The exact binomial enumeration differs by a few percent and is tabulated
+     in the contract; the widget prints the canonical numbers the lesson uses. */
+  var COEF = { "1oo1": 1, "1oo2": 4 / 3, "2oo2": 2, "2oo3": 4, "1oo3": 2 };
+  var POWER = { "1oo1": 1, "1oo2": 2, "2oo2": 1, "2oo3": 2, "1oo3": 3 };
+  function pfdOf(id, p, beta) {
+    if (id === "1oo1") return p;
+    if (id === "2oo2") return (2 - beta) * p;
+    var q = (1 - beta) * p;
+    return COEF[id] * Math.pow(q, POWER[id]) + beta * p;
   }
 
   var FORMULAS = {
     "1oo1": "p",
-    "1oo2": "p²",
-    "2oo2": "2p − p²",
-    "2oo3": "3p² − 2p³",
-    "1oo3": "p³"
+    "1oo2": "(4/3)q² + βp",
+    "2oo2": "(2 − β)p",
+    "2oo3": "4q² + βp",
+    "1oo3": "2q³ + βp"
   };
 
   function el(tag, cls, html) {
@@ -125,6 +133,7 @@
 
     field(null, data.lambda, "lambda");
     field(null, data.ti, "ti");
+    field(null, data.beta, "beta");
     field(null, data.target, "target");
 
     var out = el("div", "lopa-out");
@@ -150,7 +159,8 @@
       var target = +state.target.value;
 
       var p = lam * ti / 2;
-      var pfd = pfdOf(a.m, a.n, p);
+      var beta = +(state.beta ? state.beta.value : 0);
+      var pfd = pfdOf(a.id, p, beta);
       var rrf = 1 / pfd;
 
       out.innerHTML = "";
@@ -163,8 +173,8 @@
                                    : " — держит " + a.hft + " отказа")));
       out.appendChild(line("PFD<sub>avg</sub> узла",
         "<strong>" + fmt(pfd) + "</strong>" +
-        ' <span class="lopa-note">формула: ' + (FORMULAS[a.id] || "Σ C(n,k)·pᵏ") +
-        (a.ccf ? "; идеализация: каналы независимы, без CCF" : "") + "</span>"));
+        ' <span class="lopa-note">формула: ' + (FORMULAS[a.id] || "Σ C(n,k)·qᵏ + βp") +
+        '; q = (1 − β)·p, β = ' + F.fmt(Math.round(beta * 1000) / 10) + " %" + "</span>"));
       out.appendChild(line("RRF узла", "<strong>≈ " + fmtRRF(rrf) + "</strong>"));
       var band = F.bandOf(rrf);
       out.appendChild(line("Полоса по PFD (без HFT)",

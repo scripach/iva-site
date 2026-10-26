@@ -28,7 +28,7 @@
      </div>
    Model (low demand; every segment is one link of the shared path):
      p_i      = λ_i · TI / 2                         (1oo1 — no redundancy)
-     p_i      = [(1−β)·λ_i·TI/2]² + β·λ_i·TI/2       (1+1 — β-factor model)
+     p_i      = (4/3)·[(1−β)·λ_i·TI/2]² + β·λ_i·TI/2  (1+1 — β-factor model)
      PFD_path = Σ p_i                                (one link fails ⇒ the
                                                       whole path fails, and
                                                       every channel with it)
@@ -139,7 +139,7 @@
         var mode = state.picks[i];
         var beta = BETA[mode];
         var pi = seg.lambda * ti / 2;
-        var p = beta === null ? pi : Math.pow((1 - beta) * pi, 2) + beta * pi;
+        var p = beta === null ? pi : 4 / 3 * Math.pow((1 - beta) * pi, 2) + beta * pi;
         return { label: seg.label, p: p, beta: beta };
       });
       var path = terms.reduce(function (a, t) { return a + t.p; }, 0);

@@ -101,9 +101,9 @@
     var mant = digits.slice(0, 3).join("").replace(/0+$/, "");
     if (mant.length === 0) mant = "0";
     if (mant.length > 1) mant = mant[0] + "," + mant.slice(1);
-    if (x >= 0.01) {
+    if (x >= 0.1) {
       var plain = Number(mant.replace(",", ".") + "e" + exp);
-      if (plain >= 0.01 && plain < 1000) {
+      if (plain >= 0.1 && plain < 1000) {
         return sign + String(Number(plain.toPrecision(6))).replace(".", ",");
       }
     }
@@ -237,12 +237,16 @@
 
       /* Деление на сценарии распределяет ответственность, а не снижает
          риск: сумма частот по сценариям остаётся равна классу. Поэтому
-         в замыкании ниже m сокращается — и это стоит показать словами. */
+         в замыкании ниже m сокращается — и это стоит показать словами.
+         Равные доли — допущение курса: доли задаёт методика предприятия
+         (СТО, матрица «вероятность × тяжесть») или решение HAZOP/LOPA,
+         и в документе их надо назвать. */
       var fClass = state.source;
       var fSc = fClass / state.scenarios;
       value("На один сценарий", sci(fSc) + NB + "/год",
         "класс " + state.scenarios + " " + plural(state.scenarios, "сценарий", "сценария", "сценариев") +
-        " делится поровну; сумма по сценариям остаётся " + sci(fClass));
+        " делится поровну — это допущение курса, иная доля задаётся методикой предприятия; " +
+        "сумма по сценариям остаётся " + sci(fClass));
 
       var before = state.initiator;
       var applied = [];
@@ -304,11 +308,11 @@
       var verdict = el("div", "lopa-note-block");
       if (ok) {
         verdict.textContent = "Замыкание проходит: " + sci(indiv) + " ниже Rд " + sci(R_D_YEAR) +
-          " в " + (R_D_YEAR / indiv).toFixed(1).replace(".", ",") + " раза. " +
+          " в " + sci(R_D_YEAR / indiv) + " раза. " +
           "Класс можно брать; требование к функции считается отдельно и от замыкания не зависит.";
       } else {
         verdict.textContent = "Замыкание не проходит: " + sci(indiv) + " выше Rд " + sci(R_D_YEAR) +
-          " в " + (indiv / R_D_YEAR).toFixed(1).replace(".", ",") + " раза. " +
+          " в " + sci(indiv / R_D_YEAR) + " раза. " +
           "При " + state.people + " " + plural(state.people, "человеке", "человеках", "человеках") +
           " в зоне класс не может быть чаще " + sci(fMax) + " /год. " +
           "Функция безопасности этого не исправляет: частота задана до неё.";

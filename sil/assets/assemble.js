@@ -35,7 +35,9 @@
            The part a proof test cannot see lives the whole mission, so
            PTC = 100 % is the special case behind λ·TI/2.
      p_group = [(1−β)·p]^k + β·p        (1oo1: k → 0, i.e. p_group = p)
-               3·[(1−β)·p]² + β·p      (2oo3)
+               (4/3)·[(1−β)·p]² + β·p  (1oo2)
+               4·[(1−β)·p]² + β·p      (2oo3)
+               2·[(1−β)·p]³ + β·p      (1oo3)
      PFD_loop = Σ p_group               (series, never averaged)
    Three independent gates, loop SIL = minimum:
      number      band of PFD_loop
@@ -193,9 +195,9 @@
         var p = d.lambda * (d.ptc * state.ti / 2 + (1 - d.ptc) * state.mission / 2);
         var beta = typeof sub.beta === "number" ? sub.beta : 0.05;
         var pg = p;
-        if (state.arch[i] === "1oo2") pg = Math.pow((1 - beta) * p, 2) + beta * p;
-        if (state.arch[i] === "2oo3") pg = 3 * Math.pow((1 - beta) * p, 2) + beta * p;
-        if (state.arch[i] === "1oo3") pg = Math.pow((1 - beta) * p, 3) + beta * p;
+        if (state.arch[i] === "1oo2") pg = 4 / 3 * Math.pow((1 - beta) * p, 2) + beta * p;
+        if (state.arch[i] === "2oo3") pg = 4 * Math.pow((1 - beta) * p, 2) + beta * p;
+        if (state.arch[i] === "1oo3") pg = 2 * Math.pow((1 - beta) * p, 3) + beta * p;
         return { sub: sub, d: d, arch: arch, p: p, pg: pg, beta: beta };
       });
 
@@ -270,7 +272,7 @@
 
       var note = el("div", "lopa-formula-wrap");
       note.appendChild(el("span", "lopa-formula",
-        "p = λ·[PTC·TI/2 + (1−PTC)·TL/2].  1oo2: [(1−β)p]² + βp.  2oo3: 3[(1−β)p]² + βp.  " +
+        "p = λ·[PTC·TI/2 + (1−PTC)·TL/2].  1oo2: (4/3)[(1−β)p]² + βp.  2oo3: 4[(1−β)p]² + βp.  1oo3: 2[(1−β)p]³ + βp.  " +
         "PFD = Σ подсистем."));
       out.appendChild(note);
     }

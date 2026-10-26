@@ -119,6 +119,14 @@
     return x.toFixed(1).replace(".", ",");
   }
 
+  /* Отношение для вердикта замыкания: за 100 кратность печатается
+     степенью, иначе «в 24658 раза» — число без порядка. */
+  function ratioTxt(x) {
+    if (!isFinite(x) || x === 0) return "0";
+    if (x >= 100) return sci(x);
+    return swapTxt(x);
+  }
+
   /* Три значащие цифры в записи курса: 9,13·10⁻⁶. fmt() из format.js
      оставляет две — для критерия, который потом делят дальше, этого мало:
      1,22·10⁻⁶ и 1,2·10⁻⁶ дают разные PFD при обратном счёте.
@@ -387,13 +395,20 @@
       /* Та же степень опасности и та же отрасль, но другой фон:
          отраслевой против техногенного. Отношение показывает, во сколько
          раз строже критерий от одного только выбора фона — остальные
-         входы (поправка п. 14, число людей, сценарии) не меняются. */
+         входы (поправка п. 14, число людей, сценарии) не меняются.
+         Коэффициент запаса при этом меняется в 10 раз, а критерий — в 3,7:
+         различается и сам фон (73 против 195 ppm). Обе величины названы,
+         иначе подпись «в 3,7 раза» читается как противоречие прозе урока,
+         где речь о десятикратном росте КЗ. */
       var indCrit = state.industry / state.severity.kz;
       var techCrit = R_GL / state.severity.kzTechno;
       var swap = line("Сдвиг от выбора фона");
       swap.appendChild(el("strong", null, "в " + swapTxt(indCrit / techCrit) + " раза"));
       swap.appendChild(el("span", "lopa-note",
-        "фон отрасли даёт " + ppm(indCrit) + NB + "ppm, техногенный — " + ppm(techCrit) +
+        "критерий — в " + swapTxt(indCrit / techCrit) + " раза, коэффициент запаса (КЗ " +
+        state.severity.kz + " против " + state.severity.kzTechno + ") — в " +
+        swapTxt(state.severity.kzTechno / state.severity.kz) + " раз: фон отрасли даёт " +
+        ppm(indCrit) + NB + "ppm, техногенный — " + ppm(techCrit) +
         NB + "ppm; сейчас взят " + (isTechno ? "техногенный" : "отраслевой")));
 
       /* Второй путь: критерий задан на частоту события, а не на риск
@@ -425,9 +440,49 @@
           "получается PFD функции.";
       out.appendChild(cmp);
 
+      /* ───── Замыкание критерия ─────
+         Второй путь задаёт частоту события, но она не свободна: событие
+         убивает k человек из N, поэтому индивидуальный риск от неё равен
+         f · k / N, и он не должен превышать Rд. Тот же предел, решённый
+         относительно частоты, — f_max = Rд · N / k. Это обратный ход той же
+         цепочки, и именно он ловит целевую частоту, взятую «по привычке»:
+         при смене в тысячу и трёх погибших предел равен 4,06·10⁻⁴ /год. */
+      var clo = el("div", "lopa-formula-wrap");
+      clo.appendChild(el("span", "lopa-formula",
+        "——— замыкание: не превышает ли целевая частота критерий на человека ———"));
+      out.appendChild(clo);
+
+      var indivT = state.target * fatal / state.people;
+      var fMax = fPerson * state.people / fatal;
+      var okT = indivT <= fPerson;
+
+      value("Индивидуальный риск от целевой частоты", sci(indivT) + NB + "/год",
+        sci(state.target) + NB + "/год × " + fatal + " " +
+        plural(fatal, "погибший", "погибших", "погибших") + " / " + state.people + " " +
+        plural(state.people, "человек", "человека", "человек") + " в зоне",
+        okT ? "lopa-sil" : null);
+
+      value("Предел частоты при этих N и k", sci(fMax) + NB + "/год",
+        "Rд × " + state.people + " / " + fatal +
+        " — выше этой частоты критерий нарушается");
+
+      var verdictT = el("div", "lopa-note-block");
+      verdictT.textContent = okT
+        ? "Замыкание проходит: " + sci(indivT) + " ниже Rд " + sci(fPerson) +
+          " в " + ratioTxt(fPerson / indivT) + " раза, а целевая частота " +
+          sci(state.target) + NB + "/год не превышает предела " + sci(fMax) + NB + "/год."
+        : "Замыкание не проходит: " + sci(indivT) + " выше Rд " + sci(fPerson) +
+          " в " + ratioTxt(indivT / fPerson) + " раза. При " + state.people + " " +
+          plural(state.people, "человеке", "человеках", "человеках") + " в зоне и " +
+          fatal + " " + plural(fatal, "погибшем", "погибших", "погибших") +
+          " частота события не может быть выше " + sci(fMax) + NB +
+          "/год — снижайте целевую частоту; предел поднимается только ростом N или снижением k.";
+      out.appendChild(verdictT);
+
       var note = el("div", "lopa-formula-wrap");
       note.appendChild(el("span", "lopa-formula",
-        "Rд = Rф / КЗ;  Rд(население) = Rд(персонал) / 100;  RdB = 10·lg(R / R_ГЛ),  R_ГЛ = 195" + NB + "ppm."));
+        "Rд = Rф / КЗ;  Rд(население) = Rд(персонал) / 100;  RdB = 10·lg(R / R_ГЛ),  R_ГЛ = 195" + NB +
+        "ppm;  R_инд = f · k / N ≤ Rд,  f_max = Rд · N / k."));
       out.appendChild(note);
     }
 
