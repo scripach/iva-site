@@ -9,9 +9,12 @@
      </div>
    Items are authored in the CORRECT order; display is shuffled.
    Learner clicks items in the order they believe correct:
-   - right click  -> item locks into the sequence (green)
-   - wrong click  -> shake + hint which item was expected,
-                     sequence resets to try again
+   - right click  -> item locks into the sequence (green), only the
+                     number of remaining steps is reported; the next
+                     item is NOT named
+   - wrong click  -> sequence resets; first miss gives no answer at
+                     all, from the second miss the expected item is
+                     named (without its note)
    ============================================================ */
 (function () {
   "use strict";
@@ -64,6 +67,7 @@
     root.appendChild(resetBtn);
 
     var pos = 0;                        // next expected index
+    var miss = 0;                       // wrong picks in this run; reset only on full pass
     var buttons = [];
 
     function say(text, cls) {
@@ -106,16 +110,22 @@
         if (pos === correct.length) {
           say("Верно! Все слои встали на свои места.", "ok");
           resetBtn.style.display = "";
+          miss = 0;
         } else {
-          say("Верно. Дальше — «" + correct[pos].label + "»? Выбирайте.", "ok");
+          say("Верно. Шагов осталось: " + (correct.length - pos) + ".", "ok");
         }
       } else {
         el.classList.add("wrong");
-        var expected = buttons.filter(function (b) { return b.i === pos; })[0];
-        if (expected) expected.el.classList.add("hint");
-        say("Не тот слой. Под номером " + (pos + 1) + " должно быть: «" +
-            correct[pos].label + "» — " + (correct[pos].note || "") + " Начинаем заново.", "bad");
+        miss++;
         pool.querySelectorAll(".order-slot").forEach(function (b) { b.disabled = true; });
+        if (miss === 1) {
+          say("Не тот слой. Порядок сбрасывается — попробуйте снова.", "bad");
+        } else {
+          var expected = buttons.filter(function (b) { return b.i === pos; })[0];
+          if (expected) expected.el.classList.add("hint");
+          say("Не тот слой. Под номером " + (pos + 1) + " должно быть: «" +
+              correct[pos].label + "». Начинаем заново.", "bad");
+        }
         resetBtn.style.display = "";
       }
     }
