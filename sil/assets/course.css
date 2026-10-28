@@ -343,10 +343,17 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 60%, tr
    The scroll container is the wrapper .table-scroll (tabindex="0",
    role="region"), not the table itself: display:block on a <table>
    breaks its column layout AND leaves a scroll region that keyboard
-   users cannot reach (axe scrollable-region-focusable). */
+   users cannot reach (axe scrollable-region-focusable).
+
+   This clip belongs on the wrapper at EVERY width, not only under 640px.
+   Measured: with it scoped to max-width:640px, the band 641-959px had no
+   rule at all — the wide-screen block below starts at 60rem — so a table
+   whose header row is wider than the prose column pushed the whole page
+   sideways: +150px on normative-register.html, +170px on cabinet.html,
+   +73px on lesson 10 and +49px on pfd-contract.html, all at 669px. */
+.table-scroll { overflow-x: auto; }
 @media (max-width: 640px) {
   table { display: table; overflow: visible; }
-  .table-scroll { overflow-x: auto; }
 }
 .table-scroll:focus-visible,
 .figure-scroll:focus-visible { outline-offset: 4px; }
