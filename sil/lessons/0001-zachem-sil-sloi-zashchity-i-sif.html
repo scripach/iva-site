@@ -11,7 +11,7 @@
 <a class="skip-link" href="#content">К содержанию</a>
 <main id="content">
 <header class="lesson-head">
-  <p class="kicker">Урок 1 · 5 минут чтения + практика</p>
+  <p class="kicker">Урок 1 · 6 минут чтения + практика</p>
   <h1>Зачем SIL: риск, слои защиты и место ПАЗ</h1>
   <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
 </header>
@@ -48,6 +48,52 @@
 <em>уменьшить последствия</em> (дамба, орошение), <em>уменьшить частоту</em> (защитные барьеры).
 Регламент требует держать риск в допустимых границах и снижать его далее настолько, насколько это
 разумно практически (<a href="../reference/glossary.html#alarp">ALARP</a>).</p>
+
+<p>Насколько велик запас между отказом и аварией, видно на одном графике. Уставки сепаратора
+из сценарной части урока стоят на трёх давлениях, и каждая закрывает свой участок сценария.</p>
+
+<figure id="excursion">
+<div class="figure-scroll" role="region" aria-label="Схема: профиль давления" tabindex="0">
+<svg viewBox="0 0 880 340" role="img" aria-label="Давление в сепараторе растёт из-за отказа регулятора: на 7,5 бара срабатывает сигнализация оператору, на 8 бар — функция безопасности, на 10,5 — предохранительный клапан. При сработавшей функции давление возвращается к 6 барам, без неё доходит до клапана">
+  <line x1="150" y1="26" x2="182" y2="26" stroke="var(--accent)" stroke-width="2.4"/>
+  <text x="190" y="30" font-size="12" fill="var(--muted)">SIF сработала</text>
+  <line x1="150" y1="48" x2="182" y2="48" stroke="var(--error)" stroke-width="2.4" stroke-dasharray="7 5"/>
+  <text x="190" y="52" font-size="12" fill="var(--muted)">SIF не сработала</text>
+
+  <line x1="96" y1="66" x2="96" y2="300" stroke="var(--border)" stroke-width="1.5"/>
+  <line x1="96" y1="300" x2="520" y2="300" stroke="var(--border)" stroke-width="1.2"/>
+
+  <line x1="96" y1="264" x2="520" y2="264" stroke="var(--border)" stroke-width="1" stroke-dasharray="2 4"/>
+  <line x1="96" y1="204" x2="520" y2="204" stroke="var(--warning)" stroke-width="1.1" stroke-dasharray="6 4"/>
+  <line x1="96" y1="184" x2="520" y2="184" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <line x1="96" y1="84" x2="520" y2="84" stroke="var(--muted)" stroke-width="1.1" stroke-dasharray="4 5"/>
+
+  <text x="86" y="268" font-size="12" text-anchor="end" fill="currentColor">6</text>
+  <text x="86" y="208" font-size="12" text-anchor="end" fill="currentColor">7,5</text>
+  <text x="86" y="188" font-size="12" text-anchor="end" fill="currentColor">8</text>
+  <text x="86" y="88" font-size="12" text-anchor="end" fill="currentColor">10,5</text>
+  <text x="40" y="40" font-size="11.5" fill="var(--muted)">давление, бар</text>
+
+  <text x="534" y="89" font-size="12.5" fill="currentColor">ППК: механический сброс в факел</text>
+  <text x="534" y="188" font-size="12.5" font-weight="700" fill="var(--accent)">SIF: XV-101/102 закрыты</text>
+  <text x="534" y="208" font-size="12.5" fill="var(--warning)">PIAH-101: оператор</text>
+  <text x="534" y="268" font-size="12.5" fill="var(--muted)">рабочее давление 6 бар</text>
+
+  <path d="M 96 264 L 214 264 C 268 261 302 226 344 184" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M 344 184 C 358 208 368 248 392 261 L 520 264" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M 344 184 C 388 172 430 124 470 88 L 520 84" fill="none" stroke="var(--error)" stroke-width="2.4" stroke-dasharray="7 5"/>
+  <circle cx="344" cy="184" r="5" fill="var(--accent)"/>
+  <circle cx="344" cy="184" r="10" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.45"/>
+  <circle class="fig-move" r="4.5" fill="var(--accent)" style="offset-path:path('M 96 264 L 214 264 C 268 261 302 226 344 184 C 358 208 368 248 392 261 L 520 264')"/>
+
+  <text x="500" y="322" font-size="11.5" text-anchor="end" fill="var(--muted)">время →</text>
+</svg>
+</div>
+
+<figcaption>Отказ регулятора не сразу ведёт к аварии: между ним и разрывом стоят три уставки, и каждая даёт выигрыш во времени. Видно, что SIF и ППК — не дубликаты: они стоят на разных давлениях
+и закрывают разные участки сценария. За кадром остаётся крутизна подъёма: чем меньше времени между
+7,5 и 8 бар, тем меньше его остаётся у оператора, а это уже вопрос времени безопасности процесса.</figcaption>
+</figure>
 
 <p class="src">См. <a class="print-url" href="../materials/iec-61508-basic-guide.pdf">IEC, Functional safety and IEC 61508 — A basic guide</a>, §2 «Functional safety» и §3.4 «Safety integrity levels» (копия на нашем сервере).</p>
 
@@ -117,7 +163,7 @@
   <span class="tag">Ключевая идея урока</span>
   Независимость — это отсутствие общей причины отказа, а не отдельный шкаф. Поэтому перечень
   общих причин составляют под конкретный сценарий (п. 9.4.1 ГОСТ Р МЭК 61511-1-2018),
-  а не берут из шаблона. В нашем сепараторе общими для ОСУП и ПАЗ могут стать: один датчик
+  а не берут из шаблона. В нашем сепараторе общими для ОСУП и ПАЗ могут стать (крайний случай — схема под врезкой): один датчик
   давления или одна импульсная линия; один блок питания и одна шина 24 В; один барьер или
   один модуль ввода; общая клемма; общая прошивка и конфигурация логики; общая процедура
   проверки — синхронные проверки снимают оба слоя сразу; наконец, один человек, который
@@ -126,6 +172,61 @@
   оценённую количественно, называют <a href="../reference/glossary.html#ipl">независимым
   слоем защиты (IPL)</a>.
 </div>
+
+<p>Один и тот же отказ не всегда снимает один слой — зависит от того, чем слои связаны.
+<a href="#independence">Схема под этим абзацем</a> ставит рядом два построения: у слоёв один прибор и у каждого
+свой.</p>
+
+<figure id="independence">
+<div class="figure-scroll" role="region" aria-label="Схема: общий датчик" tabindex="0">
+<svg viewBox="0 0 880 330" role="img" aria-label="Слева один датчик давления питает и ПАЗ, и ОСУП: отказ датчика снимает оба слоя. Справа у каждого слоя собственный датчик: отказ датчика регулирования функцию безопасности не снимает">
+  <line x1="440" y1="14" x2="440" y2="318" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <text x="18" y="30" font-size="14" font-weight="700" fill="currentColor">Общий датчик</text>
+  <text x="462" y="30" font-size="14" font-weight="700" fill="currentColor">Свои датчики у каждого слоя</text>
+
+  <rect x="150" y="58" width="216" height="58" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="166" y="81" font-size="13" font-weight="700" fill="var(--error)">ПАЗ · SIF</text>
+  <text x="166" y="101" font-size="11.5" fill="var(--muted)">PSHH-101 → XV-101/102</text>
+  <rect x="150" y="188" width="216" height="58" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="166" y="211" font-size="13" font-weight="700" fill="var(--error)">ОСУП · регулирование</text>
+  <text x="166" y="231" font-size="11.5" fill="var(--muted)">регулятор держит 6 бар</text>
+
+  <rect x="34" y="118" width="86" height="52" rx="7" fill="var(--error-soft)" stroke="var(--error)" stroke-width="2"/>
+  <text x="77" y="140" font-size="12.5" text-anchor="middle" fill="currentColor">датчик</text>
+  <text x="77" y="157" font-size="11.5" text-anchor="middle" fill="var(--muted)">давления</text>
+  <path d="M 120 126 L 150 87" fill="none" stroke="var(--muted)" stroke-width="1.6"/>
+  <path d="M 120 162 L 150 217" fill="none" stroke="var(--muted)" stroke-width="1.6"/>
+  <circle cx="120" cy="144" r="9" fill="var(--surface)" stroke="var(--error)" stroke-width="1.6"/>
+  <path d="M 115 139 L 125 149 M 125 139 L 115 149" stroke="var(--error)" stroke-width="1.8"/>
+
+  <text x="18" y="276" font-size="12.5" fill="var(--error)">Отказ датчика снимает оба слоя:</text>
+  <text x="18" y="296" font-size="12.5" fill="var(--error)">кредита доверия у ПАЗ нет.</text>
+
+  <rect x="646" y="58" width="216" height="58" rx="7" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.2"/>
+  <text x="662" y="81" font-size="13" font-weight="700" fill="currentColor">ПАЗ · SIF</text>
+  <text x="662" y="101" font-size="11.5" fill="var(--muted)">срабатывает по PSHH-101</text>
+  <rect x="646" y="188" width="216" height="58" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="662" y="211" font-size="13" font-weight="700" fill="var(--error)">ОСУП · регулирование</text>
+  <text x="662" y="231" font-size="11.5" fill="var(--muted)">регулятор потерян</text>
+
+  <rect x="502" y="66" width="118" height="42" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+  <text x="561" y="92" font-size="12" text-anchor="middle" fill="currentColor">датчик ПАЗ</text>
+  <rect x="502" y="196" width="118" height="42" rx="7" fill="var(--error-soft)" stroke="var(--error)" stroke-width="2"/>
+  <text x="561" y="222" font-size="12" text-anchor="middle" fill="currentColor">датчик ОСУП</text>
+  <path d="M 620 87 L 646 87" fill="none" stroke="var(--accent)" stroke-width="1.8"/>
+  <path d="M 620 217 L 646 217" fill="none" stroke="var(--muted)" stroke-width="1.6"/>
+  <circle cx="620" cy="217" r="9" fill="var(--surface)" stroke="var(--error)" stroke-width="1.6"/>
+  <path d="M 615 212 L 625 222 M 625 212 L 615 222" stroke="var(--error)" stroke-width="1.8"/>
+
+  <text x="462" y="276" font-size="12.5" fill="var(--success)">Отказ датчика ОСУП не снимает SIF:</text>
+  <text x="462" y="296" font-size="12.5" fill="var(--success)">кредит доверия сохраняется.</text>
+</svg>
+</div>
+<figcaption>На одной и той же аварии — потере датчика давления — показаны два построения. Слева
+один прибор питает оба слоя, и его отказ снимает защиту целиком, хотя шкафы разные. Справа у ПАЗ
+свой датчик, поэтому потеря контура регулирования остаётся потерей одного слоя. Остальные общие
+причины — питание, клеммы, прошивка, процедура проверки — схема не показывает: они разобраны в уроке 6.</figcaption>
+</figure>
 
 <p class="src">Подробнее о защитных слоях: <a class="print-url" href="../materials/rausand-sis-ch2-concepts.pdf">Lundteigen &amp; Rausand, Reliability of SIS, гл. 2 «Concepts and Requirements»</a>, <a class="print-url" href="../materials/Rausand-Ch2-Concepts-Rus.pdf">русский перевод</a> (обе копии на нашем сервере).</p>
 
@@ -172,8 +273,7 @@
 по документированной процедуре (п. 16.3.1 ГОСТ Р МЭК 61511-1-2018) выявляет те отказы, которых
 не видит автоматическая диагностика; в расчёте это <a href="../reference/glossary.html#lambda-du">λ<sub>DU</sub></a> —
 интенсивность опасных необнаруженных отказов. В пределах охвата проверки элемент возвращается
-в состояние «как новый», поэтому чем длиннее интервал проверки
-<a href="../reference/glossary.html#ti">TI</a>, тем выше вероятность, что к моменту запроса
+в состояние «как новый», поэтому чем длиннее интервал проверки <a href="../reference/glossary.html#ti">TI</a>, тем выше вероятность, что к моменту запроса
 отказ уже есть. Как из этих двух величин получается вероятность отказа функции —
 <a href="0003-pfdavg-raschet-kontura-paz.html">урок 3</a>. <strong>Систематические</strong>
 ошибки (неверный проект, ошибка в ПО, неполная спецификация) так не закрываются: проверка
@@ -182,6 +282,69 @@
 независимая оценка (<a href="0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">урок 5</a>).
 Отсюда практическое следствие: учащать проверки, чтобы «добрать» SIL, можно лишь до той
 границы, где остаются систематические причины.</p>
+
+<p>Почему интервал проверки вообще входит в расчёт, показывает <a href="#hidden-failure">следующая схема</a>: проверка — единственный
+момент, когда скрытый отказ виден, а между проверками он живёт незамеченным.</p>
+
+<figure id="hidden-failure">
+<div class="figure-scroll" role="region" aria-label="Схема: скрытый отказ между проверками" tabindex="0">
+<svg viewBox="0 0 880 350" role="img" aria-label="Пила вероятности скрытого отказа: после каждой плановой проверки элемент возвращается в состояние «как новый», и вероятность падает до нуля, затем линейно растёт до произведения интенсивности скрытых отказов на интервал проверки. Средняя высота зуба равна половине этого роста. Интервал между двумя проверками отмечен как TI">
+  <!-- оси -->
+  <line x1="120" y1="250" x2="800" y2="250" stroke="var(--border)" stroke-width="1.6"/>
+  <path d="M 800 250 L 786 244 M 800 250 L 786 256" stroke="var(--border)" stroke-width="1.6" fill="none"/>
+  <line x1="120" y1="250" x2="120" y2="88" stroke="var(--border)" stroke-width="1.6"/>
+  <path d="M 120 88 L 114 102 M 120 88 L 126 102" stroke="var(--border)" stroke-width="1.6" fill="none"/>
+  <text x="120" y="64" font-size="12" fill="var(--muted)">вероятность отказа</text>
+  <text x="808" y="255" font-size="11.5" fill="var(--muted)">время</text>
+
+  <!-- деления оси: 0, среднее, вершина -->
+  <line x1="114" y1="250" x2="126" y2="250" stroke="var(--border)" stroke-width="1.2"/>
+  <line x1="114" y1="175" x2="126" y2="175" stroke="var(--accent)" stroke-width="1.4"/>
+  <line x1="114" y1="100" x2="126" y2="100" stroke="var(--border)" stroke-width="1.2"/>
+  <text x="108" y="254" font-size="11.5" text-anchor="end" fill="currentColor">0</text>
+  <text x="108" y="179" font-size="11.5" text-anchor="end" fill="var(--accent)">λ<tspan font-size="9" dy="3">DU</tspan><tspan dy="-3"> · TI/2</tspan></text>
+  <text x="108" y="104" font-size="11.5" text-anchor="end" fill="currentColor">λ<tspan font-size="9" dy="3">DU</tspan><tspan dy="-3"> · TI</tspan></text>
+
+  <!-- выделенный интервал -->
+  <path d="M 380 250 L 560 100 L 560 250 Z" fill="var(--accent)" fill-opacity="0.12" stroke="none"/>
+
+  <!-- средний уровень -->
+  <line x1="120" y1="175" x2="740" y2="175" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="7 5"/>
+
+  <!-- пила: рост от нуля после проверки до вершины перед следующей -->
+  <path d="M 200 250 L 380 100 L 380 250 L 560 100 L 560 250 L 740 100 L 740 250"
+        fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- моменты проверки -->
+  <g stroke="var(--muted)" stroke-width="1.8">
+    <line x1="200" y1="250" x2="200" y2="264"/>
+    <line x1="380" y1="250" x2="380" y2="264"/>
+    <line x1="560" y1="250" x2="560" y2="264"/>
+    <line x1="740" y1="250" x2="740" y2="264"/>
+  </g>
+  <g font-size="11.5" text-anchor="middle" fill="var(--muted)">
+    <text x="200" y="282">проверка</text>
+    <text x="380" y="282">проверка</text>
+    <text x="560" y="282">проверка</text>
+    <text x="740" y="282">проверка</text>
+  </g>
+
+  <!-- интервал TI под осью -->
+  <path d="M 380 302 L 560 302" stroke="var(--muted)" stroke-width="1.2" fill="none" marker-start="url(#tiM)" marker-end="url(#tiM)"/>
+  <text x="470" y="322" font-size="11.5" text-anchor="middle" fill="var(--muted)">TI — интервал между проверками</text>
+
+  <defs>
+    <marker id="tiM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/></marker>
+  </defs>
+</svg>
+</div>
+<figcaption>Скрытый отказ сам не исчезает: элемент остаётся отказавшим до плановой проверки. Сразу после
+проверки он «как новый», и вероятность отказа в этот момент равна нулю; дальше она растёт по прямой
+до λ<sub>DU</sub>·TI — тем выше, чем длиннее интервал и чем больше отказов не видит диагностика.
+Средняя высота зуба равна половине вершины; отсюда PFD = λ<sub>DU</sub>·TI/2 в уроке 3. Поэтому
+удвоение TI удваивает и вершину, и средний уровень. Диагностика на схеме не показана: она обрывает
+рост раньше проверки, и в формуле появляется отдельное слагаемое.</figcaption>
+</figure>
 
 <p class="src">Российская практика: требования ФНП к ПАЗ и опыт SIL-анализа —
 <a class="print-url" href="../materials/zhukov-sil-analiz-paz.pdf">Жуков И. С., «Нормативные требования ПБ и опыт SIL-анализа систем ПАЗ»</a> (копия на нашем сервере).</p>
@@ -206,6 +369,58 @@
   </tbody>
 </table>
 </div>
+
+<p>Та же таблица, прочитанная как шкала: ступень SIL — это декада, и видно, почему округление
+на круглом числе идёт вверх.</p>
+
+<figure id="sil-bands">
+<div class="figure-scroll" role="region" aria-label="Схема: полосы SIL" tabindex="0">
+<svg viewBox="0 0 880 200" role="img" aria-label="Шкала требуемого снижения риска: полоса SIL 1 от 10 до 100, SIL 2 от 100 до 1 000, SIL 3 от 1 000 до 10 000; при снижении более 10 000 пункт 9.2.5 требует пересмотра применения, а не назначает SIL 4">
+  <text x="20" y="26" font-size="14" font-weight="700" fill="currentColor">Полосы SIL: логарифмическая шкала снижения риска</text>
+
+  <rect x="90" y="52" width="150" height="66" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <text x="165" y="80" font-size="12" text-anchor="middle" fill="var(--muted)">меньше 10</text>
+  <text x="165" y="99" font-size="11" text-anchor="middle" fill="var(--muted)">полосы нет</text>
+  <rect x="240" y="52" width="150" height="66" fill="var(--success)" fill-opacity="0.16" stroke="var(--success)" stroke-width="1.8"/>
+  <text x="315" y="78" font-size="13.5" font-weight="700" text-anchor="middle" fill="currentColor">SIL 1</text>
+  <text x="315" y="98" font-size="11.5" text-anchor="middle" fill="var(--muted)">PFD 10⁻¹…10⁻²</text>
+  <rect x="390" y="52" width="150" height="66" fill="var(--accent)" fill-opacity="0.16" stroke="var(--accent)" stroke-width="1.8"/>
+  <text x="465" y="78" font-size="13.5" font-weight="700" text-anchor="middle" fill="currentColor">SIL 2</text>
+  <text x="465" y="98" font-size="11.5" text-anchor="middle" fill="var(--muted)">PFD 10⁻²…10⁻³</text>
+  <rect x="540" y="52" width="150" height="66" fill="var(--warning)" fill-opacity="0.16" stroke="var(--warning)" stroke-width="1.8"/>
+  <text x="615" y="78" font-size="13.5" font-weight="700" text-anchor="middle" fill="currentColor">SIL 3</text>
+  <text x="615" y="98" font-size="11.5" text-anchor="middle" fill="var(--muted)">PFD 10⁻³…10⁻⁴</text>
+  <rect x="690" y="52" width="150" height="66" fill="var(--error)" fill-opacity="0.14" stroke="var(--error)" stroke-width="1.8"/>
+  <text x="765" y="78" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">больше 10 000</text>
+  <text x="765" y="98" font-size="11" text-anchor="middle" fill="var(--error)">пересмотр, п. 9.2.5</text>
+
+  <line x1="90" y1="128" x2="840" y2="128" stroke="var(--border)" stroke-width="1.4"/>
+  <g stroke="var(--border)" stroke-width="1.2">
+    <line x1="90" y1="128" x2="90" y2="135"/>
+    <line x1="240" y1="128" x2="240" y2="135"/>
+    <line x1="390" y1="128" x2="390" y2="135"/>
+    <line x1="540" y1="128" x2="540" y2="135"/>
+    <line x1="690" y1="128" x2="690" y2="135"/>
+    <line x1="840" y1="128" x2="840" y2="135"/>
+  </g>
+  <g font-size="11.5" text-anchor="middle" fill="var(--muted)">
+    <text x="90" y="153">1</text>
+    <text x="240" y="153">10</text>
+    <text x="390" y="153">100</text>
+    <text x="540" y="153">1 000</text>
+    <text x="690" y="153">10 000</text>
+    <text x="840" y="153">100 000</text>
+  </g>
+  <text x="840" y="178" font-size="11.5" text-anchor="end" fill="var(--muted)">RRF — во сколько раз функция снижает риск</text>
+  <text x="90" y="178" font-size="11.5" fill="var(--muted)">одна ступень — десять раз</text>
+</svg>
+</div>
+<figcaption>Ступень SIL — это декада, поэтому шкала нарисована логарифмической: равные отрезки
+означают равное отношение. Видно, почему RRF 100 — точка, где округляют вверх: она попадает на
+общую границу полос. Видно и то, что таблица обрывается не по недосмотру: за 10 000 стоит не
+«следующая ступень», а процедура пересмотра. Из чего складывается RRF, шкала не говорит — это
+вопрос расчёта и архитектуры.</figcaption>
+</figure>
 
 <p>Границы в таблице записаны так, как удобно проектировщику; в самой табл. 4 ГОСТ Р МЭК
 61511-1-2018 они строгие: SIL 2 — это «более 100 и не более 1 000». Поэтому на круглом числе

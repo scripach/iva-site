@@ -379,6 +379,28 @@ figcaption {
   text-align: center;
 }
 
+/* Figure animation: a marker travels the scenario path (lesson 1, figure 1).
+   The curves never move, so the first painted frame is already the full
+   diagram — a screenshot, a printed sheet and a reader who lands mid-scroll
+   all see the same picture. The dot only adds direction and the moment each
+   set point is reached. Hidden when the OS asks for reduced motion and on
+   paper: the diagram keeps its meaning without it.
+   The path is set per figure in the markup (offset-path); duration lives here. */
+.fig-move {
+  offset-rotate: 0deg;
+  animation: fig-travel 6s linear infinite;
+}
+@keyframes fig-travel {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fig-move { display: none; }
+}
+@media print {
+  .fig-move { display: none; }
+}
+
 /* Wide screens: figures get their own, wider measure — editorial "narrow
    prose, wide graphics". Centering is done with negative margins, not
    transform, so focus rings and print keep working. Cards stay at the text
