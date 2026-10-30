@@ -58,37 +58,43 @@
 
   /* Which SIL a structure actually supports, rather than whether it passes.
 
-     Two sources, and the order matters (п. 11.4.5): a component assessed
-     against МЭК 61508-2 may carry its own structural rating in the
-     certificate — 3051S prints «SIL 2 @ HFT=0, SIL 3 @ HFT=1» — and that
-     rating governs. Only when no such rating exists does таблица 6 apply:
-     HFT 0 → SIL 1, HFT 1 → SIL 2, HFT 2 → SIL 3.
+     Two sources, and the order is set by п. 11.4.3 редакции 2018: a device
+     assessed against МЭК 61508-2 — by п. 7.4.4.2 (способ 1H) or п. 7.4.4.3
+     (способ 2H) — may carry its own structural rating in the certificate.
+     The 3051S prints «SIL 2 @ HFT=0, SIL 3 @ HFT=1», and that rating governs.
 
-     Табл. 5 (логика на программируемой электронике) depends on SFF:
-       SFF > 90 %  : SIL 1 → 0, SIL 2 → 0, SIL 3 → 1
-       SFF 60–90 % : SIL 1 → 0, SIL 2 → 1, SIL 3 → 2
-       SFF < 60 %  : SIL 1 → 1, SIL 2 → 2, SIL 3 → 3 */
-  var LOGIC_HFT = {
-    high: [0, 0, 1],     /* SFF > 90 %  — index SIL 1..3 */
-    mid:  [0, 1, 2],     /* 60–90 % */
-    low:  [1, 2, 3]      /* < 60 % */
-  };
+     Only when no such rating exists does таблица 6 apply. Since 2018 that is
+     ONE table for the whole safety function in low-demand mode:
+       УПБ 1 → HFT 0, УПБ 2 → HFT 0, УПБ 3 → HFT 1, УПБ 4 → HFT 2.
+     SFF is not in it: редакция 2011 had a separate табл. 5 for logic on
+     programmable electronics keyed by SFF, and редакция 2018 merged the two
+     into табл. 6. Inverting the table gives the ceiling a structure supports:
+       HFT 0 → УПБ 2, HFT 1 → УПБ 3, HFT 2 → УПБ 4.
 
-  function supportedField(hft, sil0) {
-    /* sil0 = SIL the element's own document allows at HFT 0. */
-    return Math.max(0, Math.min(3, (typeof sil0 === "number" ? sil0 : 1) + hft));
+     The high-demand / continuous column of табл. 6 asks УПБ 2 → HFT 1. The
+     course counts low demand throughout (п. 3.2.39: at most one demand a
+     year), so the inversion above is the one in force here. */
+  /* Required HFT by target SIL — ГОСТ Р МЭК 61511-1-2018, табл. 6, low
+     demand (п. 3.2.39: at most one demand a year). Index = УПБ 1..4.
+     NOTE: SilFmt.hftField() in assets/format.js still holds the retired
+     редакция-2011 table (УПБ 2 → 1, УПБ 3 → 2). It is NOT used here: this
+     widget would then report a structure one step stronger than табл. 6
+     allows. See NOTES for the pending decision on the shared helper. */
+  var HFT_NEEDED = [null, 0, 0, 1, 2];
+
+  function tableCeiling(hft) {
+    var best = 0;
+    for (var sil = 1; sil <= 4; sil++) {
+      if (hft >= HFT_NEEDED[sil]) best = sil;
+    }
+    return Math.min(best, 3); /* УПБ 4 — вне рамок курса */
   }
 
-  function supportedLogic(hft, sff, sil0) {
-    /* П. 11.4.5 is not limited to field devices: a safety PLC assessed against
-       МЭК 61508-2, таблицы 2 и 3 prints its own structural rating and many do
-       claim SIL 3 at HFT 0. When such a rating exists it governs; табл. 5 is
-       only the fallback for a PLC without one. */
+  function supportedStruct(hft, sil0) {
+    /* sil0 = the SIL the element's own document allows at HFT 0; when the
+       certificate prints no such rating the structural table decides. */
     if (typeof sil0 === "number") return Math.max(0, Math.min(3, sil0 + hft));
-    var row = sff > 90 ? LOGIC_HFT.high : (sff >= 60 ? LOGIC_HFT.mid : LOGIC_HFT.low);
-    var best = 0;
-    for (var sil = 1; sil <= 3; sil++) if (hft >= row[sil - 1]) best = sil;
-    return best;
+    return tableCeiling(hft);
   }
 
   function el(tag, cls, text) {
@@ -222,15 +228,12 @@
 
       /* Gate 2 — architecture. Each subsystem's structure has a ceiling: the
          highest SIL its HFT supports. The loop cannot claim more than the
-         weakest ceiling, and the relief of п. 11.4.4 counts only where the
-         lesson's field-device condition is actually met (checked by the user,
-         hence a declared flag in the data row). */
+         weakest ceiling. Редакция 2018 gives one table (табл. 6) for field
+         devices and logic alike, and п. 11.4.6 — the «смягчённое» successor
+         of п. 11.4.4 — lowers it only with a written justification, which a
+         widget cannot assume, so no relief is modelled here. */
       var ceilings = parts.map(function (t) {
-        var sff = typeof t.d.sff === "number" ? t.d.sff : 90;
-        var base = t.sub.kind === "logic"
-          ? supportedLogic(t.arch.hft, sff, t.d.sil0)
-          : supportedField(t.arch.hft, t.d.sil0);
-        return { sub: t.sub, arch: t.arch, sff: sff, base: base, sil0: t.d.sil0 };
+        return { sub: t.sub, arch: t.arch, base: supportedStruct(t.arch.hft, t.d.sil0), sil0: t.d.sil0 };
       });
       var weakest = ceilings.slice().sort(function (a, b) { return a.base - b.base; })[0];
       var structSil = weakest.base;
@@ -240,10 +243,8 @@
       structLine.appendChild(el("span", "lopa-note-block",
         "держит " + weakest.sub.label + " " + weakest.arch.v + " (HFT " + weakest.arch.hft +
         (typeof weakest.sil0 === "number"
-          ? ", SIL " + weakest.sil0 + " при HFT 0 из сертификата"
-          : (weakest.sub.kind === "logic"
-              ? ", SFF " + weakest.sff + " % по табл. 5 — своей оценки нет"
-              : ", табл. 6 — своей оценки нет: HFT 0 даёт SIL 1")) + ")"));
+          ? ", SIL " + weakest.sil0 + " при HFT 0 из собственной оценки"
+          : ", табл. 6 ред. 2018: HFT " + weakest.arch.hft + " даёт SIL " + structSil) + ")"));
 
       /* Gate 3 — systematic capability ceiling. No number buys SIL above it. */
       var scMin = Math.min.apply(null, parts.map(function (t) { return t.d.sc; }));

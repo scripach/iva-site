@@ -5,7 +5,8 @@
      rrf(x)        risk reduction factor: integer, thin-space groups: 8 300
      silOf(rrf)    { sil, note } — RRF ≥ 10ⁿ ⇒ SIL n (project rounding up)
      bandOf(rrf)   numeric SIL of a required/achieved RRF (0 when < 10)
-     hftField(sil) minimum HFT for a field device, ГОСТ Р МЭК 61511-1 табл. 6
+     hftField(sil)     min HFT, ГОСТ Р МЭК 61511-1-2018 табл. 6, low demand
+     hftByMode(sil,hi) same table, high-demand/continuous column when hi
    Formatting contract: decimal comma, superscript exponents, no
    locale-dependent toLocaleString anywhere in the course.
    ============================================================ */
@@ -68,13 +69,36 @@
     return 0;
   }
 
-  /* ГОСТ Р МЭК 61511-1, табл. 6 (датчики, исполнительные элементы,
-     непрограммируемая логика). SIL 4 — специальные требования. */
-  var HFT_FIELD = [0, 0, 1, 2, null];
+  /* ГОСТ Р МЭК 61511-1-2018, п. 11.4.5 и табл. 6 — минимальная HFT для
+     заданного УПБ. С 2018 года это ОДНА таблица на всю функцию безопасности,
+     без деления на поле и логику и без SFF (тот был только в табл. 5
+     редакции 2011, отменённой).
 
-  function hftField(sil) {
-    return HFT_FIELD[sil] === undefined ? null : HFT_FIELD[sil];
+     Режим низкой частоты запросов (п. 3.2.39: не более одного запроса в год)
+     — сквозное допущение курса:
+       УПБ 1 → 0, УПБ 2 → 0, УПБ 3 → 1, УПБ 4 → 2.
+     В редакции 2018 табл. 6 делит УПБ 2 по режиму: низкая частота → 0,
+     высокая частота или непрерывный режим → 1. УПБ 1 и 3 — «любой режим»,
+     поэтому оговорки не требуют. Для высокого спроса вызывайте
+     hftByMode(sil, true). УПБ 4 — специальные требования МЭК 61508, поэтому
+     null (не 2: подставлять значение из чужой рамки нельзя).
+
+     История: до 2026-10-30 здесь лежала таблица редакции 2011
+     (УПБ 2 → 1, УПБ 3 → 2) — на две ступени строже действующей, и урок 4
+     из-за неё завышал требуемый HFT. */
+  var HFT_LOW_DEMAND = { 1: 0, 2: 0, 3: 1 };
+  var HFT_HIGH_DEMAND = { 1: 0, 2: 1, 3: 1 };
+
+  function hftByMode(sil, highDemand) {
+    var row = highDemand ? HFT_HIGH_DEMAND : HFT_LOW_DEMAND;
+    return Object.prototype.hasOwnProperty.call(row, sil) ? row[sil] : null;
   }
 
-  global.SilFmt = { fmt: fmt, rrf: rrf, silOf: silOf, bandOf: bandOf, hftField: hftField, sup: sup };
+  /* Умолчание курса — низкая частота запросов. */
+  function hftField(sil) {
+    return hftByMode(sil, false);
+  }
+
+  global.SilFmt = { fmt: fmt, rrf: rrf, silOf: silOf, bandOf: bandOf,
+                  hftField: hftField, hftByMode: hftByMode, sup: sup };
 })(window);

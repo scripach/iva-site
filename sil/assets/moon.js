@@ -186,38 +186,25 @@
          target from LOPA — not by the band the node happens to reach: a node
          whose PFD is better than required must not be failed by the gate. */
       var need = F.hftField(F.bandOf(target));
-      /* The two editions disagree precisely where it matters: 2011 table 6
-         wants HFT 1 for SIL 2 field devices, 2018's merged table wants 0 in
-         low demand. The widget computes the stricter 2011 row and names the
-         edition in the label; this note keeps the difference visible. */
-      /* The two editions disagree precisely where it matters: 2011 table 6
-         wants HFT 1 for a SIL 2 field device, 2018's merged table wants 0 in
-         low demand. The widget computes the stricter 2011 row, names the
-         edition in the label, and states the other row when they differ —
-         otherwise the same page shows a table and a verdict that contradict. */
-      /* 2018 table 6 splits SIL 2 by demand mode: low demand -> 0, high
-         demand or continuous -> 1. SIL 1 and SIL 3 are "any mode", so they
-         need no qualifier. This course is low-demand throughout, but saying
-         "SIL 2 -> 0" without the mode would be wrong for a high-demand SIF. */
-      var hft2018 = target >= 1000 ? (target < 10000 ? 1 : null) : 0;
-      var hft2018Note = target >= 100 && target < 1000
-        ? " (низкая частота запросов; в высокой частоте — 1)"
-        : "";
+      /* Table 6 (редакция 2018) lives in ONE place — assets/format.js. This
+         widget used to compute the stricter 2011 row and then narrate the 2018
+         row in a note, which is two sources of truth for one number and made
+         the page contradict its own verdict. The course is low-demand
+         throughout, so the high-demand column is only named when it differs. */
+      var silTarget = F.bandOf(target);
+      var needHigh = F.hftByMode(silTarget, true);
       var gateText = need === null
-        ? '<span class="pfd-verdict bad">целевой SIL 4 — вне рамок курса</span>'
+        ? '<span class="pfd-verdict bad">целевой УПБ 4 — вне рамок курса</span>'
         : (a.hft >= need
             ? '<span class="pfd-verdict ok">проходит: HFT ' + a.hft + " ≥ " + need + "</span>"
             : '<span class="pfd-verdict bad">не проходит: HFT ' + a.hft + " &lt; " + need + "</span>");
       var note = need === null
-        ? "для целевого SIL 4 стандарт отправляет к МЭК 61508"
-        : "для целевого SIL " + F.bandOf(target) + " нужно HFT " + need +
-          (a.hft === 1 && need === 2
-            ? "; п. 11.4.4 ред. 2011 (в ред. 2018 — п. 11.4.6–11.4.7) разрешает на единицу меньше при четырёх условиях"
-            : "") +
-          (hft2018 !== null && hft2018 !== need
-            ? "; табл. 6 ред. 2018 для того же SIL даёт HFT " + hft2018 + hft2018Note
+        ? "для целевого УПБ 4 стандарт отправляет к МЭК 61508"
+        : "табл. 6 ред. 2018: для УПБ " + silTarget + " минимум HFT " + need +
+          (needHigh !== null && needHigh !== need
+            ? " (низкая частота запросов; в высокой частоте и непрерывном режиме — " + needHigh + ")"
             : "");
-      out.appendChild(line("Структурный гейт (табл. 6 ред. 2011)", gateText +
+      out.appendChild(line("Структурный гейт (табл. 6 ред. 2018)", gateText +
         ' <span class="lopa-note">' + note + "</span>"));
       out.appendChild(line("Ложные срабатывания", a.spurious));
 
