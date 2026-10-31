@@ -122,6 +122,25 @@
     return sign + m + "·10" + F.sup(parseInt(parts[1], 10));
   }
 
+  /* Критерий печатается четырьмя знаками после запятой: 73 / 20 / 3 =
+     1,2167 ppm — ровно то число, что стоит в прозе урока и на схеме.
+     sci() даёт три значащие и превращает критерий в «1,22», после чего шаги
+     перестают сходиться с текстом на глазах у читателя. */
+  function ppm(x) {
+    return Number(x).toFixed(4).replace(".", ",");
+  }
+
+  function criterion() {
+    return ppm(R_D) + "·10⁻⁶";
+  }
+
+  /* Границы табл. 4 полуоткрыты: значение ровно на ней — нижняя полоса. */
+  function onBandEdge(r) {
+    return [10, 100, 1000, 10000].some(function (b) {
+      return Math.abs(r - b) <= b * 1e-9;
+    });
+  }
+
   function plural(n, one, few, many) {
     var a = Math.abs(n) % 100, b = a % 10;
     if (a > 10 && a < 20) return many;
@@ -227,12 +246,12 @@
       /* k не может превышать N: из трёх человек в зоне не погибают пятеро. */
       var fatal = Math.min(state.fatal, state.people);
 
-      value("Критерий на человека, Rд", sci(R_D) + NB + "ppm",
+      value("Критерий на человека, Rд", ppm(R_D) + NB + "ppm",
         "73 / 20 / 3 — разбор урока 11, §5");
 
       value("Целевая частота класса", sci(state.source) + NB + "/год",
         state.source === 1e-4
-          ? "пример прил. B ГОСТ Р МЭК 61511-3; нормативом не является"
+          ? "пример прил. B ГОСТ Р МЭК 61511-3-2018; нормативом не является"
           : "корпоративный критерий: строже примера в десять раз");
 
       /* Деление на сценарии распределяет ответственность, а не снижает
@@ -281,8 +300,9 @@
           : "частота до SIF " + sci(before) + " ниже частоты сценария " + sci(fSc));
 
       var band = needed ? F.silOf(rrf) : { sil: "—", note: "слои до SIF уже дают нужную частоту" };
-      value("Требуемый уровень", band.sil,
-        needed ? "RRF ≈ " + fmtRRF(rrf) + " — " + band.note : band.note);
+      value("Требуемый уровень", band.sil.replace("SIL", "УПБ"),
+        needed ? "RRF ≈ " + fmtRRF(rrf) + "; " + band.note.replace("RRF ", "полоса ").replace("SIL", "УПБ") +
+          (onBandEdge(rrf) ? " (ровно на границе — курс округляет вверх)" : "") : band.note);
 
       /* ───── Замыкание критерия ─────
          Класс f даёт f·k/N индивидуального риска: событий в год, умноженных
@@ -307,14 +327,14 @@
 
       var verdict = el("div", "lopa-note-block");
       if (ok) {
-        verdict.textContent = "Замыкание проходит: " + sci(indiv) + " ниже Rд " + sci(R_D_YEAR) +
+        verdict.textContent = "Замыкание проходит: " + sci(indiv) + " ниже Rд " + criterion() +
           " в " + sci(R_D_YEAR / indiv) + " раза. " +
           "Класс можно брать; требование к функции считается отдельно и от замыкания не зависит.";
       } else {
-        verdict.textContent = "Замыкание не проходит: " + sci(indiv) + " выше Rд " + sci(R_D_YEAR) +
+        verdict.textContent = "Замыкание не проходит: " + sci(indiv) + " выше Rд " + criterion() +
           " в " + sci(indiv / R_D_YEAR) + " раза. " +
-          "При " + state.people + " " + plural(state.people, "человеке", "человеках", "человеках") +
-          " в зоне класс не может быть чаще " + sci(fMax) + " /год. " +
+          "При числе людей в зоне " + state.people +
+          " класс не может быть чаще " + sci(fMax) + " /год. " +
           "Функция безопасности этого не исправляет: частота задана до неё.";
       }
       out.appendChild(verdict);
