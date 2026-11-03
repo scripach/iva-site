@@ -159,7 +159,7 @@
 
       var loopLine = line("PFD контура без общей части");
       loopLine.appendChild(el("span", "lopa-note",
-        fmt(Number(state.loop.toPrecision(6))) + " — принято из урока 5"));
+        fmt(Number(state.loop.toPrecision(6))) + " — принято из урока 8"));
 
       var total = Number((path + state.loop).toPrecision(6));
       line("PFD контура всего")
