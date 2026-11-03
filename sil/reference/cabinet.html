@@ -13,7 +13,7 @@
 <header class="lesson-head">
   <p class="kicker">Справочник · SIL-курс</p>
   <h1>Шкаф ПАЗ: цепь канала, клеммы, байпасы</h1>
-  <p class="meta">Выжимка урока 8<span class="sep">·</span>ГОСТ Р МЭК 61511-1-2018, п. 10.3.2, 11.6.2, 11.8, 16.2.6–16.2.7<span class="sep">·</span>статус и номера — <a href="normative-register.html">нормативный реестр</a></p>
+  <p class="meta">Выжимка урока 12<span class="sep">·</span>ГОСТ Р МЭК 61511-1-2018, п. 10.3.2, 11.6.2, 11.8, 16.2.6–16.2.7<span class="sep">·</span>статус и номера — <a href="normative-register.html">нормативный реестр</a></p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
@@ -24,8 +24,8 @@
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Уроки:</span>
-    <a href="../lessons/0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 8: шкаф ПАЗ</a>
-    <a href="../lessons/0006-obshchie-izdeliya-blok-pitaniya.html">Урок 6: общие изделия</a>
+    <a href="../lessons/0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 12: шкаф ПАЗ</a>
+    <a href="../lessons/0006-obshchie-izdeliya-blok-pitaniya.html">Урок 9: общие изделия</a>
   </div>
 </nav>
 
@@ -86,7 +86,7 @@ NAMUR NE 43) и должно выбираться под функцию: 0 мА
 </div>
 
 <p>Числа на примере цепи шкафа: инженерная оценка λ = 100 FIT = 1,0·10⁻⁷ 1/ч, TI 1 год
-(8 760 ч), TL 20 лет (175 200 ч), MTTR 8 ч. Контур — шаг 4 урока 7
+(8 760 ч), TL 20 лет (175 200 ч), MTTR 8 ч. Контур — шаг 4 <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 10</a>
 (4,0·10⁻⁴). Охватов в таблице два, и они отвечают на разные вопросы:</p>
 
 <ul>
@@ -107,7 +107,7 @@ p = λ·TL/2 = 8,8·10⁻³ (<a href="evidence.html">«Доказательст�
 </table>
 </div>
 
-<p id="formula">Формула та же, что в уроке 7, но с разделением на скрытую
+<p id="formula">Формула та же, что в <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 10</a>, но с разделением на скрытую
 и выявленную части:</p>
 
 <div class="lopa-formula-wrap">
@@ -128,7 +128,7 @@ DC = 0, с контролем — 90 %. Разницу даёт именно 
 1,5·10⁻⁴, то есть на два порядка меньше. При DC 0 % выявленной части нет и вся цепь
 считается по первому слагаемому; при DC 100 % она целиком переходит во второе, то есть
 живёт до ремонта. Делит две части коэффициент диагностики DC = λ<sub>DD</sub>/λ<sub>D</sub>.
-У MTTR тот же смысл, что в уроке 9: время до полного восстановления, и задаёте его
+У MTTR тот же смысл, что в <a href="../lessons/0009-rele-bezopasnosti-pasport-i-sertifikat.html">уроке 11</a>: время до полного восстановления, и задаёте его
 вы, а не изготовитель (<a href="glossary.html#mttr">MTTR</a>, <a href="glossary.html#mrt">MRT</a>).
 Считается DC по изделию: у клеммы её нет, поэтому в цепи шкафа она приходит из параметров
 канала (<a href="glossary.html#dc">DC</a>).</p>
@@ -239,6 +239,7 @@ TI 8 760 ч, TL 175 200 ч), β 5 %, отсюда q = (1−β)p = 4,
 <ol>
 <li>Тест КЗ и питание датчика на входе включены; если внешнее питание — КЗ исключено проводкой и это
 записано.</li>
+<li>Сам тест КЗ описан как процедура с выводом контура, разрешением, компенсирующими мерами и записью: замыкание входа на L+ пассивирует канал, поэтому на работающем контуре оно не испытание, а незаписанный байпас.</li>
 <li>У каждого внешнего устройства своя клемма, свой автомат, своя трасса (ред. 2011, п. 11.6.3;
 в редакции 2018 — разд. 9.4 и п. 10.3.2).</li>
 <li>Ни один модуль ввода не обслуживает два канала одной голосованной группы без анализа β.</li>
@@ -282,7 +283,7 @@ TI 8 760 ч, TL 175 200 ч), β 5 %, отсюда q = (1−β)p = 4,
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Уроки и материалы:</span>
-    <a href="../lessons/0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 8: шкаф ПАЗ</a>
+    <a href="../lessons/0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 12: шкаф ПАЗ</a>
     <a href="../materials/">Библиотека материалов</a>
   </div>
 </footer>

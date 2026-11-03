@@ -194,16 +194,17 @@
       var silTarget = F.bandOf(target);
       var needHigh = F.hftByMode(silTarget, true);
       var gateText = need === null
-        ? '<span class="pfd-verdict bad">целевой УПБ 4 — вне рамок курса</span>'
+        ? '<span class="pfd-verdict bad">целевой уровень вне шкалы УПБ</span>'
         : (a.hft >= need
             ? '<span class="pfd-verdict ok">проходит: HFT ' + a.hft + " ≥ " + need + "</span>"
             : '<span class="pfd-verdict bad">не проходит: HFT ' + a.hft + " &lt; " + need + "</span>");
       var note = need === null
-        ? "для целевого УПБ 4 стандарт отправляет к МЭК 61508"
+        ? "табл. 6 ред. 2018 покрывает УПБ 1–4"
         : "табл. 6 ред. 2018: для УПБ " + silTarget + " минимум HFT " + need +
           (needHigh !== null && needHigh !== need
             ? " (низкая частота запросов; в высокой частоте и непрерывном режиме — " + needHigh + ")"
-            : "");
+            : " (любой режим)") +
+          (silTarget === 4 ? "; четвёртый уровень вне рамок курса" : "");
       out.appendChild(line("Структурный гейт (табл. 6 ред. 2018)", gateText +
         ' <span class="lopa-note">' + note + "</span>"));
       out.appendChild(line("Ложные срабатывания", a.spurious));

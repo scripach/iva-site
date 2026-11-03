@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Справочник — Рабочие формы курса: где что лежит</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
+<header class="ref-head">
+  <p class="kicker">Справочник · SIL-курс</p>
+  <h1>Рабочие формы курса: где что лежит</h1>
+  <p class="meta">Указатель, а не копия<span class="sep">·</span>одна строка на форму</p>
+</header>
+
+<nav class="lesson-nav top" aria-label="Навигация по курсу">
+  <div class="nav-row">
+    <a class="prev" href="srs.html">← Требования к безопасности</a>
+    <a class="toc" href="../index.html">Содержание курса</a>
+    <a class="next" href="glossary.html">Глоссарий →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Уроки:</span>
+    <a href="../lessons/0019-itogovyy-proekt-odnoy-sif.html">Урок 19: Итоговый проект</a>
+  </div>
+</nav>
+
+<div class="note">
+  <span class="tag">Зачем эта страница</span>
+  В курсе восемь рабочих форм, и каждая живёт на одной странице-владельце. Здесь — список:
+  что за форма, зачем она и где её брать. Формы здесь не описываются повторно: страница,
+  которая копирует форму — это вторая версия, и она разойдётся с первой.
+</div>
+
+<h2 id="forms">1. Восемь форм</h2>
+
+<div class="table-scroll" role="region" aria-label="Таблица: формы курса и их владельцы" tabindex="0">
+<table>
+<thead><tr><th>Форма</th><th>Зачем</th><th>Владелец</th></tr></thead>
+<tbody>
+<tr><td>Строка HAZOP</td><td>сценарий в виде, который принимает анализ слоёв: причина, последствие без защит, частота</td><td><a href="../lessons/0014-kontrakt-stroki-hazop.html">урок о строке HAZOP</a></td></tr>
+<tr><td>Лист LOPA</td><td>слои с их PFD, остаток, требование к функции</td><td><a href="hazop.html#sheet">справочник HAZOP</a></td></tr>
+<tr><td>Перечень требований безопасности</td><td>полный документ по п. 10.3.2 на одну функцию</td><td><a href="srs.html">справочник требований</a></td></tr>
+<tr><td>Матрица «причина — действие»</td><td>требования, переведённые в строки программы</td><td><a href="../lessons/0018-prikladnaya-programma-matritsa.html">урок о прикладной программе</a></td></tr>
+<tr><td>Расчётный лист контура</td><td>PFD<sub>avg</sub> или PFH с вердиктом против требования</td><td><a href="pfd-contract.html">расчётный контракт</a></td></tr>
+<tr><td>Реестр исходных данных</td><td>каждое число с источником или допущением</td><td><a href="loop-passport.html">паспорт контура</a></td></tr>
+<tr><td>Процедура проверки и журнал байпасов</td><td>предусловия, критерии, запись результата</td><td><a href="../lessons/0017-proverka-ispytaniya-i-validatsiya.html">урок о проверке</a></td></tr>
+<tr><td>Матрица прослеживаемости</td><td>требование → решение → число → проверка</td><td><a href="../lessons/0019-itogovyy-proekt-odnoy-sif.html">итоговый проект</a></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="order">2. Порядок, в котором формы заполняются</h2>
+
+<p>Порядок не случаен: каждая следующая форма опирается на предыдущую. Лист LOPA нельзя
+заполнить раньше строки HAZOP, а матрицу «причина — действие» — раньше перечня требований.</p>
+
+<ol>
+<li>Строка HAZOP — что происходит и как часто.</li>
+<li>Лист LOPA — какие слои уже есть и что остаётся функции.</li>
+<li>Перечень требований — что функция обязана делать.</li>
+<li>Матрица «причина — действие» — как это реализовано в программе.</li>
+<li>Расчётный лист — выдерживает ли контур требование.</li>
+<li>Реестр исходных данных — откуда взято каждое число расчёта.</li>
+<li>Процедура проверки — как это будет подтверждено.</li>
+<li>Матрица прослеживаемости — что из требований закрыто, а что нет.</li>
+</ol>
+
+<p>Восьмая форма замыкает круг: она ссылается на все предыдущие и показывает разрывы.
+Если в ней пусто, значит либо работа не делалась, либо её не проверили.</p>
+
+<div class="src">
+<p>Формы соответствуют требованиям ГОСТ Р МЭК 61511-1-2018: п. 10.3.2 (перечень требований),
+п. 11.9.2 (проверка), разд. 12 (прикладная программа), и приложению F части 3
+(форма анализа слоёв).</p>
+</div>
+
+<footer class="lesson-nav bottom">
+  <div class="nav-row">
+    <a class="prev" href="srs.html">← Требования к безопасности</a>
+    <a class="toc" href="../index.html">Содержание курса</a>
+    <a class="next" href="glossary.html">Глоссарий →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Уроки:</span>
+    <a href="../lessons/0019-itogovyy-proekt-odnoy-sif.html">Урок 19: Итоговый проект</a>
+  </div>
+</footer>
+</main>
+</body>
+</html>

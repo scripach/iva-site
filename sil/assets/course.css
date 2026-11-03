@@ -176,6 +176,11 @@ code, .mono {
   background: color-mix(in srgb, var(--border) 35%, transparent);
   padding: 0.08em 0.35em;
   border-radius: 4px;
+  /* A file path is one unbreakable token: «scripts/tests/test_loop_passport.py»
+     measured 262,5px inside a 280px viewport and pushed the page 7px sideways.
+     The block-level `overflow-wrap: break-word` above does not reach an inline
+     span, so the token breaks only with `anywhere`. */
+  overflow-wrap: anywhere;
 }
 
 

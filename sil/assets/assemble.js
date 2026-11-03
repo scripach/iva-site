@@ -76,10 +76,9 @@
      year), so the inversion above is the one in force here. */
   /* Required HFT by target SIL — ГОСТ Р МЭК 61511-1-2018, табл. 6, low
      demand (п. 3.2.39: at most one demand a year). Index = УПБ 1..4.
-     NOTE: SilFmt.hftField() in assets/format.js still holds the retired
-     редакция-2011 table (УПБ 2 → 1, УПБ 3 → 2). It is NOT used here: this
-     widget would then report a structure one step stronger than табл. 6
-     allows. See NOTES for the pending decision on the shared helper. */
+     SilFmt.hftField() in assets/format.js carries the same row since
+     2026-11-03 (УПБ 4 → 2 in both columns); this widget keeps its own copy
+     because it asks the inverse question — which УПБ a given HFT supports. */
   var HFT_NEEDED = [null, 0, 0, 1, 2];
 
   function tableCeiling(hft) {
