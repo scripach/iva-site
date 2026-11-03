@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Урок 9 — Общие для всех каналов изделия: питание, клеммы и β-пол</title>
+<title>Урок 10 — Общие для всех каналов изделия: питание, клеммы и β-пол</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
 <a class="skip-link" href="#content">К содержанию</a>
 <main id="content">
 <header class="lesson-head">
-  <p class="kicker">Урок 9 · 11 минут чтения + практика</p>
+  <p class="kicker">Урок 10 · 11 минут чтения + практика</p>
   <h1>Общие для всех каналов изделия: питание, клеммы и β-пол</h1>
-  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
+  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511.</p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">← Урок 8: SIL как класс требований</a>
+    <a href="0020-trebovaniya-k-bezopasnosti-dokument.html">← Урок 9: Требования к безопасности</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 10: Сборка контура →</a>
+    <a class="next" href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 11: Сборка контура из сертифицированных элементов →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
@@ -33,7 +33,8 @@
 
 <div class="note">
   <span class="tag">Мостик от урока 8</span>
-  До сих пор мы резервировали <strong>каналы</strong>, а питание у всех каналов одно. Отсюда вопрос,
+  До сих пор мы <a href="0004-arhitektury-moon-golosovanie-i-hft.html">резервировали <strong>каналы</strong></a>,
+  а питание у всех каналов одно. Отсюда вопрос,
   который встаёт сразу: как учитывать надёжность изделий, общих для всех каналов (блоков питания
   и подобного), и какая схема резервирования для них нужна. Сегодня — где эта общая часть живёт
   в расчёте, почему голосование её не спасает и как выбирается схема резервирования.
@@ -253,7 +254,7 @@
 питания, которая при срабатывании на обесточивание уходит в ложные срабатывания, относится
 к безопасной стороне и в PFD не входит, поэтому одно и то же число не стоит дважды —
 ни в опасной скрытой доле, ни в частоте ложных срабатываний (тот же запрет двойного счёта
-разобран в <a href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">уроке 12</a>). Если паспорт
+разобран в <a href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">уроке 13</a>). Если паспорт
 делит λ<sub>S</sub> и λ<sub>D</sub> своими числами, в PFD идёт паспортная λ<sub>D</sub>, тогда
 1·10⁻⁶ /ч в таблице заменяется ею, а остальное уходит в ложные. Если деления нет, вся λ
 относится к скрытой опасной — это заведомо пессимистичная оценка сверху, а не измерение
@@ -524,7 +525,7 @@ PFH = 9,1·10⁻¹⁰ 1/ч, PFD<sub>avg</sub> = 5,58·10⁻⁵ при TI = 15 
 по табл. 6 и п. 11.4.5 (в редакции 2011 — табл. 5 для логики и табл. 6 для полевых узлов);
 систематическая полнота SC выбранного изделия; путь оценки изделия по п. 11.4.3 — либо
 п. 11.4.5–11.4.9, либо способы 1H и 2H МЭК 61508-2. Одна и та же цифра «SIL 3» на корпусе ничего
-не говорит о контуре: она относится к конкретной функции, архитектуре и HFT. Разбор трёх гейтов — в <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 10</a>.</p>
+не говорит о контуре: она относится к конкретной функции, архитектуре и HFT. Разбор трёх гейтов — в <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 11</a>.</p>
 
 <h2>Практика</h2>
 
@@ -687,17 +688,17 @@ SIL 2</strong>, а не SIL 3. Запишите почему: идеальны
   <strong>Вопросы — вашему учителю.</strong> Где урок упирается в практику: какой β ставить, если ввод один
   физически и второй не завести; как учитывать ИБП с батареей (это резерв источника, но не резерв преобразователя);
   и сертификат выдан на функцию, которой в вашем контуре нет: что с таким документом делать,
-  разобрано в <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 10</a> (§1).
+  разобрано в <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 11</a> (§1).
   Отдельный случай — когда документы на изделие расходятся между собой: об этом
-  <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">урок 11</a> (§4 и §5). Спрашивайте — разберём
+  <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">урок 12</a> (§4 и §5). Спрашивайте — разберём
   на ваших схемах.
 </div>
 
 <nav class="lesson-nav bottom" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">← Урок 8: SIL как класс требований</a>
+    <a href="0020-trebovaniya-k-bezopasnosti-dokument.html">← Урок 9: Требования к безопасности</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 10: Сборка контура →</a>
+    <a class="next" href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 11: Сборка контура из сертифицированных элементов →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>

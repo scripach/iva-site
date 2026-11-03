@@ -13,14 +13,14 @@
 <header class="lesson-head">
   <p class="kicker">Урок 5 · 11 минут чтения + практика · мера, которая не PFD</p>
   <h1>PFH и режим высокого спроса: частота вместо вероятности</h1>
-  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
+  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511.</p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
   <div class="nav-row">
     <a href="0003-pfdavg-raschet-kontura-paz.html">← Урок 4: PFDavg</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 6: Архитектуры MooN →</a>
+    <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 6: Архитектуры MooN →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
@@ -154,7 +154,7 @@ PFH ровно 10⁻⁶ 1/ч — это уже УПБ 1, а не УПБ 2. Т�
 <p><strong>Новый сценарий.</strong> Объект — печь П-2, горелка на газе. Функция безопасности
 отсекает подачу топлива при погасании факела: клапан с двойным блоком и продувкой, датчик пламени,
 логика ПАЗ. Инициирующее событие — срыв пламени, частота 8 запросов в год: горелку гасят и разжигают при пусках, остановах и переключениях, часть срывов приходится на нарушения режима.
-Доля сценария в бюджете класса последствий — 2,5·10⁻⁵ /год, та же, что в <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">уроке 17</a>. Целевая частота отказов
+Доля сценария в бюджете класса последствий — 2,5·10⁻⁵ /год, та же, что в <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">уроке 19</a>. Целевая частота отказов
 получается делением доли на частоту запросов:</p>
 
 <p class="mono" style="text-align:center;">PFH<sub>цель</sub> = 2,5·10⁻⁵ / 8 = 3,125·10⁻⁶ 1/ч</p>
@@ -277,8 +277,8 @@ application». Это не оговорка юриста, а указание: �
 изготовителя, а к контуру — только после проверки. Три вещи проверяются до подстановки:
 PFH элемента — не PFH функции (в последовательном контуре интенсивности складываются, и контур всегда хуже своего лучшего элемента); обнаруженные отказы работающего изделия
 изолируются за MTTR, а не за интервал проверки; архитектурные ограничения берутся из табл. 6
-по режиму, а не из рекламного листа. Как читать такие числа в руководстве, разобрано в <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">уроке 11</a>; как проверять
-сертификат целиком — в <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 10</a>.</p>
+по режиму, а не из рекламного листа. Как читать такие числа в руководстве, разобрано в <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">уроке 12</a>; как проверять
+сертификат целиком — в <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">уроке 11</a>.</p>
 
 <p>Практическое правило простое и не требует помнить формулы: <strong>берут ту величину, у которой размерность совпадает с мерой режима</strong>, а в обоснование пишут, почему выбрана
 именно она. Для функции по запросу это PFD, для частых запросов — PFH. Пересчёт между ними не
@@ -441,7 +441,7 @@ PFH элемента выдан за PFH функции.</li>
   <div class="nav-row">
     <a href="0003-pfdavg-raschet-kontura-paz.html">← Урок 4: PFDavg</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 6: Архитектуры MooN →</a>
+    <a class="next" href="0004-arhitektury-moon-golosovanie-i-hft.html">Урок 6: Архитектуры MooN →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>

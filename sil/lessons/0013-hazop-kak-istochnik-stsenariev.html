@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Урок 18 — HAZOP как источник сценариев: строка, которую ждёт LOPA</title>
+<title>Урок 20 — HAZOP как источник сценариев: строка, которую ждёт LOPA</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
 <a class="skip-link" href="#content">К содержанию</a>
 <main id="content">
 <header class="lesson-head">
-  <p class="kicker">Урок 18 · 8 минут чтения + практика · строка, из которой считается SIL</p>
+  <p class="kicker">Урок 20 · 8 минут чтения + практика · строка, из которой считается SIL</p>
   <h1>HAZOP: строка, которую ждёт LOPA</h1>
-  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
+  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511.</p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">← Урок 17: Целевая частота</a>
+    <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">← Урок 19: Целевая частота</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0019-itogovyy-proekt-odnoy-sif.html">Урок 19: Итоговый проект →</a>
+    <a class="next" href="0019-itogovyy-proekt-odnoy-sif.html">Урок 21: Итоговый проект одной SIF →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
@@ -31,9 +31,9 @@
 </nav>
 
 <div class="note">
-  <span class="tag">Мостик от урока 17</span>
+  <span class="tag">Мостик от урока 19</span>
   В <a href="0002-kak-naznachayut-sil-lopa.html">уроке 3</a> анализ слоёв защиты начинался со слов «берёт один сценарий из HAZOP», и это
-  было честное признание: сам сценарий мы не разбирали ни разу. В <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">уроке 17</a> появилась доля
+  было честное признание: сам сценарий мы не разбирали ни разу. В <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">уроке 19</a> появилась доля
   сценария в бюджете класса — 2,5·10⁻⁵ /год. Но откуда взялось, что сценариев четыре и что
   они вообще есть, тоже оставалось за кадром. Оба числа приходят из одного документа. Сама строка, из которой они
   берутся, разобрана раньше: её контракт — поля, смысл каждого и правило выделения
@@ -184,7 +184,7 @@
 
 <h2>6. Что анализ слоёв получает из этих чисел</h2>
 
-<p>Возьмём сценарий <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урока 17</a>: доля в бюджете класса 2,5·10⁻⁵ /год, инициатор с частотой
+<p>Возьмём сценарий <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урока 19</a>: доля в бюджете класса 2,5·10⁻⁵ /год, инициатор с частотой
 0,1 /год по данным объекта (в табл. G.3 такому инициатору соответствует MTBF контура
 управления 10 лет). Слоёв до функции не зачтено, поэтому частота до SIF равна частоте
 причины:</p>
@@ -355,7 +355,7 @@
 
 <p>Если строк несколько и у них общая причина — отказ одного контура, потеря энергии,
 ошибка одной смены — проверьте, не сложены ли их частоты. Дальше посчитайте, что получит
-анализ слоёв: поделите долю сценария из <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урока 17</a> на частоту причины и сравните УПБ с тем,
+анализ слоёв: поделите долю сценария из <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урока 19</a> на частоту причины и сравните УПБ с тем,
 что стоит в перечне требований. Расхождение на ступень почти всегда означает, что строка
 HAZOP и расчёт живут в разных документах.</p>
 
@@ -378,7 +378,7 @@ HAZOP и расчёт живут в разных документах.</p>
   HAZOP назван среди методов анализа опасностей, там же ссылка на МЭК 61882.
   Прежняя редакция — <a class="print-url" href="../materials/gost-r-mek-61511-3-2011.pdf">ГОСТ Р МЭК 61511-3-2011</a>, прил. F: табл. F.1 та же, а подразделы сдвинуты на один — влияние события и тяжесть стоят в F.3 и F.4 против F.2 и F.3 действующей редакции. Приложения B–K стандарт сам называет иллюстративными: числа из них — пример, а не норматив.
   Дальнейшие шаги — <a href="0002-kak-naznachayut-sil-lopa.html">урок 3 (анализ слоёв)</a>
-  и <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урок 17 (целевая частота)</a>;
+  и <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урок 19 (целевая частота)</a>;
   сводка на одну страницу — <a href="../reference/hazop.html">справочник «HAZOP и LOPA»</a>;
   статус редакций — <a href="../reference/normative-register.html">нормативный реестр</a>.</p>
 </div>
@@ -393,9 +393,9 @@ HAZOP и расчёт живут в разных документах.</p>
 
 <nav class="lesson-nav bottom" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">← Урок 17: Целевая частота</a>
+    <a href="0012-tselevaya-chastota-i-zamykanie-kriteriya.html">← Урок 19: Целевая частота</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0019-itogovyy-proekt-odnoy-sif.html">Урок 19: Итоговый проект →</a>
+    <a class="next" href="0019-itogovyy-proekt-odnoy-sif.html">Урок 21: Итоговый проект одной SIF →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>

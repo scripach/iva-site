@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Урок 12 — Шкаф ПАЗ: цепь канала, клеммы, байпасы</title>
+<title>Урок 13 — Шкаф ПАЗ: цепь канала, клеммы, байпасы</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
 <a class="skip-link" href="#content">К содержанию</a>
 <main id="content">
 <header class="lesson-head">
-  <p class="kicker">Урок 12 · 13 минут чтения + практика · первый практический</p>
+  <p class="kicker">Урок 13 · 13 минут чтения + практика · первый практический</p>
   <h1>Шкаф ПАЗ: цепь канала, клеммы и байпасы</h1>
-  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
+  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511.</p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">← Урок 11: Реле безопасности</a>
+    <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">← Урок 12: Реле безопасности</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">Урок 13: Четыре доказательства →</a>
+    <a class="next" href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">Урок 14: Четыре доказательства, которых нет в паспорте →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
@@ -31,8 +31,8 @@
 </nav>
 
 <div class="note">
-  <span class="tag">Мостик от урока 11</span>
-  <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 10</a> считал PFD по паспортам: λ<sub>DU</sub> датчика, ПЛК, клапана. Паспорт кончается на
+  <span class="tag">Мостик от урока 12</span>
+  <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 11</a> считал PFD по паспортам: λ<sub>DU</sub> датчика, ПЛК, клапана. Паспорт кончается на
   клемме прибора, а между прибором и входом модуля стоит шкаф — клеммы, размыкатели, вставки,
   маршаллинг. Этих чисел в паспорте нет, и в расчёт их обычно не ставят вовсе. Сегодня добавляем шкаф
   к расчёту контура, а время в <a href="../reference/glossary.html#bypass">байпасе</a> считаем как долю
@@ -44,7 +44,7 @@
 <p>От датчика до входа модуля сигнал проходит через четыре-шесть соединений: полевое подключение,
 клемма в шкафу, размыкатель для проверки, вставка, вход. Каждое соединение может уйти в одну
 из двух сторон, и для ПАЗ они неравноценны: норма — обесточено-значит-защищено
-(de-energize-to-trip) из <a href="0006-obshchie-izdeliya-blok-pitaniya.html">урока 9</a>. В этой норме вход читает исправное состояние как «1», а
+(de-energize-to-trip) из <a href="0006-obshchie-izdeliya-blok-pitaniya.html">урока 10</a>. В этой норме вход читает исправное состояние как «1», а
 срабатывание — как «0».</p>
 
 <figure id="channel">
@@ -106,7 +106,7 @@
 <h2>2. Шунт против обрыва: два разных числа</h2>
 
 <p>Направление отказа решает, что делать с дефектом. Скрытый отказ <a href="../reference/glossary.html#shunt">шунта</a> складывается
-с λ<sub>DU</sub> приборов в гейте 1 <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 10</a>. <a href="../reference/glossary.html#open-circuit">Обрыв</a> в гейт 1 не входит: его нормируют
+с λ<sub>DU</sub> приборов в гейте 1 <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 11</a>. <a href="../reference/glossary.html#open-circuit">Обрыв</a> в гейт 1 не входит: его нормируют
 отдельно, по п. 10.3.2 редакции 2018 года (в редакции 2011 это был п. 10.3.1) — допустимая
 интенсивность ложных срабатываний входит в перечень требований безопасности. Номер пункта
 и правовой статус документа — в <a href="../reference/normative-register.html">нормативном
@@ -221,11 +221,11 @@ SIL 3 (Cat. 3 / PL d при 1oo1, Cat. 4 / PL e при 1oo2 с тесто�
 Это заведомо пессимистичная оценка, а не расчёт изделия: 12,5 FIT на точку соединения умножить на восемь точек
 цепи. Восемь — в полной цепи с размыкателем, вставкой и кроссировкой; в короткой,
 из §1, набирается четыре-шесть: полевое подключение, клемма, размыкатель, вход. Три законных
-источника таких чисел и цена каждого разобраны в <a href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">уроке 13</a>,
+источника таких чисел и цена каждого разобраны в <a href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">уроке 14</a>,
 § 2; здесь взят третий, самый грубый: оценка сверху, и в обоснование она идёт
 именно так, с указанием, что реальное число ниже.
 TI 8 760 ч (год), срок службы TL 175 200 ч (20 лет), MTTR 8 ч. Контур — шаг 4 из
-<a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 10</a> (4,0·10⁻⁴).
+<a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 11</a> (4,0·10⁻⁴).
 Охват диагностикой 90 % — <strong>допущение этого расчёта</strong>, а не паспортное число:
 такую долю обещают только с контролем линии, и в исходные данные она входит с этой оговоркой. Охватов здесь два, и они отвечают на разные вопросы: PTC 87 % — какую долю
 оставшихся отказов видит сквозная проверка от датчика до входа; <strong>охват диагностикой, ОД</strong> (DC, п. 3.2.15.1) — какую долю опасных отказов
@@ -329,7 +329,7 @@ TI 8 760 ч (год), срок службы TL 175 200 ч (20 лет), MT
 </div>
 
 <p>PFD хуже в 5,8 раза: 8,8·10⁻³ против 1,5·10⁻³; разбор —
-<a href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">урок 13</a>, §2.</p>
+<a href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">урок 14</a>, §2.</p>
 
 <p>Первая строка и есть типичный проект: контур собран из сертифицированных элементов, а шкаф даёт
 <strong>почти восемь десятых</strong> его PFD (79 %). Вторая строка не потребовала ни одного нового
@@ -437,7 +437,7 @@ TI 8 760 ч (год), срок службы TL 175 200 ч (20 лет), MT
 питания каналов — иначе общая часть переезжает на шаг раньше.</figcaption>
 </figure>
 
-<p>Числа для правой панели — на датчике <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 10</a>: p = 5,1675·10⁻⁴ на канал (34 FIT, PTC 87 %, TI 8 760 ч,
+<p>Числа для правой панели — на датчике <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 11</a>: p = 5,1675·10⁻⁴ на канал (34 FIT, PTC 87 %, TI 8 760 ч,
 TL 175 200 ч), β 5 %, q = (1−β)p = 4,909·10⁻⁴, βp = 2,58·10⁻⁵. Целая группа:
 2oo3 и 1oo2 дают почти одно и то же.</p>
 
@@ -804,9 +804,9 @@ RRF 1 000 — 5,2 ч/год: одна проверка по 8 ч его п
 
 <nav class="lesson-nav bottom" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">← Урок 11: Реле безопасности</a>
+    <a href="0009-rele-bezopasnosti-pasport-i-sertifikat.html">← Урок 12: Реле безопасности</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">Урок 13: Четыре доказательства →</a>
+    <a class="next" href="0010-chetyre-dokazatelstva-kotorykh-net-v-pasporte.html">Урок 14: Четыре доказательства, которых нет в паспорте →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>

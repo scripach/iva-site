@@ -13,7 +13,7 @@
 <header class="lesson-head">
   <p class="kicker">Справочник · SIL-курс</p>
   <h1>Паспорт сквозного контура</h1>
-  <p class="meta">Одна страница на печать<span class="sep">·</span>Исходные данные до расчёта<span class="sep">·</span>Ведомость моделей<span class="sep">·</span>Запасной пакет данных</p>
+  <p class="meta">Одна страница на печать<span class="sep">·</span>Исходные данные до расчёта<span class="sep">·</span>Ведомость моделей<span class="sep">·</span>Запасной пакет данных.</p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
@@ -25,14 +25,14 @@
   <div class="nav-refs">
     <span class="nav-refs-label">Уроки:</span>
     <a href="../lessons/0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">Урок 8: PFD контура</a>
-    <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">Урок 17: целевая частота</a>
-    <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">Урок 18: HAZOP</a>
+    <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">Урок 19: целевая частота</a>
+    <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">Урок 20: HAZOP</a>
   </div>
 </nav>
 
 <p>Это паспорт одного сквозного контура — сепаратора V-101 — и одного сценария, который
 разбирают <a href="../lessons/0002-kak-naznachayut-sil-lopa.html">урок 3</a>,
-<a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урок 17</a> и <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">урок 18</a>. Он отвечает на вопрос,
+<a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урок 19</a> и <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">урок 20</a>. Он отвечает на вопрос,
 который возникает раньше расчёта: почему у одного объекта в разных местах курса стоят разные
 числа. Причин ровно две — изменились исходные данные или изменилась модель. Поэтому страница
 идёт в таком порядке: сначала исходные данные, затем нарастающая ведомость моделей на одних и тех
@@ -47,14 +47,14 @@
 <table>
 <thead><tr><th>Что задано</th><th>Значение</th><th>Откуда и в каком качестве</th></tr></thead>
 <tbody>
-<tr><td>Объект</td><td>сепаратор V-101, ёмкость под давлением</td><td>сквозной объект курса: <a href="../lessons/0003-pfdavg-raschet-kontura-paz.html">урок 4</a>, <a href="../lessons/0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">урок 12</a></td></tr>
+<tr><td>Объект</td><td>сепаратор V-101, ёмкость под давлением</td><td>сквозной объект курса: <a href="../lessons/0003-pfdavg-raschet-kontura-paz.html">урок 4</a>, <a href="../lessons/0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">урок 13</a></td></tr>
 <tr><td>Сценарий</td><td>отказ контура регулирования давления → рост давления выше допустимого → разрыв ёмкости и выброс</td><td>строка HAZOP, прил. G ГОСТ Р МЭК 61511-3-2018</td></tr>
 <tr><td>Инициирующее событие</td><td>отказ регулятора давления, 0,1 1 /год</td><td>MTBF контура управления 10 лет, табл. G.3; данные объекта</td></tr>
 <tr><td>Обеспечивающие условия</td><td>не зачтены</td><td>G.2.4 допускает их только при независимости от причины; условий, прошедших обе проверки, в примере нет</td></tr>
 <tr><td>Слои до SIF</td><td>базовый вариант — не зачтено; в <a href="../lessons/0002-kak-naznachayut-sil-lopa.html">уроке 3</a> зачтена реакция оператора по PIAH с PFD 0,1</td><td>прил. F, п. F.8 — критерий независимого слоя</td></tr>
-<tr><td>Люди в зоне поражения</td><td>N = 1000, в событии погибают k = 3</td><td><a href="../lessons/0011-federalnyy-dopustimyy-risk.html">урок 16</a>; присутствие и тяжесть последствий</td></tr>
+<tr><td>Люди в зоне поражения</td><td>N = 1000, в событии погибают k = 3</td><td><a href="../lessons/0011-federalnyy-dopustimyy-risk.html">урок 18</a>; присутствие и тяжесть последствий</td></tr>
 <tr><td>Критерий на человека</td><td>R<sub>д</sub> = 1,2167·10⁻⁶ 1 /год (1,2167 ppm)</td><td>РБ № 331: фон 73, поправка ÷20, деление на 3</td></tr>
-<tr><td>Предельная частота класса</td><td>f<sub>max</sub> = R<sub>д</sub>·N/k = 4,06·10⁻⁴ 1 /год</td><td>замыкание критерия, <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урок 17</a>, §5</td></tr>
+<tr><td>Предельная частота класса</td><td>f<sub>max</sub> = R<sub>д</sub>·N/k = 4,06·10⁻⁴ 1 /год</td><td>замыкание критерия, <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урок 19</a>, §5</td></tr>
 <tr><td>Бюджет класса последствий</td><td>1·10⁻⁴ 1 /год</td><td>пример прил. B ГОСТ Р МЭК 61511-3-2018 — ориентир, а не норматив</td></tr>
 <tr><td>Сценариев в классе</td><td>m = 4, доли равные</td><td>допущение курса, когда методика долей не задаёт; называется в документе</td></tr>
 <tr><td>Доля сценария</td><td>2,5·10⁻⁵ 1 /год</td><td>1·10⁻⁴ / 4</td></tr>
@@ -69,14 +69,14 @@
 а двумя входами — зачтённым слоем до SIF и тем, что считать допустимой частотой. Внутри
 второго входа есть ещё вариант: зачесть слой оператора и получить PFD 2,5·10⁻³, RRF 400,
 УПБ 2 — это расчёт по той же формуле с другим значением f<sub>до</sub>, и он тоже назван
-в <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">уроке 17</a>.</p>
+в <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">уроке 19</a>.</p>
 
 <div class="table-scroll" role="region" aria-label="Два требования к одному сценарию" tabindex="0">
 <table>
 <thead><tr><th>Где</th><th>Что взято в знаменатель</th><th>Частота до SIF, 1 /год</th><th>Требование</th><th>УПБ</th></tr></thead>
 <tbody>
 <tr data-case="lesson2"><td><a href="../lessons/0002-kak-naznachayut-sil-lopa.html">Урок 3</a></td><td>критерий сценария 5·10⁻⁵ 1 /год, слой оператора зачтён</td><td>0,1 × 0,1 = 0,01</td><td>PFD 5·10⁻⁵ / 0,01 → RRF 200</td><td>2</td></tr>
-<tr data-case="lesson12"><td><a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">Урок 17</a>, <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">урок 18</a></td><td>доля класса 2,5·10⁻⁵ 1 /год, слоёв до SIF нет</td><td>0,1</td><td>PFD 2,5·10⁻⁴, RRF 4 000</td><td>3</td></tr>
+<tr data-case="lesson12"><td><a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">Урок 19</a>, <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">урок 20</a></td><td>доля класса 2,5·10⁻⁵ 1 /год, слоёв до SIF нет</td><td>0,1</td><td>PFD 2,5·10⁻⁴, RRF 4 000</td><td>3</td></tr>
 </tbody>
 </table>
 </div>
@@ -137,16 +137,16 @@
 <p>Строки 2 и 3 — это один и тот же контур с одним и тем же набором λ; между ними стоит только
 слагаемое общей причины. Строки 3 и 4 так сравнивать нельзя: в четвёртой заменены изделия,
 поэтому RRF 2 492 означает «другое железо плюс учтённая процедура», а не «та же арифметика дала
-больше». <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 10</a>
+больше». <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 11</a>
 оговаривает это в разборе шага, где одновременно меняются λ<sub>DU</sub> и охват проверки.</p>
 
 <p>Отсюда правило чтения: прежде чем сравнивать два числа PFD, назовите строку ведомости, из
-которой каждое взято. RRF 16 из первой строки разбора <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 10</a> и RRF 513 из строки 3 — не «расчёт
+которой каждое взято. RRF 16 из первой строки разбора <a href="../lessons/0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урока 11</a> и RRF 513 из строки 3 — не «расчёт
 против расчёта», а одноцепная модель против архитектурной.</p>
 
 <h2 id="verdict">3. Что ведомость говорит о требовании</h2>
 
-<p>Требование <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урока 17</a> и <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">урока 18</a> — PFD ≤ 2,5·10⁻⁴, то есть RRF 4 000. Ни одна строка ведомости его не достигает. Строка 3 даёт 1,95·10⁻³ — это полоса УПБ 2 и PFD в 7,8 раза выше требования; строка 4 даёт 4,0·10⁻⁴ — полоса УПБ 3 и превышение в 1,6 раза. Граница между ними — 1·10⁻³: ниже него идёт полоса УПБ 3, от 1·10⁻³ до 1·10⁻² — полоса УПБ 2. Полоса и требование — не одно и то же: полоса ставится по PFD, а требование выведено из частоты до SIF, и внутри полосы УПБ 3 разброс в десять раз. С <a href="../lessons/0002-kak-naznachayut-sil-lopa.html">уроком 3</a> расхождения нет: там требование было RRF 200, и обе строки его перекрывают. Настоящая причина расхождения — не расчёт, а критерий: 2,5·10⁻⁵ 1 /год на сценарий против 5·10⁻⁵ 1 /год. </p>
+<p>Требование <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">урока 19</a> и <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">урока 20</a> — PFD ≤ 2,5·10⁻⁴, то есть RRF 4 000. Ни одна строка ведомости его не достигает. Строка 3 даёт 1,95·10⁻³ — это полоса УПБ 2 и PFD в 7,8 раза выше требования; строка 4 даёт 4,0·10⁻⁴ — полоса УПБ 3 и превышение в 1,6 раза. Граница между ними — 1·10⁻³: ниже него идёт полоса УПБ 3, от 1·10⁻³ до 1·10⁻² — полоса УПБ 2. Полоса и требование — не одно и то же: полоса ставится по PFD, а требование выведено из частоты до SIF, и внутри полосы УПБ 3 разброс в десять раз. С <a href="../lessons/0002-kak-naznachayut-sil-lopa.html">уроком 3</a> расхождения нет: там требование было RRF 200, и обе строки его перекрывают. Настоящая причина расхождения — не расчёт, а критерий: 2,5·10⁻⁵ 1 /год на сценарий против 5·10⁻⁵ 1 /год. </p>
 
 <p>Замкнутость класса при этом в порядке: f<sub>max</sub> = 4,06·10⁻⁴ 1 /год вчетверо выше
 целевой 1·10⁻⁴, поэтому выбранная частота класса критерий на человека не нарушает. Функция
@@ -164,7 +164,7 @@
 <table>
 <thead><tr><th>Что в пакете</th><th>Что внутри</th><th>Какое задание закрывает</th></tr></thead>
 <tbody>
-<tr><td>Фрагмент HAZOP</td><td>одна строка по узлу V-101: отклонение «БОЛЬШЕ давления», причина — отказ регулятора с частотой 0,1 1 /год без слоёв, последствие — давление выше 1,5 MAWP с выбросом за 5 мин, тяжесть E, графа 4 заполнена; разобрана в <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">уроке 18</a> и <a href="hazop.html">справочнике HAZOP</a></td><td>сборка листа LOPA и проверка строки по шести парам табл. F.1</td></tr>
+<tr><td>Фрагмент HAZOP</td><td>одна строка по узлу V-101: отклонение «БОЛЬШЕ давления», причина — отказ регулятора с частотой 0,1 1 /год без слоёв, последствие — давление выше 1,5 MAWP с выбросом за 5 мин, тяжесть E, графа 4 заполнена; разобрана в <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">уроке 20</a> и <a href="hazop.html">справочнике HAZOP</a></td><td>сборка листа LOPA и проверка строки по шести парам табл. F.1</td></tr>
 <tr><td>Схема контура</td><td>датчик PSHH 2oo3, ПЛК, соленоид с отсечным клапаном 1oo2, питание 1+1 с развязкой, клеммы канала, направление отказа — срабатывание при обесточивании</td><td>расчёт PFD, проверка трёх гейтов, разбор байпаса</td></tr>
 <tr><td>Комплект паспортов и руководств</td><td>сертификат и FMEDA датчика 3051S, руководство по безопасности блока питания, руководство модуля ввода, руководство и паспорт реле, документы клеммы — <a class="print-url" href="../materials/exida-rosemount-3051s-fmeda.pdf">FMEDA</a>, <a class="print-url" href="../materials/emerson-3051s-safety-certificate.pdf">сертификат</a>, <a class="print-url" href="../materials/phoenix-quint4-sil3-safety-manual-RU.pdf">руководство БП</a>, <a class="print-url" href="../materials/siemens-et200sp-fdi-8x24vdc-hf.pdf">модуль ввода</a>, <a class="print-url" href="../materials/stez-astra-safety-manual.pdf">руководство реле</a>, <a class="print-url" href="../materials/stez-astra-paz-1no1nz-24d-passport.pdf">паспорт реле</a>, <a class="print-url" href="../materials/ut4-hesi-5x20.pdf">клемма</a></td><td>чтение λ<sub>DU</sub>, PTC, SC, HFT и проверка размерности</td></tr>
 <tr><td>Данные по отказам и проверкам</td><td>λ<sub>DU</sub> 34 FIT, охваты проверки 41 / 87 / 78 %, TL 20 лет, TI 12 мес, MTTR 8 ч, β 5 % по чек-листу, протокол теста КЗ, журнал проверок и байпасов</td><td>пересчёт со своей процедурой, верхняя граница λ, оценка байпаса</td></tr>
@@ -203,8 +203,8 @@
   <div class="nav-refs">
     <span class="nav-refs-label">Уроки:</span>
     <a href="../lessons/0005-sil-kak-klass-trebovaniy-zhiznennyy-cikl.html">Урок 8: PFD контура</a>
-    <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">Урок 17: целевая частота</a>
-    <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">Урок 18: HAZOP</a>
+    <a href="../lessons/0012-tselevaya-chastota-i-zamykanie-kriteriya.html">Урок 19: целевая частота</a>
+    <a href="../lessons/0013-hazop-kak-istochnik-stsenariev.html">Урок 20: HAZOP</a>
   </div>
 </footer>
 </main>

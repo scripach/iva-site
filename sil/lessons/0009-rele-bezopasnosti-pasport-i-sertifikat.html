@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Урок 11 — Реле безопасности: как проверить руководство по безопасности</title>
+<title>Урок 12 — Реле безопасности: как проверить руководство по безопасности</title>
 <link rel="stylesheet" href="../assets/course.css">
 </head>
 <body>
 <a class="skip-link" href="#content">К содержанию</a>
 <main id="content">
 <header class="lesson-head">
-  <p class="kicker">Урок 11 · 16 минут чтения + практика</p>
+  <p class="kicker">Урок 12 · 16 минут чтения + практика</p>
   <h1>Реле безопасности: как проверить руководство по безопасности</h1>
-  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511</p>
+  <p class="meta">Миссия: проектировать и обосновывать SIF<span class="sep">·</span>Нефтегаз / МЭК 61511.</p>
 </header>
 
 <nav class="lesson-nav top" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">← Урок 10: Сборка контура</a>
+    <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">← Урок 11: Сборка контура из сертифицированных элементов</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 12: Шкаф ПАЗ →</a>
+    <a class="next" href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 13: Шкаф ПАЗ →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
@@ -30,8 +30,8 @@
 </nav>
 
 <div class="note">
-  <span class="tag">Мостик от урока 10</span>
-  <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 10</a> собирал контур из сертифицированных элементов и требовал от каждого изделия
+  <span class="tag">Мостик от урока 11</span>
+  <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">Урок 11</a> собирал контур из сертифицированных элементов и требовал от каждого изделия
   трёх вещей: числа, структуры и стойкости к систематическим отказам. Всё это берётся из документов, которые
   поставщик прикладывает к изделию — а им мы до сих пор верили на слово. Здесь начинается
   доказательная часть курса: прежде чем считать, проверяем сам документ. Первый шаг захода на объект —
@@ -227,7 +227,7 @@ HFT; стойкость к систематическим отказам ими
 
 <h2>3. Что руководство даёт для расчёта</h2>
 
-<p>Страница 7 руководства содержит то, что <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урок 10</a> требовал от любого элемента: интенсивности
+<p>Страница 7 руководства содержит то, что <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урок 11</a> требовал от любого элемента: интенсивности
 по видам отказов. Строк в таблице две — модели с цепью ручного сброса и все остальные; наше реле
 без сброса, поэтому берём вторую, в FIT:</p>
 
@@ -273,7 +273,7 @@ PFH — ВОЧ, SFF — ДБО, HFT — ОАС, охват диагности
 отказа, время до начала ремонта, сам ремонт и возврат в работу; MRT — среднее время ремонта
 (п. 3.2.37.1), то есть последние три составляющих. В расчёте они стоят в разных слагаемых и потому
 не складываются. Полная формула элемента с разделением на скрытую и выявленную части (обобщение
-формулы <a href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">урока 12</a>; <a href="../reference/cabinet.html#formula">справочник «Шкаф ПАЗ»</a>, §3) такова:</p>
+формулы <a href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">урока 13</a>; <a href="../reference/cabinet.html#formula">справочник «Шкаф ПАЗ»</a>, §3) такова:</p>
 
 <div class="lopa-formula-wrap">
   <span class="lopa-formula">p = λ<sub>DU</sub>·[PTC·TI/2 + (1−PTC)·TL/2 + MRT] + λ<sub>DD</sub>·MTTR</span>
@@ -485,7 +485,7 @@ PFD<sub>avg</sub> = 1,04·10⁻³ — меняются только подпи�
 
 <p>Сумма почти целиком состоит из слагаемого общей причины: 6,57·10⁻⁶ из 6,66·10⁻⁶, то есть
 98,7 %. Голосование двух каналов дало 8,8·10⁻⁸ — на два порядка меньше. Это и есть β-пол
-из <a href="0006-obshchie-izdeliya-blok-pitaniya.html">урока 9</a>: ниже β·p резервирование
+из <a href="0006-obshchie-izdeliya-blok-pitaniya.html">урока 10</a>: ниже β·p резервирование
 не опускается, сколько каналов ни ставь, и снижает этот пол только уменьшение β или укорочение
 интервала проверки.</p>
 
@@ -749,7 +749,7 @@ PFD<sub>avg</sub> = 1,04·10⁻³ — меняются только подпи�
   <a class="print-url" href="../materials/stez-astra-61508-sil3-certificate.pdf">сертификат 61508-1</a>,
   <a class="print-url" href="../materials/stez-astra-iso13849-certificate.pdf">сертификат ИСО 13849</a>,
   <a class="print-url" href="../materials/stez-astra-relay-catalog.pdf">каталог</a>.</p>
-  <p class="src">Числа сходятся в двух документах: <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урок 10</a> и <a class="print-url" href="../materials/exida-rosemount-3051s-fmeda.pdf">FMEDA Rosemount 3051S</a>.
+  <p class="src">Числа сходятся в двух документах: <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">урок 11</a> и <a class="print-url" href="../materials/exida-rosemount-3051s-fmeda.pdf">FMEDA Rosemount 3051S</a>.
   Граница с безопасностью машин — <a href="../reference/glossary.html#gost13849">глоссарий,
   ГОСТ ISO 13849-1</a>. Сводка гейтов — <a href="../reference/assembly.html">«Сборка контура»</a>.</p>
 </div>
@@ -763,9 +763,9 @@ PFD<sub>avg</sub> = 1,04·10⁻³ — меняются только подпи�
 
 <nav class="lesson-nav bottom" aria-label="Навигация по курсу">
   <div class="nav-row">
-    <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">← Урок 10: Сборка контура</a>
+    <a href="0007-soborka-kontura-iz-sertifitsirovannykh-elementov.html">← Урок 11: Сборка контура из сертифицированных элементов</a>
     <a class="toc" href="../index.html">Содержание курса</a>
-    <a class="next" href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 12: Шкаф ПАЗ →</a>
+    <a class="next" href="0008-shkaf-paz-cep-kanala-klemmy-baypasy.html">Урок 13: Шкаф ПАЗ →</a>
   </div>
   <div class="nav-refs">
     <span class="nav-refs-label">Справочники:</span>
