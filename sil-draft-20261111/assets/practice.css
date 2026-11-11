@@ -1,0 +1,103 @@
+/* Applied practice (task 29): a matrix / verification-plan fragment whose
+   blanks are native selects. Native controls keep the exercise operable from
+   the keyboard without a custom focus model; the feedback under each select
+   explains the chosen mistake, not just "wrong". */
+
+.practice {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  padding-top: 1.2rem;
+  padding-bottom: 1.35rem;
+  margin-block: 1.8rem;
+}
+
+.practice-title {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.7rem;
+}
+
+.practice p.instruction { font-size: 0.95rem; margin-bottom: 0.9rem; }
+
+.practice-item { margin-bottom: 1.35rem; }
+.practice-item:last-of-type { margin-bottom: 0.9rem; }
+
+.practice-prompt {
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 0 0 0.45rem;
+}
+.practice-num {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-right: 0.4rem;
+}
+
+.practice-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.practice-select {
+  width: 100%;
+  max-width: 54rem;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.35;
+  padding: 0.45rem 0.6rem;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--fg);
+}
+.practice-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.practice-item.is-correct .practice-select { border-color: var(--success); }
+.practice-item.is-wrong .practice-select { border-color: var(--error); }
+
+.practice-feedback {
+  display: none;
+  margin-top: 0.45rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 7px;
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+.practice-feedback.shown { display: block; }
+.practice-item.is-correct .practice-feedback {
+  background: var(--success-soft);
+}
+.practice-item.is-wrong .practice-feedback {
+  background: var(--error-soft);
+}
+
+.practice-actions { margin-top: 0.4rem; }
+
+.practice-result {
+  display: none;
+  margin-top: 0.75rem;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.practice-result.shown { display: block; }
+.practice-result:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media print {
+  .practice-actions { display: none; }
+  .practice-feedback,
+  .practice-result { display: none; }
+  .practice-select { border: none; padding-left: 0; }
+}

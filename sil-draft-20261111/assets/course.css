@@ -1,0 +1,1303 @@
+/* ============================================================
+   SIL Course — shared stylesheet
+   Tufte-inspired: serif body, generous measure, quiet chrome.
+   Used by every lesson and reference document.
+
+   Geometry lives in three variables, and everything else is derived
+   from them — that is what keeps the heading scale, the page gutter
+   and the card width from drifting apart:
+     --card-pad  inner padding of a callout/panel
+     --page-pad  page gutter, always wider than --card-pad
+     --fit       largest heading size that still fits the column
+   ============================================================ */
+
+:root {
+  /* Нативные контролы и скроллбары следуют теме ОС. Тема остаётся
+     системной: ручного переключателя на сайте нет. */
+  color-scheme: light dark;
+
+  --card-pad: clamp(0.6rem, 2.2vw, 1.35rem);
+  --page-pad: max(1.25rem, calc(var(--card-pad) + 0.75rem));
+  --fit: calc((100vw - 2 * var(--page-pad)) / 9.6);
+
+  --fg: #1c1b18;
+  --muted: #6e6a63;
+  --border: #dcd7ce;
+  --surface: #f7f4ef;
+  --accent: #0f5c8c;
+  --accent-soft: #e7eff5;
+  --success: #1e7a3c;
+  --success-soft: #e9f4ec;
+  --warning: #7d6213;
+  --warning-soft: #f7f0dc;
+  --error: #a03030;
+  --error-soft: #f8eaea;
+  /* Ряды данных в диаграммах — отдельно от семантических цветов, чтобы
+     «третий ряд» не читался как «тревога». Значения различимы и по
+     светлоте, то есть различимы в ч/б и при дальтонизме; текстовые подписи
+     всё равно стоят рядом с каждой полосой, так что цвет — не единственный
+     носитель смысла. */
+  --series-1: #e7eff5;   /* поле полосы: светлое, под тёмный текст */
+  --series-2: #f7f0dc;
+  --series-3: #e9f4ec;
+  --series-1-edge: #0f5c8c;  /* граница полосы: насыщенная, для различения рядов */
+  --series-2-edge: #7d6213;
+  --series-3-edge: #1e7a3c;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --mono: "Cascadia Code", Consolas, "SF Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e8e4dc;
+    --muted: #a09a90;
+    --border: #3a3730;
+    --surface: #23211d;
+    --accent: #7db8dc;
+    --accent-soft: #22303a;
+    --success: #7fc79a;
+    --success-soft: #1e2f24;
+    --warning: #d4b96a;
+    --warning-soft: #332d1c;
+    --error: #d99a9a;
+    --error-soft: #3a2323;
+    --series-1: #22303a;
+    --series-2: #332d1c;
+    --series-3: #1e2f24;
+    --series-1-edge: #7db8dc;
+    --series-2-edge: #d4b96a;
+    --series-3-edge: #7fc79a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 18px; }
+
+body {
+  font-family: var(--serif);
+  color: var(--fg);
+  background: var(--surface);
+  line-height: 1.65;
+  margin: 0;
+  padding: 2rem var(--page-pad) 4rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 41rem ≈ 82 знака при 18px. Исходные 46rem давали 92 — глаз теряет
+   строку на тексте с формулами и индексами (λDU, PFDavg, 10⁻⁶). */
+main {
+  max-width: 41rem;
+  margin: 0 auto;
+}
+
+/* ---------- header ---------- */
+
+header.lesson-head { margin-bottom: 2.2rem; }
+
+.kicker {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
+}
+
+/* Шкала заголовков выводится из --fit, поэтому иерархия не может
+   перевернуться ни на одной ширине: h1 > h2 > h3 по построению.
+   Верхний предел — 2.5x тела (18px → 45px); ниже он падает ровно
+   настолько, чтобы самое длинное слово курса («последовательное»,
+   9.18 кегля) влезало в колонку целиком. */
+h1 {
+  font-size: min(2.5rem, var(--fit));
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-weight: 600;
+  margin: 0 0 0.7rem;
+  text-wrap: balance;
+  hyphens: manual;
+  overflow-wrap: break-word;
+}
+
+.meta {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* --border is a surface token (1.31:1 here) and the separator is a TEXT glyph,
+   so it must clear the 4.5:1 text rule, not the 3:1 non-text one. */
+.meta .sep { margin: 0 0.45rem; color: var(--muted); }
+
+/* ---------- typography ---------- */
+
+h2 {
+  font-size: min(1.5rem, calc(0.93 * var(--fit)));
+  line-height: 1.28;
+  font-weight: 600;
+  margin: 3rem 0 0.9rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--border);
+  text-wrap: balance;
+  hyphens: manual;
+  overflow-wrap: break-word;
+}
+
+h3 {
+  font-size: min(1.12rem, calc(0.82 * var(--fit)));
+  line-height: 1.35;
+  font-weight: 600;
+  margin: 1.9rem 0 0.55rem;
+  hyphens: manual;
+  overflow-wrap: break-word;
+}
+
+/* Переносов в теле нет: hyphens:auto на кириллице режет короткие
+   слова посреди смысла («на-шем»), а курс читают и глазами, и вслух. */
+p, li, dd, td, blockquote { hyphens: manual; }
+
+/* Подзаголовок не отрывается от своего первого абзаца. */
+h2 + p, h2 + figure, h2 + table, h2 + .widget { margin-top: 0; }
+
+p { margin: 0 0 1rem; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+
+strong { font-weight: 700; }
+em { font-style: italic; }
+
+code, .mono {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: color-mix(in srgb, var(--border) 35%, transparent);
+  padding: 0.08em 0.35em;
+  border-radius: 4px;
+  /* A file path is one unbreakable token: «scripts/tests/test_loop_passport.py»
+     measured 262,5px inside a 280px viewport and pushed the page 7px sideways.
+     The block-level `overflow-wrap: break-word` above does not reach an inline
+     span, so the token breaks only with `anywhere`. */
+  overflow-wrap: anywhere;
+}
+
+
+/* lopa calculator */
+.lopa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+@media (max-width: 640px) { .lopa-grid { grid-template-columns: 1fr; } }
+.lopa-field { display: block; margin-bottom: 0.9rem; }
+/* Same reason as th: a field label carries notation — «Блок питания 24 В
+   (λ 1·10⁻⁶ /ч)» — and uppercase turns λ into Λ and /ч into /Ч. */
+.lopa-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.lopa-select {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--fg);
+}
+.lopa-ipls { display: grid; gap: 0.4rem; }
+.lopa-ipl {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+/* Dossier audit (dossier.js): a document row pairs its label with the
+   three-state choice. The chosen state is repeated as text only on paper,
+   where the select is hidden and the choice would otherwise vanish. */
+.dossier-item { display: grid; gap: 0.3rem; margin-bottom: 0.7rem; }
+.dossier-label {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+.dossier-state { display: none; font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+
+.lopa-out {
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: var(--accent-soft);
+  border-radius: 10px;
+  padding: 0.95rem 1.05rem;
+}
+.lopa-line { margin-bottom: 0.55rem; font-size: 0.95rem; }
+.lopa-line strong { font-size: 1.05rem; }
+/* Same reason as th: line labels repeat the widget data («PFD звена 1+1»,
+   «Шина и клеммы 24 В (λ 1·10⁻⁷ /ч)») and uppercase mangles λ and /ч. */
+.lopa-line-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.lopa-formula-wrap { margin: 0.2rem 0 0.7rem; }
+.lopa-formula { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); }
+.lopa-sil { color: var(--accent); }
+.lopa-sil-line strong { font-size: 1.25rem; }
+.lopa-note { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin-left: 0.4rem; }
+/* Long explanatory note under a value: the inline .lopa-note wraps mid-sentence
+   in a narrow column, so multi-line notes get their own row instead. */
+.lopa-note-block {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+/* pfd calculator: verdict colors (layout reuses .lopa-*) */
+.pfd-verdict.ok { color: var(--success); }
+.pfd-verdict.bad { color: var(--error); }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+/* ---------- callouts ---------- */
+
+/* Полоса слева (border-left: 3px) — самый узнаваемый признак
+   сгенерированного интерфейса. Статус несут рамка по кругу, заливка,
+   точка-маркер и текст подписи: цвет нигде не единственный сигнал. */
+.note, .warn, .key {
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: var(--accent-soft);
+  padding: 0.95rem 1.15rem 1rem;
+  margin: 1.4rem 0;
+  border-radius: 10px;
+  font-size: 0.97rem;
+}
+.note .tag, .warn .tag, .key .tag {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.45rem;
+  color: var(--accent);
+}
+.note .tag::before, .warn .tag::before, .key .tag::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+.warn {
+  border-color: color-mix(in srgb, var(--warning) 40%, var(--border));
+  background: var(--warning-soft);
+}
+.warn .tag { color: var(--warning); }
+.key {
+  border-color: color-mix(in srgb, var(--success) 40%, var(--border));
+  background: var(--success-soft);
+}
+.key .tag { color: var(--success); }
+
+/* Одна ширина у всех карточек: карточка = колонка текста + поле с двух
+   сторон. Раньше .primary-source и .widget вылетали шире, а
+   .note/.warn/.key стояли в колонке — рядом это читалось
+   как ошибка вёрстки. Выступ включает толщину рамки (+1px), иначе
+   текст внутри встаёт на пиксель правее прозы снаружи. */
+.note,
+.warn,
+.key,
+.primary-source,
+.widget {
+  box-sizing: border-box;
+  --card-frame: 1px;
+  width: calc(100% + 2 * (var(--card-pad) + var(--card-frame)));
+  margin-inline: calc(-1 * (var(--card-pad) + var(--card-frame)));
+  padding-inline: var(--card-pad);
+}
+/* Вложенный вывод виджета не расширяется второй раз: он уже внутри
+   карточки, поле вокруг — часть её набора. */
+.widget .lopa-out { width: auto; margin-inline: 0; }
+
+/* ---------- tables ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  margin: 1.3rem 0;
+  font-family: var(--sans);
+}
+th, td {
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+/* Headers keep their original case: uppercase mangles the notation the course
+   is built on — λDU → ΛDU, PFDavg → PFD AVG, 1/ч → 1/Ч, and the Humphreys
+   levels a..e → A..E, which the source prints in lowercase. Small size,
+   weight and muted colour separate a header from a cell without touching case. */
+th {
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+}
+tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 60%, transparent); }
+
+/* Wide tables scroll inside their own box instead of widening the page.
+   The scroll container is the wrapper .table-scroll (tabindex="0",
+   role="region"), not the table itself: display:block on a <table>
+   breaks its column layout AND leaves a scroll region that keyboard
+   users cannot reach (axe scrollable-region-focusable).
+
+   This clip belongs on the wrapper at EVERY width, not only under 640px.
+   Measured: with it scoped to max-width:640px, the band 641-959px had no
+   rule at all — the wide-screen block below starts at 60rem — so a table
+   whose header row is wider than the prose column pushed the whole page
+   sideways: +150px on normative-register.html, +170px on cabinet.html,
+   +73px on lesson 10 and +49px on pfd-contract.html, all at 669px. */
+.table-scroll { overflow-x: auto; }
+@media (max-width: 640px) {
+  table { display: table; overflow: visible; }
+}
+.table-scroll:focus-visible,
+.figure-scroll:focus-visible { outline-offset: 4px; }
+
+/* ---------- figures ---------- */
+
+figure { margin: 1.6rem 0; text-align: center; }
+figure svg { max-width: 100%; height: auto; }
+@media (max-width: 640px) {
+  /* Scaled to a 300px column the SVG labels fall to ~5px. Let the diagram
+     keep a readable size and scroll inside .figure-scroll instead — the
+     wrapper can take focus, a bare <figure> cannot. */
+  figure { overflow: visible; }
+  figure svg { min-width: 0; }
+  .figure-scroll { overflow-x: auto; }
+  .figure-scroll svg { min-width: 700px; }
+}
+figcaption {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Figure animation: a marker travels the scenario path (lesson 1, figure 1).
+   The curves never move, so the first painted frame is already the full
+   diagram — a screenshot, a printed sheet and a reader who lands mid-scroll
+   all see the same picture. The dot only adds direction and the moment each
+   set point is reached. Hidden when the OS asks for reduced motion and on
+   paper: the diagram keeps its meaning without it.
+   The path is set per figure in the markup (offset-path); duration lives here. */
+.fig-move {
+  offset-rotate: 0deg;
+  animation: fig-travel 6s linear infinite;
+}
+@keyframes fig-travel {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fig-move { display: none; }
+}
+@media print {
+  .fig-move { display: none; }
+}
+
+/* Wide screens: figures get their own, wider measure — editorial "narrow
+   prose, wide graphics". Centering is done with negative margins, not
+   transform, so focus rings and print keep working. Cards stay at the text
+   measure (see the callout rules). */
+@media (min-width: 60rem) {
+  figure,
+  .figure-scroll {
+    --bleed: min(calc(100vw - 2rem), 56rem);
+    width: var(--bleed);
+    margin-inline: calc((100% - var(--bleed)) / 2);
+  }
+  /* Tables are NOT given the full bleed unconditionally. A three-column
+     table stretched to 56rem left 150px empty on the right while its text
+     touched the far-left edge — read as "the table is shifted left" even
+     though the wrapper was centred. Now the box hugs the prose measure and
+     `auto` centres it, so an ordinary table sits exactly on the column.
+     Behaviour at the edges, measured rather than assumed:
+       · content wider than the prose measure → the box grows to its
+         min-content width; left edge stays on the prose, right edge runs
+         past the column. It grows to the RIGHT, not symmetrically: with
+         `margin-inline: auto` and a box already at its fit width there is
+         no free space to distribute.
+       · content wider than --bleed → max-width caps the box, overflow-x
+         turns the wrapper into a scroll region, and the cap keeps the page
+         itself from widening.
+     If a table ever needs to sit centred and wider than the prose, that
+     needs explicit negative margins, not this rule. */
+  .table-scroll {
+    --bleed: min(calc(100vw - 2rem), 56rem);
+    width: fit-content;
+    /* At least the prose measure, so columns keep room to breathe. */
+    min-width: 100%;
+    max-width: var(--bleed);
+    /* Шире прозы — компенсация как у figure: auto не центрирует коробку,
+       выросшую за пределы родителя, и правый край уходил за экран. */
+    margin-inline: min(0px, calc((100% - var(--bleed)) / 2));
+    overflow-x: auto;
+  }
+  .table-scroll table { width: 100%; }
+  figcaption,
+  .src {
+    width: auto;
+    margin-inline: 0;
+  }
+}
+
+/* ---------- glossary ---------- */
+
+dl.gloss dt {
+  font-weight: 700;
+  margin-top: 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.98rem;
+}
+dl.gloss dt .en { color: var(--muted); font-weight: 400; font-style: italic; }
+dl.gloss dd { margin: 0.15rem 0 0 0; }
+
+/* ---------- interactive widgets ---------- */
+
+.widget {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  /* Horizontal padding is set by the shared card rule above, so that the
+     text inside lines up with the prose outside. */
+  padding-top: 1.2rem;
+  padding-bottom: 1.35rem;
+  margin-block: 1.8rem;
+}
+.widget-title {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.7rem;
+}
+.widget p.instruction { font-size: 0.95rem; margin-bottom: 0.9rem; }
+
+.btn {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--fg);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:disabled { cursor: default; opacity: 0.55; }
+
+/* Видимый фокус в обеих темах. UA-outline — 1px rgb(16,16,16): на
+   светлом фоне это 17:1, на тёмном (#23211d) — 1.18:1, то есть кольца
+   практически не видно. Кольцо из accent проходит в обеих. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.btn:focus-visible,
+.q-opt:focus-visible,
+.sort-choice:focus-visible,
+.order-slot:focus-visible,
+.lopa-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* quiz */
+.q-item { margin-bottom: 1.4rem; }
+.q-item:last-child { margin-bottom: 0.8rem; }
+.q-text { font-weight: 600; margin: 0 0 0.6rem; }
+.q-text .q-num {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-right: 0.4rem;
+}
+.q-options { display: grid; gap: 0.45rem; }
+.q-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  background: transparent;
+  color: var(--fg);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+}
+.q-opt .letter {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-right: 0.55rem;
+}
+.q-opt:hover:not(:disabled) { border-color: var(--accent); }
+.q-opt:disabled { cursor: default; }
+.q-opt.correct {
+  border-color: var(--success);
+  background: var(--success-soft);
+  font-weight: 600;
+}
+.q-opt.incorrect {
+  border-color: var(--error);
+  background: var(--error-soft);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+.q-opt.reveal { border-color: var(--success); }
+.q-explain {
+  font-size: 0.88rem;
+  font-family: var(--sans);
+  color: var(--muted);
+  border-top: 1px dashed var(--border);
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  display: none;
+}
+.q-explain.shown { display: block; }
+.q-result {
+  font-family: var(--sans);
+  font-weight: 600;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.q-result.shown { display: block; }
+
+/* order widget */
+.order-pool { display: grid; gap: 0.45rem; margin-bottom: 0.9rem; }
+.order-slot {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  gap: 0.6rem;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  background: transparent;
+  color: var(--fg);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+}
+.order-slot:hover:not(:disabled) { border-color: var(--accent); }
+.order-slot:disabled { cursor: default; }
+.order-slot .num {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-right: 1px solid var(--border);
+  padding-right: 0.3rem;
+}
+.order-slot.done {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+.order-slot.wrong {
+  border-color: var(--error);
+  background: var(--error-soft);
+  animation: shake 0.35s;
+}
+.order-slot.hint { border-color: var(--warning); background: var(--warning-soft); }
+/* Тряска при ошибке — единственная анимация в курсе; её нельзя
+   проигрывать тем, кто просил уменьшить движение в системе. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.order-feedback { font-family: var(--sans); font-size: 0.88rem; min-height: 1.4rem; margin: 0.2rem 0 0.7rem; }
+.order-feedback.ok { color: var(--success); font-weight: 600; }
+.order-feedback.bad { color: var(--error); }
+
+/* sort widget (two-bucket classification) */
+.sort-list { display: grid; gap: 0.9rem; }
+.sort-item { border-top: 1px solid var(--border); padding-top: 0.8rem; }
+.sort-item:first-child { border-top: none; padding-top: 0; }
+.sort-text { font-weight: 600; margin: 0 0 0.5rem; }
+.sort-text .sort-num {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-right: 0.4rem;
+}
+.sort-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  align-items: start;
+}
+@media (max-width: 640px) { .sort-choices { grid-template-columns: 1fr; } }
+.sort-choice {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  line-height: 1.35;
+  background: transparent;
+  color: var(--fg);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+.sort-choice:hover:not(:disabled) { border-color: var(--accent); }
+.sort-choice:disabled { cursor: default; opacity: 0.75; }
+.sort-choice.ok {
+  border-color: var(--success);
+  background: var(--success-soft);
+  font-weight: 600;
+  opacity: 1;
+}
+.sort-choice.bad {
+  border-color: var(--error);
+  background: var(--error-soft);
+  text-decoration: line-through;
+}
+.sort-answer { display: none; }
+.sort-explain {
+  font-size: 0.88rem;
+  font-family: var(--sans);
+  color: var(--muted);
+  border-top: 1px dashed var(--border);
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  display: none;
+}
+.sort-explain.shown { display: block; }
+.sort-result {
+  font-family: var(--sans);
+  font-weight: 600;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.sort-result.shown { display: block; }
+
+/* ---------- source / footer ---------- */
+
+.src {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  /* Мера сноски — в знаках: при мелком кегле та же ширина даёт больше
+     символов, чем у тела, и сноска читается хуже прозы. */
+  max-width: 82ch;
+}
+
+/* Служебные подписи набраны uppercase с трекингом; 0.14em на
+   кириллице слишком разрежен, 0.11em читается ровнее. */
+.kicker, .widget-title { letter-spacing: 0.11em; }
+
+/* Артикул держится целым средствами разметки, а не неразрывным
+   дефисом U+2011: тот неотличим на глаз, но ломает поиск по каталогу
+   изготовителя — обозначение копируется и не находится. Обычный дефис
+   в span.nowrap копируется как есть. */
+.partno { white-space: nowrap; }
+p .partno { font-size: 0.92em; }
+@media (max-width: 15rem) {
+  /* На предельно узком экране целостность не стоит горизонтальной
+     прокрутки: лучше разрыв, чем вылет. */
+  .partno { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* Ссылка «к содержанию»: видна только при фокусе с клавиатуры. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+}
+.skip-link:focus {
+  position: static;
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.primary-source {
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-block: 2rem;
+}
+.primary-source .widget-title { margin-bottom: 0.4rem; }
+
+/* Lesson navigation: same block at the top and at the bottom of every lesson —
+   previous lesson, course contents, next lesson, plus a row of the reference
+   pages that lesson leans on. Reference pages reuse the .nav-row inside a
+   footer, so one set of rules serves both. */
+.lesson-nav {
+  margin: 1.5rem 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--sans);
+  font-size: 0.86rem;
+}
+.lesson-nav.bottom {
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+}
+.lesson-nav a { text-decoration: none; }
+.nav-row,
+.lesson-nav > .nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.4rem;
+}
+/* margin-left:auto выталкивал «Урок N+1» на отдельную строку с провалом —
+   на узком экране это читается как обрыв. «Дальше» идёт обычным потоком. */
+.nav-row { gap: 0.35rem 1.2rem; }
+.nav-row .next { margin-left: 0; font-weight: 600; }
+@media (max-width: 30rem) {
+  .nav-row { gap: 0.3rem 0.9rem; }
+  .nav-refs { gap: 0.3rem 0.8rem; }
+}
+.nav-row .toc {
+  color: var(--muted);
+  border-bottom: 1px dotted var(--border);
+}
+.nav-dummy { color: var(--muted); }
+.nav-refs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+  margin-top: 0.55rem;
+  font-size: 0.82rem;
+}
+.nav-refs-label { color: var(--muted); }
+.nav-refs a { color: var(--accent); }
+
+/* ---------- print ---------- */
+
+@media print {
+  :root { --fg: #000; --muted: #444; --border: #bbb; --surface: #fff;
+          --accent: #1a4a6b; --accent-soft: #fff; --success: #14602d;
+          --success-soft: #fff; --warning: #6b5510; --warning-soft: #fff;
+          --error: #7a2020; --error-soft: #fff;
+          --series-1: #eef2f5; --series-2: #f7f4ee; --series-3: #eff4f0;
+          --series-1-edge: #1a4a6b; --series-2-edge: #6b5510; --series-3-edge: #14602d; }
+  body { font-size: 11pt; padding: 0; background: #fff; }
+  /* Карточки на экране вылезают в поле страницы отрицательными полями.
+     На бумаге это означало бы рамку за границей набора, поэтому выступ
+     снят, а внутреннее поле сохранено. */
+  .note, .warn, .key, .primary-source, .widget {
+    width: auto;
+    margin-inline: 0;
+  }
+  table, figure, .table-scroll, .figure-scroll { width: auto; margin-inline: 0; }
+  .figure-scroll svg { min-width: 0; }
+  .skip-link { display: none !important; }
+  /* На экране статус несут заливка и цветная рамка; на бумаге заливка
+     снята (чернила), и color-mix даёт почти белый контур — врезка
+     сливается со страницей. На печати рамка берёт цвет статуса целиком,
+     чтобы блок остался видимым и узнаваемым. */
+  .note { border: 1px solid var(--accent); }
+  .warn { border: 1px solid var(--warning); }
+  .key { border: 1px solid var(--success); }
+  .note .tag::before, .warn .tag::before, .key .tag::before { print-color-adjust: exact; }
+  /* Widgets print as read-only sheets: task text, quiz options and the
+     live summary stay; anything you can click or choose does not. */
+  .widget { border: none; background: none; padding: 0; margin: 1rem 0; }
+  .widget select, .widget input, .widget .btn, .widget .lopa-formula-wrap { display: none !important; }
+  .widget .lopa-field { display: none !important; }
+  /* The dossier choice is the answer, so on paper the select goes and the
+     state it held is printed in its place. */
+  .dossier-state { display: block; }
+  .lopa-grid { display: block; }
+  .lopa-out { border: 1px solid var(--border); }
+  .q-opt {
+    display: block; border: none; background: none; padding: 0.1rem 0;
+    cursor: auto; font-size: 0.95rem;
+  }
+  .q-opt.correct, .q-opt.incorrect, .q-opt.reveal { background: none; border: none; }
+  .q-opt.incorrect { text-decoration: line-through; }
+  .order-slot { border: none; background: none; padding: 0.1rem 0; cursor: auto; }
+  /* sort widget: buttons out, the right bucket printed as a statement */
+  .sort-choice { display: none !important; }
+  .sort-answer {
+    display: block; font-family: var(--sans); font-size: 0.86rem;
+    color: var(--success); font-weight: 600;
+  }
+  .sort-explain { display: block; }
+  a { color: inherit; text-decoration: none; }
+  /* Navigation is a screen affordance: printed sheets carry the source URLs
+     of the lesson body only, not a row of dead links on every page. */
+  .lesson-nav { display: none !important; }
+  .print-url::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #444; }
+  h2 { break-after: avoid; }
+  table, figure, .widget { break-inside: avoid; }
+  /* Врезка не рвётся между страницами: рамка по кругу, разрезанная
+     пополам, читается как обрезанный блок, а не как продолжение. */
+  .note, .warn, .key, .primary-source { break-inside: avoid; }
+}
+
+
+/* ============================================================
+   Course contents (index.html) — index list, not a wall of links
+   Each row is one link: lesson number, title, reading time and a
+   one-line description. The whole row is clickable, so the target
+   does not depend on how long the title happens to be.
+   ============================================================ */
+
+.lesson-list {
+  list-style: none;
+  margin: 0 0 2.4rem;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+.lesson-item { border-bottom: 1px solid var(--border); }
+
+.lesson-link {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr) auto;
+  grid-template-areas:
+    "num title time"
+    "num desc  time";
+  gap: 0.2rem 1rem;
+  align-items: baseline;
+  padding: 0.95rem 0.3rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 6px;
+}
+.lesson-link:hover { background: var(--accent-soft); }
+.lesson-link:focus-visible { outline-offset: 0; }
+
+.lesson-num {
+  grid-area: num;
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.lesson-title {
+  grid-area: title;
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.lesson-link:hover .lesson-title { text-decoration-thickness: 2px; }
+.lesson-time {
+  grid-area: time;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lesson-desc {
+  grid-area: desc;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+/* Current page: the number takes the accent and the title loses its
+   underline, so the marker survives without relying on colour alone. */
+.lesson-link[aria-current="page"] .lesson-num { color: var(--accent); font-weight: 700; }
+.lesson-link[aria-current="page"] .lesson-title {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+@media (max-width: 34rem) {
+  .lesson-link {
+    grid-template-columns: 3.6rem minmax(0, 1fr);
+    grid-template-areas:
+      "num title"
+      "num time"
+      "num desc";
+    gap: 0.15rem 0.75rem;
+  }
+}
+@media (max-width: 22rem) {
+  .lesson-link {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "num" "title" "time" "desc";
+    gap: 0.1rem 0;
+  }
+  .lesson-num { margin-bottom: 0.15rem; }
+}
+
+.ref-list { padding-left: 1.1rem; }
+.ref-list li { margin-bottom: 0.5rem; }
+.ref-list li::marker { color: var(--border); }
+
+@media print {
+  .lesson-link { display: grid; padding: 0.4rem 0; }
+  .lesson-link:hover { background: none; }
+  .lesson-title { color: inherit; }
+  .lesson-link[aria-current="page"] .lesson-num { font-weight: 700; }
+}
+
+/* === draft-30: case practice styles (from draft-28) === */
+.case { margin: 1.1rem 0 1.4rem; }
+.case.widget { width: auto; margin-inline: 0; }
+.case-meta { color: var(--muted); font-size: 0.9rem; }
+.case-step { padding: 0.85rem 0; border-top: 1px solid var(--border); }
+.case-step:first-of-type { border-top: 0; }
+.case-prompt { font-weight: 600; margin: 0 0 0.55rem; }
+.case-row { display: flex; flex-wrap: wrap; align-items: end; gap: 0.55rem; }
+.case-label { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+  flex: 1 1 14rem; min-width: 0; max-width: 100%; }
+.case-label-text { color: var(--muted); font-size: 0.86rem; }
+.case-select, .case-input {
+  font: inherit; font-size: 0.95rem; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 0.35rem; padding: 0.35rem 0.5rem;
+}
+.case-input { width: 9rem; max-width: 100%; }
+.case-select { width: 100%; max-width: 100%; min-width: 0; }
+.case-unit { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+.case-feedback {
+  display: none; margin-top: 0.55rem; padding: 0.55rem 0.7rem;
+  border-left: 3px solid var(--accent); background: var(--surface); font-size: 0.92rem;
+}
+.case-feedback.shown { display: block; }
+.case-feedback.ok { border-left-color: var(--success); }
+.case-feedback.bad { border-left-color: var(--error); }
+.case-solution {
+  display: none; margin-top: 0.55rem; padding: 0.6rem 0.75rem;
+  border: 1px dashed var(--border); background: var(--surface); font-size: 0.92rem;
+}
+.case-solution.shown { display: block; }
+.case-solution-title {
+  font-family: var(--sans); font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--muted); margin: 0 0 0.35rem;
+}
+.case-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.9rem; }
+.case-summary { margin-top: 0.5rem; color: var(--muted); font-size: 0.86rem; }
+.case-summary:empty { display: none; }
+
+.widget-scope { margin-top: 0.9rem; }
+.scope-line { margin: 0.2rem 0; }
+.scope-verdict { margin: 0.45rem 0 0; font-weight: 600; }
+.widget-reset { margin-top: 0.75rem; }
+
+@media print {
+  .case-input, .case-select, .case-check, .case-actions, .case-summary { display: none !important; }
+  .case-solution { display: block !important; border: 0; padding-left: 0; }
+  .case-solution-title { display: block; }
+  .case-feedback { border-left: 0; padding-left: 0; }
+  .case-feedback.shown { display: block !important; }
+  .case-step { break-inside: avoid; }
+  .widget-reset { display: none !important; }
+}
+
+/* === draft-30: linked final-case constructor === */
+.final-calc { margin-block: 1.2rem 1.5rem; }
+.calc-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.75rem; align-items: start;
+}
+.calc-group {
+  border: 1px solid var(--border); background: var(--surface);
+  padding: 0.65rem 0.75rem 0.75rem; min-width: 0;
+}
+.calc-group legend {
+  font-family: var(--sans); font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--muted); padding: 0 0.25rem;
+}
+.calc-field { display: flex; flex-direction: column; gap: 0.18rem; margin: 0.45rem 0; }
+.calc-label { color: var(--muted); font-size: 0.86rem; }
+.calc-select, .calc-input {
+  font: inherit; font-size: 0.92rem; color: var(--fg); background: var(--bg, #fff);
+  border: 1px solid var(--border); border-radius: 0.35rem; padding: 0.35rem 0.5rem;
+  width: 100%; min-width: 0; max-width: 100%;
+}
+.calc-check { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
+.calc-unit { color: var(--muted); font-size: 0.82rem; }
+.calc-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.9rem 0 0.2rem; }
+.calc-outputs { margin-top: 0.8rem; }
+.calc-status {
+  padding: 0.55rem 0.7rem; border-left: 3px solid var(--accent);
+  background: var(--surface); font-weight: 600; font-size: 0.92rem;
+}
+.calc-status.is-negative { border-left-color: var(--error); background: var(--error-soft); }
+.calc-status.is-corrected { border-left-color: var(--success); background: var(--success-soft); }
+.calc-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 0.55rem; }
+.calc-table th, .calc-table td {
+  text-align: left; vertical-align: top; padding: 0.3rem 0.45rem;
+  border-bottom: 1px solid var(--border);
+}
+.calc-table th { color: var(--muted); font-weight: 600; width: 42%; }
+.calc-notes { margin-top: 0.65rem; font-size: 0.88rem; }
+.calc-note-title { font-weight: 600; margin: 0.55rem 0 0.2rem; }
+.calc-notes ul { margin: 0.2rem 0 0.4rem 1.1rem; }
+.calc-log { margin-top: 0.55rem; color: var(--muted); font-size: 0.86rem; }
+@media print {
+  .calc-actions, .calc-grid { display: none !important; }
+  .calc-table th, .calc-table td { border-bottom: 1px solid #bbb; }
+  .calc-status { border: 1px solid #999; background: #fff !important; }
+  .calc-notes { break-inside: avoid; }
+}
+
+/* === draft-30: set badges === */
+.set-badge {
+  display: inline-block; margin: 0.4rem 0 0.8rem; padding: 0.28rem 0.6rem;
+  font-family: var(--sans); font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  border: 1px solid currentColor; border-radius: 0.25rem;
+}
+.set-negative { color: var(--error); background: var(--error-soft); }
+.set-corrected { color: var(--success); background: var(--success-soft); }
+@media print {
+  .set-badge { border: 1px solid #555; background: #fff !important; color: #000 !important; }
+}
+
+
+/* === draft-30: 200 % text and narrow-screen guards === */
+main { overflow-wrap: break-word; }
+.set-badge { max-width: 100%; overflow-wrap: anywhere; }
+.calc-table-wrap { max-width: 100%; overflow-x: auto; }
+.calc-actions .btn { max-width: 100%; white-space: normal; min-width: 0; }
+.calc-outputs { min-width: 0; }
+@media print {
+  .calc-table-wrap { overflow: visible; }
+}
+
+.calc-group legend { max-width: 100%; overflow-wrap: anywhere; }
+
+
+/* === Сведение draft-36: блоки 31 (интерфейс квизов) === */
+/* quiz feedback: hint, separate solution, one-question retry, storage note */
+.q-stale,
+.q-storage {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0.55rem 0 0;
+}
+.q-storage {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.45rem 0.7rem;
+}
+.q-hint {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  color: var(--fg);
+  border-top: 1px dashed var(--border);
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+}
+.q-hint-text { margin: 0 0 0.45rem; }
+.q-ref {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-top: 0.15rem;
+}
+.q-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+}
+.q-explain-label {
+  font-family: var(--sans);
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+}
+.q-explain-body {
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--fg);
+  margin-bottom: 0.35rem;
+}
+.q-stale[hidden],
+.q-storage[hidden],
+.q-hint[hidden],
+.q-actions[hidden],
+.q-explain[hidden] {
+  display: none !important;
+}
+.q-explain:not([hidden]) { display: block; }
+.q-result:not([hidden]) { display: block; }
+.q-explain:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media print {
+  .q-actions,
+  .q-storage,
+  .q-stale { display: none !important; }
+  .q-hint,
+  .q-explain { border-top: 0; }
+  .q-ref { color: inherit; text-decoration: none; }
+}
+
+/* === Сведение draft-36: блоки 32 (локальное оглавление и навигация) === */
+/* ============================================================
+   Course route and local lesson contents (task 32)
+   The route lives in index.html only: modules, visible prerequisites
+   and one marked advanced branch. Long lessons get a collapsible
+   contents block for their own sections; it never repeats the route
+   and it never hides lesson text.
+   ============================================================ */
+
+.route-note {
+  max-width: 62ch;
+  margin: 0 0 1.4rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.course-module { margin: 2rem 0 2.6rem; }
+.module-title {
+  margin: 0 0 0.45rem;
+  font-size: 1.12rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.module-prereq,
+.module-result,
+.module-note {
+  max-width: 62ch;
+  margin: 0 0 0.35rem;
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+.module-prereq { color: var(--muted); }
+.module-result { color: var(--fg); }
+.module-label {
+  display: inline-block;
+  margin-right: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.module-note {
+  margin-top: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+}
+.course-module .lesson-list { margin-top: 0.9rem; margin-bottom: 0.2rem; }
+.lesson-badge {
+  grid-column: 2;
+  display: block;
+  margin: 0.15rem 0 0;
+  font-size: 0.66rem;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  color: var(--warning);
+  text-transform: none;
+}
+@media (max-width: 34rem) {
+  .lesson-badge { grid-column: 2; }
+}
+@media (max-width: 22rem) {
+  .lesson-badge { grid-column: 1; }
+}
+
+.lesson-toc {
+  margin: 1.4rem 0 1.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  font-family: var(--sans);
+  font-size: 0.86rem;
+}
+.lesson-toc > summary {
+  cursor: pointer;
+  padding: 0.65rem 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+  list-style-position: inside;
+}
+.lesson-toc[open] > summary { border-bottom: 1px solid var(--border); }
+.lesson-toc:not([open]) > nav { display: none; }
+.lesson-toc nav { padding: 0.55rem 0.9rem 0.8rem; }
+.lesson-toc ol { margin: 0; padding-left: 1.15rem; }
+.lesson-toc li { margin: 0.16rem 0; }
+.lesson-toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border);
+}
+.lesson-toc a:hover { border-bottom-color: var(--accent); }
+.lesson-toc nav ol ol { margin-top: 0.16rem; font-size: 0.82rem; }
+.anchor-alias { display: inline-block; width: 0; height: 0; overflow: hidden; }
+
+@media (max-width: 34rem) {
+  .lesson-toc { margin: 1.1rem 0 1.4rem; }
+  .lesson-toc > summary { padding: 0.6rem 0.7rem; }
+  .lesson-toc nav { padding: 0.45rem 0.7rem 0.7rem; }
+}
+
+@media print {
+  .lesson-toc, .lesson-badge, .route-note { display: none !important; }
+  .course-module { break-inside: avoid-page; }
+}
+

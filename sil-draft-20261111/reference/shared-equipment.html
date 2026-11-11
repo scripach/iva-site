@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Справочник — Общие изделия: питание, клеммы, β-пол</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<main id="content">
+<header class="lesson-head">
+  <p class="kicker">Справочник · SIL-курс</p>
+  <h1>Общие изделия: питание, клеммы, β-пол</h1>
+  <p class="meta">Выжимка урока 10<span class="sep">·</span>ГОСТ Р МЭК 61511-1-2018, п. 3.2.67, 9.4, 11.2.11, 11.9.2.</p>
+</header>
+
+<p>Одна страница на печать: как найти общую часть контура, как её считать и в каком порядке резервировать.
+Термины — в <a href="glossary.html#shared-path">глоссарии</a>.</p>
+
+<h2>1. Что попадает в общую часть</h2>
+
+<p>Общая часть — всё, через что проходит <em>каждый</em> канал SIF и что само не резервировано. По п. 3.2.67, примечание 1 такое вспомогательное оборудование входит в состав ПСБ:</p>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Звено</th><th>Типичный λ<sub>DU</sub></th><th>Чем резервируют</th></tr></thead>
+<tbody>
+<tr><td>Ввод 220 В, автомат, кабель до шкафа</td><td>10⁻⁷…10⁻⁶ /ч</td><td>второй ввод от другой секции, отдельный автомат</td></tr>
+<tr><td>Блок питания 24 В</td><td>10⁻⁶ /ч</td><td>1+1 с развязкой (диоды, OR-ing, встроенный MOSFET)</td></tr>
+<tr><td>Шина 24 В, клеммы, распределительные автоматы</td><td>10⁻⁷…10⁻⁶ /ч</td><td>раздельные клеммы и автоматы на канал</td></tr>
+<tr><td>Барьер / искрозащита, повторитель питания</td><td>10⁻⁶ /ч</td><td>по барьеру на канал, разные типы</td></tr>
+<tr><td>Кабель в общем лотке, общая клемма</td><td>10⁻⁷ /ч</td><td>разные трассы, раздельные клеммы</td></tr>
+<tr><td>ПЛК: общий блок ЦП, общая шина, общий модуль ввода-вывода</td><td>по сертификату</td><td>резервирование ЦП и модулей (1oo2 / 2oo3)</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>2. Куда идёт отказ при потере питания</h2>
+
+<p>Один и тот же дефект попадает в разные расчёты в зависимости от того, что он делает с функцией:</p>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Что происходит с SIF</th><th>Куда идёт</th><th>Основание</th></tr></thead>
+<tbody>
+<tr><td>Защита не может сработать (нет питания на соленоиде, залип контакт)</td><td><strong>PFD</strong> — последовательное звено</td><td>п. 11.9.2 f — чувствительность к CCF</td></tr>
+<tr><td>Защита срабатывает без опасности (пропало питание при de-energize-to-trip)</td><td>частота <strong>ложных срабатываний</strong></td><td>п. 10.3.2 — допустимая интенсивность ложных</td></tr>
+<tr><td>Подсистема вышла из безопасного состояния при потере питания</td><td>проектное требование, не число</td><td>п. 11.2.11 — контроль цепи, резерв, сигнализация</td></tr>
+<tr><td>Питание общее с ОСУП, отказ создаёт запрос</td><td>запрещено без анализа</td><td>п. 11.2.10</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>3. Формулы</h2>
+
+<p class="mono">1oo1: p = λ<sub>DU</sub>·TI/2</p>
+<p class="mono">1+1, семантика 1oo2 (любой блок держит нагрузку), β-модель: p = (4/3)·[(1 − β)·λ<sub>DU</sub>·TI/2]² + β·λ<sub>DU</sub>·TI/2</p>
+<p class="mono">1+1, семантика 2oo2 (нужны оба, потеря одного уже отказ): p = (2 − β)·λ<sub>DU</sub>·TI/2</p>
+<p class="muted">Какая семантика у вашей функции, решает проект, а не схема питания: если безопасное состояние
+требует <em>отключения обоих</em> путей, это 2oo2 и PFD хуже одиночного блока; если достаточно одного —
+1oo2 и выигрыш ограничен полом β·p. Расчётный контракт — <a href="pfd-contract.html#formulas">§5</a>.</p>
+<p class="mono">PFD<sub>контура</sub> = Σ звеньев трассы + Σ подсистем (датчик + логика + исполнительный элемент)</p>
+
+<p>Два следствия, которые надо помнить:</p>
+<ul>
+<li><strong>Слагаемое β·λ·TI/2 не зависит от архитектуры.</strong> У 1oo2 и 2oo3 оно одинаковое: β-модель
+предполагает, что при CCF отказывают все каналы группы. Поэтому второй блок сдвигает пол, третий — нет.
+Порог, ниже которого добавление копий уже не даёт выигрыша, и способы получить само число — в <a href="beta-factor.html">справочнике «β-фактор»</a>.</li>
+<li><strong>Общая часть не голосуется.</strong> Никакое MooN не делит её PFD: отказ звена трассы выводит
+из строя все каналы сразу.</li>
+</ul>
+
+<p>Формула 1+1 верна только при развязке; что она снимает и что оставляет — на схеме.</p>
+
+<figure>
+<div class="figure-scroll" role="region" aria-label="Схема: Сравнение двух блоков питания на общей шине 24 В" tabindex="0">
+<svg viewBox="0 0 900 392" role="img" aria-label="Сравнение двух блоков питания на общей шине 24 В: без развязки пробой выхода одного блока закорачивает шину и обесточивает все каналы; с развязывающими диодами отказавший блок отсекается, шина держит 24 В">
+  <text x="80" y="30" font-size="15" font-weight="700" fill="currentColor">Без развязки</text>
+  <text x="530" y="30" font-size="15" font-weight="700" fill="currentColor">1+1 с развязкой</text>
+  <line x1="450" y1="14" x2="450" y2="380" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 5"/>
+
+  <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+    <line x1="145" y1="84" x2="145" y2="96"/>
+    <line x1="56" y1="96" x2="145" y2="96"/>
+    <line x1="56" y1="96" x2="56" y2="221"/>
+    <line x1="56" y1="141" x2="80" y2="141"/>
+    <line x1="56" y1="221" x2="80" y2="221"/>
+    <line x1="210" y1="141" x2="250" y2="141"/>
+    <line x1="210" y1="221" x2="250" y2="221"/>
+    <line x1="250" y1="141" x2="250" y2="221"/>
+    <line x1="250" y1="181" x2="290" y2="181"/>
+    <line x1="290" y1="120" x2="330" y2="120"/>
+    <line x1="290" y1="181" x2="330" y2="181"/>
+    <line x1="290" y1="242" x2="330" y2="242"/>
+  </g>
+  <line x1="290" y1="96" x2="290" y2="242" stroke="var(--error)" stroke-width="3"/>
+
+  <g>
+    <rect x="80" y="52" width="130" height="32" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="145" y="73" text-anchor="middle" font-size="13" fill="currentColor">Ввод 220 В</text>
+  </g>
+  <g>
+    <rect x="80" y="120" width="130" height="42" rx="7" fill="var(--error-soft)" stroke="var(--error)" stroke-width="2.5"/>
+    <text x="145" y="139" text-anchor="middle" font-size="12.5" fill="currentColor">БП-1</text>
+    <text x="145" y="154" text-anchor="middle" font-size="11.5" fill="var(--error)">пробой выхода</text>
+    <rect x="80" y="200" width="130" height="42" rx="7" fill="var(--warning-soft)" stroke="var(--warning)" stroke-width="2"/>
+    <text x="145" y="219" text-anchor="middle" font-size="12.5" fill="currentColor">БП-2</text>
+    <text x="145" y="234" text-anchor="middle" font-size="11.5" fill="var(--muted)">исправен</text>
+  </g>
+  <g>
+    <rect x="330" y="100" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="373" y="125" text-anchor="middle" font-size="12.5" fill="var(--muted)">канал 1</text>
+    <rect x="330" y="161" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="373" y="186" text-anchor="middle" font-size="12.5" fill="var(--muted)">канал 2</text>
+    <rect x="330" y="222" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="373" y="247" text-anchor="middle" font-size="12.5" fill="var(--muted)">канал 3</text>
+  </g>
+  <text x="290" y="272" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--error)">шина 0 В</text>
+  <text x="60" y="312" font-size="12.5" fill="currentColor">Пробой выхода закорачивает шину 24 В.</text>
+  <text x="60" y="332" font-size="12.5" fill="var(--muted)">Ток БП-2 уходит в замыкание.</text>
+
+  <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+    <line x1="595" y1="84" x2="595" y2="96"/>
+    <line x1="506" y1="96" x2="595" y2="96"/>
+    <line x1="506" y1="96" x2="506" y2="221"/>
+    <line x1="506" y1="141" x2="530" y2="141"/>
+    <line x1="506" y1="221" x2="530" y2="221"/>
+    <line x1="660" y1="141" x2="666" y2="141"/>
+    <line x1="686" y1="141" x2="700" y2="141"/>
+    <line x1="660" y1="221" x2="666" y2="221"/>
+    <line x1="686" y1="221" x2="700" y2="221"/>
+    <line x1="700" y1="141" x2="700" y2="221"/>
+    <line x1="700" y1="181" x2="740" y2="181"/>
+    <line x1="740" y1="120" x2="780" y2="120"/>
+    <line x1="740" y1="181" x2="780" y2="181"/>
+    <line x1="740" y1="242" x2="780" y2="242"/>
+  </g>
+  <line x1="740" y1="96" x2="740" y2="242" stroke="var(--accent)" stroke-width="3"/>
+
+  <g>
+    <rect x="530" y="52" width="130" height="32" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="595" y="73" text-anchor="middle" font-size="13" fill="currentColor">Ввод 220 В</text>
+  </g>
+  <g>
+    <rect x="530" y="120" width="130" height="42" rx="7" fill="var(--error-soft)" stroke="var(--error)" stroke-width="2.5"/>
+    <text x="595" y="139" text-anchor="middle" font-size="12.5" fill="currentColor">БП-1</text>
+    <text x="595" y="154" text-anchor="middle" font-size="11.5" fill="var(--error)">пробой выхода</text>
+    <rect x="530" y="200" width="130" height="42" rx="7" fill="var(--warning-soft)" stroke="var(--warning)" stroke-width="2"/>
+    <text x="595" y="219" text-anchor="middle" font-size="12.5" fill="currentColor">БП-2</text>
+    <text x="595" y="234" text-anchor="middle" font-size="11.5" fill="var(--muted)">исправен</text>
+  </g>
+  <g fill="var(--accent)" stroke="var(--accent)" stroke-width="1.6">
+    <polygon points="666,134 666,148 684,141" fill="var(--accent-soft)"/>
+    <line x1="684" y1="133" x2="684" y2="149"/>
+    <polygon points="666,214 666,228 684,221" fill="var(--accent-soft)"/>
+    <line x1="684" y1="213" x2="684" y2="229"/>
+  </g>
+  <text x="676" y="172" text-anchor="middle" font-size="11" fill="var(--muted)">диод</text>
+  <g>
+    <rect x="780" y="100" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="823" y="125" text-anchor="middle" font-size="12.5" fill="currentColor">канал 1</text>
+    <rect x="780" y="161" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="823" y="186" text-anchor="middle" font-size="12.5" fill="currentColor">канал 2</text>
+    <rect x="780" y="222" width="86" height="40" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1.6"/>
+    <text x="823" y="247" text-anchor="middle" font-size="12.5" fill="currentColor">канал 3</text>
+  </g>
+  <text x="740" y="272" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--accent)">шина 24 В</text>
+  <text x="510" y="312" font-size="12.5" fill="currentColor">Диод закрыт, отказавший блок отсечён.</text>
+  <text x="510" y="332" font-size="12.5" fill="var(--muted)">БП-2 держит шину 24 В, каналы живы.</text>
+
+  <g>
+    <rect x="20" y="366" width="18" height="14" rx="3" fill="var(--surface)" stroke="var(--error)" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <text x="48" y="378" font-size="12.5" fill="var(--muted)">отказавшее звено</text>
+    <rect x="188" y="366" width="18" height="14" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+    <text x="216" y="378" font-size="12.5" fill="var(--muted)">развязка: диод, OR-ing-модуль</text>
+  </g>
+</svg>
+</div>
+<figcaption>Пробой выхода БП-1 замыкает шину: каналы обесточены, хотя БП-2 исправен. Диод разрывает связь,
+и отказ одной копии перестаёт быть отказом второй. Именно этот отказ стоит в квадратных скобках
+формулы. Общее у копий остаётся: ввод, среда, тип изделия; эту долю снимают разделением вводов,
+разнообразием и раздельными трассами.</figcaption>
+</figure>
+
+<h2>4. Порядок резервирования</h2>
+
+<ol>
+<li>Разложить трассу на звенья и выписать λ каждого — из сертификата или паспорта.</li>
+<li>Посчитать вклад звена: доля в PFD трассы. Дублировать начинают с самого крупного.</li>
+<li>Проверить, что резерв не имеет <em>своей</em> общей части: два блока от одного ввода — не резерв ввода.</li>
+<li>Обеспечить развязку: диод, OR-ing-модуль или встроенный развязывающий MOSFET. Без неё отказ одного
+блока тянет шину вниз.</li>
+<li>Развести питание по каналам: отдельные автоматы и клеммы на канал — иначе одна клемма валит группу (CCF).</li>
+<li>Сделать переключение наблюдаемым: сигнализация отказа резерва в ОСУП (п. 11.7.2.4). Молчаливый резерв
+живёт до первого отказа.</li>
+<li>Задать β по чек-листу, а не по привычке: ГОСТ Р МЭК 61508-6-2012, прил. D — 37 вопросов, β 0,5–5 % для логики
+и 1–10 % для датчиков и исполнительных элементов.</li>
+<li>Если потеря питания выводит подсистему из безопасного состояния — ИБП, контроль целостности цепи
+и обнаружение потери питания обязательны (п. 11.2.11).</li>
+</ol>
+
+<h2>5. Чек-лист CCF (ГОСТ Р МЭК 61508-6-2012, прил. D)</h2>
+
+<div class="table-scroll" role="region" aria-label="Таблица" tabindex="0">
+<table>
+<thead><tr><th>Группа</th><th>Что проверять</th></tr></thead>
+<tbody>
+<tr><td>Разделение</td><td>физическое, электрическое, функциональное: трассы, вводы, автоматы, клеммы</td></tr>
+<tr><td>Разнообразие</td><td>разные принципы измерения, разные типы барьеров, разное ПО</td></tr>
+<tr><td>Сложность и зрелость</td><td>простота схемы, опыт применения, отсутствие скрытых связей</td></tr>
+<tr><td>Анализ</td><td><a href="glossary.html#fmeca">FMECA</a>, анализ общих причин, обратная связь по данным эксплуатации</td></tr>
+<tr><td>Человек</td><td>процедуры, обучение, культура безопасности, защита от ошибочного байпаса</td></tr>
+<tr><td>Среда</td><td>температура, влага, ЭМС, коррозия, вибрация</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>6. Что спрашивать у изготовителя блока питания</h2>
+
+<ul>
+<li>Какая <strong>функция безопасности</strong> сертифицирована? У БП с маркировкой «SIL 3 capable» сертифицирована одна функция —
+ограничение выходного напряжения, а не гарантия, что 24 В будут подаваться всегда.</li>
+<li>PFH и PFD<sub>avg</sub> для этой функции, и при каком TI они действительны.</li>
+<li>HFT и SFF — по какой таблице получены.</li>
+<li>λ<sub>DU</sub> для режима «выход пропал» — если этот режим для вашего контура опасен.</li>
+<li>Условия применения: температура, высота, влажность, требуемая вентиляция, срок службы электролитов.</li>
+</ul>
+
+<p class="src">Пример такого сертификата: <a class="print-url" href="/iva-site/sil/materials/phoenix-quint4-sil3-safety-manual.pdf">Safety
+Manual QUINT4-PS/1AC/24DC/20/+</a> (<a class="print-url" href="/iva-site/sil/materials/phoenix-quint4-sil3-safety-manual-RU.pdf">перевод</a>),
+стр. 5–7 — функция безопасности, PFH, PFD<sub>avg</sub>, HFT и SFF. Теория CCF и β-модель:
+<a class="print-url" href="/iva-site/sil/materials/rausand-ch10-ccf.pdf">Rausand &amp; Lundteigen, гл. 10</a>
+(<a class="print-url" href="/iva-site/sil/materials/rausand-ch10-ccf-RU.pdf">перевод</a>).</p>
+
+<footer class="lesson-nav bottom">
+  <div class="nav-row">
+    <a href="lifecycle.html">← Жизненный цикл</a>
+    <a class="toc" href="../index.html">Содержание курса</a>
+    <a class="next" href="beta-factor.html">β-фактор →</a>
+  </div>
+  <div class="nav-refs">
+    <span class="nav-refs-label">Уроки и материалы:</span>
+    <a href="../lessons/0006-obshchie-izdeliya-blok-pitaniya.html">Урок 10: общие изделия</a>
+    <a href="/iva-site/sil/materials/">Библиотека материалов</a>
+  </div>
+</footer>
+</main>
+</body>
+</html>
