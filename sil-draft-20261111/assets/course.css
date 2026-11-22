@@ -461,6 +461,13 @@ figcaption {
     overflow-x: auto;
   }
   .table-scroll table { width: 100%; }
+  /* Вложенная таблица остаётся внутри рамки врезки. */
+  :is(.note, .warn, .key, .primary-source, .widget) .table-scroll {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin-inline: 0;
+  }
   figcaption,
   .src {
     width: auto;
