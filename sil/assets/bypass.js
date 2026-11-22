@@ -130,7 +130,7 @@
       var budget = YEAR * (targetPfd - state.base);
 
       value("PFD контура без байпаса", fmt(state.base),
-        "RRF ≈ " + fmtRRF(1 / state.base) + " — " + F.silOf(1 / state.base).sil);
+        "RRF ≈ " + fmtRRF(1 / state.base) + " — " + F.silOfPfd(state.base).sil);
       /* A fraction of the year must not be printed through fmt(): 8 h is
          9,1·10⁻⁴ of the calendar, which reads like a probability. Percent
          is what a procedure owner can check against a logbook. */
@@ -140,7 +140,7 @@
       value("Доля года в байпасе", pctTxt + "\u00a0%",
         "байпас " + state.hours + "\u00a0ч/год; один час даёт 1,14·10⁻⁴");
       value("PFD с байпасом", fmt(Number(pEff.toPrecision(6))),
-        "RRF ≈ " + fmtRRF(rrfEff) + " — " + F.silOf(rrfEff).sil,
+        "RRF ≈ " + fmtRRF(rrfEff) + " — " + F.silOfPfd(pEff).sil,
         pEff <= targetPfd ? "lopa-sil" : "pfd-verdict bad");
 
       var bLine = line("Бюджет байпаса при цели RRF ≥ " + fmtRRF(state.target));

@@ -158,6 +158,12 @@
 
     if (cfg.title) root.appendChild(el("p", "widget-title", cfg.title));
     if (cfg.instruction) root.appendChild(el("p", "instruction", cfg.instruction));
+    /* правка 27: класс и реестр называются до чисел */
+    if (cfg.classId) {
+      root.appendChild(el("p", "instruction lopa-registry-meta",
+        "Класс " + cfg.classId +
+        (cfg.registry ? " · реестр " + cfg.registry : "")));
+    }
 
     var grid = el("div", "lopa-grid");
     var left = el("div");
@@ -169,6 +175,10 @@
     var state = {
       source: parseFloat(picked(cfg.source.options).v),
       people: parseFloat(picked(cfg.people.options).v),
+      /* правка 27: модель «кого считаем» и люди вне зоны; поля могут
+         отсутствовать в старой разметке — тогда безопасные значения */
+      model: cfg.model ? picked(cfg.model.options).v : "group",
+      outsiders: cfg.outsiders ? parseFloat(picked(cfg.outsiders.options).v) : 0,
       fatal: parseFloat(picked(cfg.fatal.options).v),
       scenarios: parseFloat(picked(cfg.scenarios.options).v),
       initiator: parseFloat(picked(cfg.initiator.options).v),
@@ -194,6 +204,9 @@
 
     select(cfg.source, state.source, function (v) { state.source = parseFloat(v); });
     select(cfg.people, state.people, function (v) { state.people = parseFloat(v); });
+    /* правка 27: выбор модели и списка вне зоны — только при наличии полей */
+    if (cfg.model) select(cfg.model, state.model, function (v) { state.model = v; });
+    if (cfg.outsiders) select(cfg.outsiders, state.outsiders, function (v) { state.outsiders = parseFloat(v); });
     select(cfg.fatal, state.fatal, function (v) { state.fatal = parseFloat(v); });
     select(cfg.scenarios, state.scenarios, function (v) { state.scenarios = parseFloat(v); });
     select(cfg.initiator, state.initiator, function (v) { state.initiator = parseFloat(v); });
@@ -286,64 +299,125 @@
       var pfd = fSc / before;
       var rrf = before / fSc;
 
-      /* PFD ≥ 1 значит, что слои до SIF уже укладываются в целевую частоту:
-         функция не требуется, и печатать «PFD ≤ 1» нельзя — это читается
-         как требование, а не как его отсутствие. */
-      /* Допуск: 1·10⁻⁴ / (0,1 × 0,1 × 0,01) даёт 1,0000000000000002, и
-         строгое < 1 объявило бы функцию нужной ровно там, где она не
-         требуется. PFD — величина порядка единицы, 1e−9 относительной
-         погрешности на порядки меньше любого физического различия. */
-      var needed = pfd < 1 - 1e-9;
+      /* Точный десятичный путь для вердикта и полосы: целевая частота,
+         число сценариев, инициатор и PFD слоёв заданы десятичными
+         значениями, поэтому отношение считается как рациональное число и
+         граница табл. 4 узнаётся точно, без обратного RRF → PFD. */
+      var decFSc = F.decDiv(F.decOf(fClass), F.decOf(state.scenarios));
+      var decBefore = F.decOf(state.initiator);
+      (cfg.ipls || []).forEach(function (ipl, i) {
+        if (state.ipls[i]) decBefore = decBefore ? F.decMul(decBefore, F.decOf(ipl.pfd)) : null;
+      });
+      var decPfd = decFSc && decBefore ? F.decDiv(decFSc, decBefore) : null;
+      var neededDec = decPfd
+        ? F.decCmp(decPfd, F.decOf(1)) < 0
+        : pfd < 1 - 1e-9;
+      /* Та же семантика, что выше: PFD ≥ 1 — функция не требуется.
+         Допуск только для не-десятичного запасного пути. */
+      var needed = neededDec;
+
       value("Что должна дать SIF", needed ? "PFD ≤ " + sci(pfd) : "не требуется",
         needed
           ? "делим частоту сценария на частоту до SIF: " + sci(fSc) + " / " + sci(before)
           : "частота до SIF " + sci(before) + " ниже частоты сценария " + sci(fSc));
 
-      var band = needed ? F.silOf(rrf) : { sil: "—", note: "слои до SIF уже дают нужную частоту" };
-      value("Требуемый уровень", band.sil.replace("SIL", "УПБ"),
-        needed ? "RRF ≈ " + fmtRRF(rrf) + "; " + band.note.replace("RRF ", "полоса ").replace("SIL", "УПБ") +
-          (onBandEdge(rrf) ? " (ровно на границе — курс округляет вверх)" : "") : band.note);
+      /* правка 27: выше 10⁵ шкала УПБ заканчивается — «вне шкалы», это
+         только отображение. Точные границы, включая ровно 10⁵, считает
+         format.js задачи 21 по неокруглённому десятичному PFD. */
+      var outOfScale = needed && (decPfd
+        ? F.decCmp(decPfd, F.decOf(1e-5)) < 0
+        : rrf > 1e5);
+      var band = needed
+        ? (decPfd ? F.silOfDec(decPfd) : F.silOfPfd(pfd))
+        : { sil: "—", note: "слои до SIF уже дают нужную частоту" };
+      var bandTitle = outOfScale ? "вне шкалы" : band.sil.replace("SIL", "УПБ");
+      var bandNote = !needed ? band.note
+        : outOfScale
+          ? "RRF ≈ " + fmtRRF(rrf) + " — выше верхней границы 10⁵; значение вне шкалы УПБ"
+          : onBandEdge(rrf)
+            ? "RRF ≈ " + fmtRRF(rrf) + " — значение ровно на границе полосы; "
+              + "табл. 4 полуоткрыта, поэтому оно относится к нижней полосе ("
+              + band.sil.replace("SIL", "УПБ") + ")"
+            : "RRF ≈ " + fmtRRF(rrf) + "; " + band.note.replace("RRF ", "полоса ").replace("SIL", "УПБ");
+      value("Требуемый уровень", bandTitle, bandNote);
 
-      /* ───── Замыкание критерия ─────
-         Класс f даёт f·k/N индивидуального риска: событий в год, умноженных
-         на погибших в событии, делённых на число людей, которые этому риску
-         подвержены. Сравниваем с Rд. */
+      /* ───── Замыкание критерия: кого считаем (правка 27) ─────
+         f·k/N — учебная модель однородной группы: все N в зоне и у каждого
+         p = k/N. Для конкретного работника риск равен f·p_i; добавление
+         людей вне зоны не меняет ни f, ни p_i. f_max = Rд·N/k — предел
+         для однородной группы, а не для списка людей. */
       var sep = el("div", "lopa-formula-wrap");
       sep.appendChild(el("span", "lopa-formula",
-        "——— замыкание: не нарушает ли выбранная частота критерий на человека ———"));
+        "——— замыкание: средний риск группы и риск конкретного работника ———"));
       out.appendChild(sep);
 
-      var indiv = fClass * fatal / state.people;
-      var fMax = R_D_YEAR * state.people / fatal;
-      var ok = indiv <= R_D_YEAR;
+      var N = state.people;
+      var listN = N + state.outsiders;
+      var pGroup = fatal / N;
+      var pWorker = 1;
+      /* Замыкание — по частоте класса, не по fSc: сценарная доля уже
+         учтена в PFD, второй раз её здесь не делим. */
+      var rGroup = fClass * pGroup;
+      var rWorker = fClass * pWorker;
+      var rList = fClass * fatal / listN;
+      var fMaxGroup = R_D_YEAR * N / fatal;
+      var fMaxWorker = R_D_YEAR / pWorker;
 
-      var riskLine = value("Индивидуальный риск от класса", sci(indiv) + NB + "/год",
-        factor(fClass) + " × " + fatal + " " + plural(fatal, "погибший", "погибших", "погибших") +
-        " / " + state.people + " " + plural(state.people, "человек", "человека", "человек") +
-        " в зоне", ok ? "lopa-sil" : null);
+      value("Средний риск однородной группы", sci(rGroup) + NB + "/год",
+        factor(fClass) + " × " + fatal + " / " + N +
+        " — у каждого p = k/N; это среднее, а не верхняя граница",
+        state.model === "group" && rGroup <= R_D_YEAR ? "lopa-sil" : null);
 
-      value("Предел для такого класса", sci(fMax) + NB + "/год",
-        "Rд × " + state.people + " / " + fatal + " — выше этой частоты критерий нарушается");
+      value("Риск конкретного работника", sci(rWorker) + NB + "/год",
+        factor(fClass) + " × 1 — он всегда в зоне и погибает при событии",
+        state.model === "person" && rWorker <= R_D_YEAR ? "lopa-sil" : null);
+
+      if (state.outsiders > 0) {
+        value("Средний риск по списку", sci(rList) + NB + "/год",
+          factor(fClass) + " × " + fatal + " / " + listN +
+          " — люди вне зоны входят только в список, не в N; это не риск работника");
+      }
+
+      value("Предел для однородной группы", sci(fMaxGroup) + NB + "/год",
+        "Rд × " + N + " / " + fatal + " — выше этой частоты средний риск группы больше Rд");
+
+      value("Предел для работника", sci(fMaxWorker) + NB + "/год",
+        "Rд / 1 — при p = 1 предел равен Rд; N и k на него не влияют");
+
+      var ok = state.model === "group" ? rGroup <= R_D_YEAR : rWorker <= R_D_YEAR;
+      var usedRisk = state.model === "group" ? rGroup : rWorker;
+      var usedMax = state.model === "group" ? fMaxGroup : fMaxWorker;
+      var usedWho = state.model === "group"
+        ? "средний риск однородной группы"
+        : "риск конкретного работника";
 
       var verdict = el("div", "lopa-note-block");
       if (ok) {
-        verdict.textContent = "Замыкание проходит: " + sci(indiv) + " ниже Rд " + criterion() +
-          " в " + sci(R_D_YEAR / indiv) + " раза. " +
-          "Класс можно брать; требование к функции считается отдельно и от замыкания не зависит.";
+        verdict.textContent = "Замыкание проходит для выбранной модели (" + usedWho + "): " +
+          sci(usedRisk) + " ниже Rд " + criterion() + " в " + sci(R_D_YEAR / usedRisk) +
+          " раза. Класс можно брать; требование к функции считается отдельно и от замыкания не зависит.";
       } else {
-        verdict.textContent = "Замыкание не проходит: " + sci(indiv) + " выше Rд " + criterion() +
-          " в " + sci(indiv / R_D_YEAR) + " раза. " +
-          "При числе людей в зоне " + state.people +
-          " класс не может быть чаще " + sci(fMax) + " /год. " +
+        verdict.textContent = "Замыкание не проходит для выбранной модели (" + usedWho + "): " +
+          sci(usedRisk) + " выше Rд " + criterion() + " в " + sci(usedRisk / R_D_YEAR) +
+          " раза. Предел для этой модели — " + sci(usedMax) + " /год. " +
           "Функция безопасности этого не исправляет: частота задана до неё.";
       }
       out.appendChild(verdict);
+
+      if (state.outsiders > 0) {
+        var outNote = el("div", "lopa-note-block");
+        outNote.textContent = "Люди вне зоны не входят в N: в опасной зоне " + N + " " +
+          plural(N, "человек", "человека", "человек") + ", в списке " + listN + ". " +
+          "Средний риск по списку " + sci(rList) + NB + "/год ниже, но это не риск работника: " +
+          "его риск " + sci(rWorker) + NB + "/год и от длины списка не зависит.";
+        out.appendChild(outNote);
+      }
 
       /* m не входит в замыкание: деление бюджета на сценарии переставляет
          ответственность между функциями, а сумма остаётся классом. */
       var mNote = el("div", "lopa-note-block");
       mNote.textContent = "Число сценариев " + state.scenarios + " на замыкание не влияет: " +
-        "произведение «частота класса × погибших / людей» от него не зависит. " +
+        "средний риск f·k/N от него не зависит. " +
         "Деление на сценарии решает, какой функции какая доля принадлежит, " +
         "а не сколько риска остаётся у объекта.";
       out.appendChild(mNote);
@@ -351,7 +425,8 @@
       var note = el("div", "lopa-formula-wrap");
       note.appendChild(el("span", "lopa-formula",
         "f_сц = f_класс / m;  f_до = f_иниц × Π PFD;  PFD = f_сц / f_до;  " +
-        "R_инд = f_класс · k / N ≤ R_д"));
+        "R_ср = f_класс · k / N — однородная группа;  R_i = f_класс · p_i — конкретный человек;  " +
+        "f_max = Rд · N / k — только для однородной группы."));
       out.appendChild(note);
     }
 

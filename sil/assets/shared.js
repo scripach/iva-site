@@ -168,7 +168,7 @@
       var rrf = Number((1 / total).toPrecision(6));
       line("RRF контура").appendChild(el("strong", null, "≈ " + fmtRRF(rrf)));
 
-      var band = F.silOf(rrf);
+      var band = F.silOfPfd(total);
       var sil = line("Полоса по PFD");
       sil.appendChild(el("strong", "lopa-sil", band.sil));
       sil.appendChild(el("span", "lopa-note", "— " + band.note));

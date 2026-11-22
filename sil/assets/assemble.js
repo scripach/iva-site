@@ -192,7 +192,10 @@
     function recalc() {
       out.innerHTML = "";
 
-      var targetSil = F.bandOf(state.target);
+      /* Целевой уровень задан как RRF; полоса считается по точному
+         десятичному PFD = 1/RRF (задача 21), без обратного округления. */
+      var decTarget = F.decDiv(F.decOf(1), F.decOf(state.target));
+      var targetSil = decTarget ? F.silOfDec(decTarget).band : 0;
 
       var parts = cfg.subsystems.map(function (sub, i) {
         var d = state.data[i];
@@ -221,8 +224,8 @@
       value("RRF контура", "≈ " + fmtRRF(Number(rrf.toPrecision(6))));
 
       /* Gate 1 — the number. */
-      var band = F.silOf(rrf);
-      var bandSil = F.bandOf(rrf);
+      var band = F.silOfPfd(total);
+      var bandSil = F.bandOfPfd(total);
       value("Гейт 1 · полоса по PFD", band.sil, "— " + band.note, "lopa-sil");
 
       /* Gate 2 — architecture. Each subsystem's structure has a ceiling: the

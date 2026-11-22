@@ -29,16 +29,20 @@
             "above 1,5·MAWP → vessel damage and release within 5 min", while
             the controller failure that produced it is the CAUSE (G.2.4);
      G.2.4  the cause frequency is estimated WITHOUT ANY protection layer;
-            several causes → the event frequency is the HIGHEST of them, not
-            their sum; a team that finds no credible cause writes "нет никакой
-            вероятной исходной причины" together with the reasoning;
-     F.13.4 the same rule shown in action: each cause is followed to the end
-            before the next one is taken, which is why the summary carries the
-            maximum, never a total;
+             in the worksheet record of the Annex G procedure the event
+             frequency is the HIGHEST of the listed causes, one number for
+             column 4. That is a rule of this calibrated procedure, not a
+             general law of combining frequencies: a quantitative model adds
+             distinct realizations (mutual exclusion does not prevent that;
+             overlaps need a correction), and Annex G does not forbid it;
+             a team that finds no credible cause writes the closed record;
+     F.13.4 the standard's example follows each cause separately, so a LOPA
+             scenario is a cause × event pair; the worksheet record does not
+             replace that list;
      табл. F.1 — the six pairs HAZOP owes the layer analysis.
 
    Six outcomes, all reachable (smoke test drives every one):
-     ready    — the row can be handed over; LOPA gets f = max(causes);
+     ready    — the row can be handed over; the G record is max(causes), the quantitative record is the sum;
      blocked  — a cause sits in the consequence cell;
      blocked  — a deviation sits in the consequence cell;
      closed   — the team closed the deviation as not credible (a record of the
@@ -70,7 +74,9 @@
   var IPL_PFD = 0.1;
 
   /* Доля сценария в бюджете класса — из урока 12: 1·10⁻⁴ /год на четыре
-     сценария. Виджет не пересчитывает класс: он показывает, что получает АСЗ. */
+     сценария. Виджет не пересчитывает класс: он показывает, что получает АСЗ.
+     Значение по умолчанию оставлено для страниц без реестра; если в JSON есть
+     classFrequency и m, доля считается из них, а не берётся из подписи. */
   var F_SCENARIO = 2.5e-5;
 
   function jsonOf(root) {
@@ -93,9 +99,9 @@
     return options.filter(function (x) { return x.selected; })[0] || options[0];
   }
 
-  /* Три значащие с ручным округлением полувверх — как в tolerable.js
-     и target.js: иначе 1,25·10⁻⁴ съезжает вниз на округлении к чётному
-     и требование расходится с прозой на глазах у читателя. */
+  /* Две значащие цифры с ручным округлением полувверх: по U06 коэффициент
+     не точнее десятых. Внутренние расчёты идут с полной точностью; это
+     только подпись результата. */
   function sci(x) {
     if (!isFinite(x) || x === 0) return "0";
     var sign = x < 0 ? "−" : "";
@@ -103,21 +109,21 @@
     var parts = x.toExponential(15).split("e");
     var digits = parts[0].replace(".", "").split("");
     var exp = parseInt(parts[1], 10);
-    if (digits[3] >= "5") {
-      var i = 2;
+    if (digits[2] >= "5") {
+      var i = 1;
       while (i >= 0) {
         if (digits[i] === "9") { digits[i] = "0"; i -= 1; }
         else { digits[i] = String(Number(digits[i]) + 1); break; }
       }
-      if (i < 0) { digits.unshift("1"); digits.length = 3; exp += 1; }
+      if (i < 0) { digits.unshift("1"); digits.length = 2; exp += 1; }
     }
-    var mant = digits.slice(0, 3).join("").replace(/0+$/, "");
+    var mant = digits.slice(0, 2).join("").replace(/0+$/, "");
     if (mant.length === 0) mant = "0";
     if (mant.length > 1) mant = mant[0] + "," + mant.slice(1);
     if (x >= 0.1) {
       var plain = Number(mant.replace(",", ".") + "e" + exp);
       if (plain >= 0.1 && plain < 1000) {
-        return sign + String(Number(plain.toPrecision(6))).replace(".", ",");
+        return sign + String(Number(plain.toPrecision(3))).replace(".", ",");
       }
     }
     return sign + mant + "·10" + F.sup(exp);
@@ -133,13 +139,17 @@
 
   /* Требование к функции из частоты и доли сценария. Те же число и полоса,
      что в уроке 12; здесь они печатаются как следствие строки HAZOP. */
-  function requirement(fBefore) {
-    var pfd = F_SCENARIO / fBefore;
-    return { pfd: pfd, rrf: 1 / pfd, band: F.silOf(1 / pfd) };
+  function requirement(fBefore, fScenario) {
+    var pfd = fScenario / fBefore;
+    return { pfd: pfd, rrf: 1 / pfd, band: F.silOfPfd(pfd) };
   }
 
+  /* Полоса по RRF: точный десятичный PFD = 1/RRF (задача 21), чтобы
+     значение ровно на границе не переезжало в соседнюю полосу. */
   function bandName(rrf) {
-    return F.silOf(rrf).sil.replace("SIL", "УПБ");
+    var dec = F.decDiv(F.decOf(1), F.decOf(rrf));
+    var rec = dec ? F.silOfDec(dec) : { sil: "вне шкалы" };
+    return rec.sil.replace("SIL", "УПБ");
   }
 
   function render(root) {
@@ -149,8 +159,24 @@
     root.innerHTML = "";
     root.classList.add("widget");
 
+    /* Доля сценария приходит из реестра: f_класс / m. Подпись причины на неё
+       не влияет — перефразирование меняет текст, но не m и не ID. */
+    var fScenario = (cfg.classFrequency && cfg.m)
+      ? cfg.classFrequency / cfg.m
+      : F_SCENARIO;
+    if (cfg.m) root.setAttribute("data-m", String(cfg.m));
+    if (cfg.scenarioId) root.setAttribute("data-scenario", cfg.scenarioId);
+
     if (cfg.title) root.appendChild(el("p", "widget-title", cfg.title));
     if (cfg.instruction) root.appendChild(el("p", "instruction", cfg.instruction));
+    if (cfg.scenarioId) {
+      root.appendChild(el("p", "instruction lopa-registry-meta",
+        "Сценарий " + cfg.scenarioId +
+        (cfg.classId ? " · класс " + cfg.classId : "") +
+        (cfg.registry ? " · реестр " + cfg.registry : "") +
+        (cfg.m ? " · m = " + cfg.m : "") +
+        " · класс " + sci(fScenario) + NB + "/год на сценарий"));
+    }
 
     var grid = el("div", "lopa-grid");
     var left = el("div");
@@ -159,10 +185,14 @@
     grid.appendChild(right);
     root.appendChild(grid);
 
+    var pickedCauses = picked(cfg.causes.options);
     var state = {
       consequenceCell: picked(cfg.consequenceCell.options).v,
       causeFrequency: picked(cfg.causeFrequency.options).v,
-      causes: parseFloat(picked(cfg.causes.options).v),
+      causes: parseFloat(pickedCauses.v),
+      causeMax: pickedCauses.max || F_CAUSE,
+      causeSum: pickedCauses.sum || F_CAUSE * parseFloat(pickedCauses.v),
+      causeAddends: pickedCauses.addends || "частоты причин",
       safeguards: picked(cfg.safeguards.options).v
     };
 
@@ -185,7 +215,13 @@
 
     select(cfg.consequenceCell, state.consequenceCell, function (v) { state.consequenceCell = v; });
     select(cfg.causeFrequency, state.causeFrequency, function (v) { state.causeFrequency = v; });
-    select(cfg.causes, state.causes, function (v) { state.causes = parseFloat(v); });
+    select(cfg.causes, state.causes, function (v) {
+      state.causes = parseFloat(v);
+      var o = cfg.causes.options.filter(function (x) { return String(x.v) === String(v); })[0];
+      state.causeMax = o && o.max ? o.max : F_CAUSE;
+      state.causeSum = o && o.sum ? o.sum : F_CAUSE * state.causes;
+      state.causeAddends = o && o.addends ? o.addends : "частоты причин";
+    });
     select(cfg.safeguards, state.safeguards, function (v) { state.safeguards = v; });
 
     var out = el("div", "lopa-out");
@@ -249,8 +285,8 @@
       var closed = state.causeFrequency === "none-recorded";
       var doubleCounted = state.safeguards === "inside";
       var cleanFrequency = hasFrequency && !doubleCounted;
-      var used = doubleCounted ? F_CAUSE * IPL_PFD : F_CAUSE;
-      var sum = F_CAUSE * state.causes;
+      var used = doubleCounted ? state.causeMax * IPL_PFD : state.causeMax;
+      var sum = state.causeSum;
 
       var freqText, freqNote;
       if (closed) {
@@ -262,20 +298,22 @@
           "запрещает брать её для конкретной оценки";
       } else if (doubleCounted) {
         freqText = sci(used);
-        freqNote = fmt(F_CAUSE) + " × " + fmt(IPL_PFD) + " — слой защиты вычтен в частоте";
+        freqNote = fmt(state.causeMax) + " × " + fmt(IPL_PFD) + " — слой защиты вычтен в частоте";
       } else {
         freqText = sci(used);
         freqNote = state.causes > 1
-          ? "из " + state.causes + " причин берётся наибольшая, а не сумма"
-          : "по табл. G.3: MTBF контура управления 10 лет";
+          ? "наибольшая из " + state.causes + " причин: одно число для графы 4 по G.2.4"
+          : "одна причина; по табл. G.3 MTBF контура управления 10 лет";
       }
-      value("Частота причины, 1 /год", freqText, freqNote);
+      value("Запись строки по G.2.4, 1 /год", freqText, freqNote);
 
       if (hasFrequency && state.causes > 1) {
-        value("Если сложить причины", sci(sum) + NB + "/год",
-          "G.2.4 берёт наибольшую, F.13.4 разбирает причины по одной. Сумма " +
-          "потребует RRF " + fmtRRF(requirement(sum).rrf) + " вместо " +
-          fmtRRF(requirement(used).rrf) + ": вдвое больше надёжности, чем обосновано");
+        var qreq = requirement(sum, fScenario);
+        value("Количественная сумма реализаций, 1 /год", sci(sum) + NB + "/год",
+          state.causeAddends + ": складываются частоты отдельных реализаций; при общем " +
+          "эпизоде нужна поправка на двойной счёт. Это вход другой процедуры, а не замена " +
+          "записи G: при той же доле " + sci(fScenario) + NB + "/год сумма требует RRF " +
+          fmtRRF(qreq.rrf) + ".");
       }
 
       /* ───── что видит АСЗ: шесть пар табл. F.1 ───── */
@@ -293,19 +331,27 @@
       /* Требование к функции печатается только для годной строки: иначе
          число выглядит как результат, хотя вход в него недостоверен. */
       if (cleanFrequency && state.consequenceCell === "consequence") {
-        var req = requirement(used);
+        var req = requirement(used, fScenario);
         value("Что получит АСЗ", "PFD ≤ " + sci(req.pfd),
-          "доля сценария " + sci(F_SCENARIO) + NB + "/год из урока 12 делится на " +
+          "доля сценария " + sci(fScenario) + NB + "/год из реестра делится на " +
           sci(used) + NB + "/год; RRF ≈ " + fmtRRF(req.rrf) + " — " + bandName(req.rrf));
+      }
+
+      if (cleanFrequency && state.consequenceCell === "consequence" && state.causes > 1) {
+        var q = requirement(sum, fScenario);
+        value("Если считать количественно", "PFD ≤ " + sci(q.pfd),
+          "сумма " + sci(sum) + NB + "/год и та же доля " + sci(fScenario) + NB +
+          "/год дают RRF ≈ " + fmtRRF(q.rrf) + " — " + bandName(q.rrf) +
+          ". Это другая процедура, не замена записи G.");
       }
 
       /* Цена дефекта: зачтённый в частоте слой делает требование мягче
          на целую полосу, и по документу этого не видно. */
       if (doubleCounted) {
-        var soft = requirement(used);
+        var soft = requirement(used, fScenario);
         value("Чем это обернётся", "PFD ≤ " + sci(soft.pfd),
           "RRF " + fmtRRF(soft.rrf) + ", " + bandName(soft.rrf) + " вместо " +
-          bandName(requirement(F_CAUSE).rrf) + " — на целую полосу мягче");
+          bandName(requirement(state.causeMax, fScenario).rrf) + " — на целую полосу мягче");
       }
 
       /* ───── вердикт ─────
@@ -352,18 +398,18 @@
       } else {
         verdict.setAttribute("data-verdict", "ready");
         verdict.textContent = "Строка готова: все шесть пар табл. F.1 заполнены, частота " +
-          "оценена без учёта слоёв, из " + state.causes + " " +
+          "оценена без учёта слоёв; в записи G из " + state.causes + " " +
           plural(state.causes, "причины", "причин", "причин") +
-          " взята наибольшая. Дальше считает АСЗ урока 2, а критерий класса берётся " +
-          "из урока 12: " + sci(F_SCENARIO) + NB + "/год / " + sci(used) + NB +
-          "/год = PFD " + sci(requirement(used).pfd) + ".";
+          " взята наибольшая. В LOPA каждая причина даёт свой сценарий, поэтому m берут " +
+          "из реестра. Критерий класса: " + sci(fScenario) + NB + "/год / " + sci(used) +
+          NB + "/год = PFD " + sci(requirement(used, fScenario).pfd) + ".";
         verdict.className += " lopa-sil";
       }
       out.appendChild(verdict);
 
       var note = el("div", "lopa-formula-wrap");
       note.appendChild(el("span", "lopa-formula",
-        "f_иниц = max(f_причин);  PFD = f_сц / (f_иниц × Π PFD(НСЗ))"));
+        "f_запись = max(f_причин) по G.2.4;  f_колич. = Σ f_реализаций;  PFD = f_сц / (f_иниц × Π PFD(НСЗ))"));
       out.appendChild(note);
     }
 

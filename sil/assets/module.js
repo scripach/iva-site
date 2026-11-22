@@ -217,7 +217,7 @@
       var actual = sharedPfd(m, n, p, beta, k, qm);
       var one = p + qm;                       /* a single unprotected channel */
       var rrf = 1 / actual;
-      var band = F.silOf(rrf);
+      var band = F.silOfPfd(actual);
 
       value("PFD канала", fmt(p), "уже включает PTC, TI и срок службы");
       value("Группа " + state.arch.v + " без общей части",

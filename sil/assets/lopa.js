@@ -27,11 +27,6 @@
   var fmt = F.fmt;
   var fmtRRF = F.rrf;
 
-  function silOf(rrf) {
-    if (rrf <= 1) return { sil: "—", note: "снижение риска не требуется" };
-    return F.silOf(rrf);
-  }
-
   function render(root) {
     var cfg = jsonOf(root);
     if (!cfg) return;
@@ -48,6 +43,22 @@
       ins.className = "instruction";
       ins.textContent = cfg.instruction;
       root.appendChild(ins);
+    }
+
+    /* Сценарий и критерий называются до чисел: это вход, а не результат.
+       m печатается только как ссылка на реестр; в арифметике этого листа
+       его нет, потому что критерий K-01 задан на сценарий. (правка 27) */
+    if (cfg.scenarioId || cfg.criterionId) {
+      var meta = document.createElement("p");
+      meta.className = "instruction lopa-registry-meta";
+      var bits = [];
+      if (cfg.scenarioId) bits.push("Сценарий " + cfg.scenarioId);
+      if (cfg.classId) bits.push("класс " + cfg.classId);
+      if (cfg.registry) bits.push("реестр " + cfg.registry);
+      if (cfg.criterionId) bits.push("критерий " + cfg.criterionId);
+      if (cfg.m) bits.push(cfg.mNote || "m = " + cfg.m);
+      meta.textContent = bits.join(" · ");
+      root.appendChild(meta);
     }
 
     var grid = document.createElement("div");
@@ -155,9 +166,27 @@
       state.ipls.forEach(function (it) {
         if (it.on) { pfd *= it.cfg.pfd; parts.push(fmt(it.cfg.pfd)); }
       });
-      var fres = Number((state.fInit * pfd).toPrecision(6));
-      var rrf = Number((fres / state.target).toPrecision(6));
-      var sil = silOf(rrf);
+      var fres = state.fInit * pfd;
+      var rrf = fres === 0 ? Infinity : fres / state.target;
+      var requiredPfd = fres === 0 ? Infinity : state.target / fres;
+
+      /* Точный десятичный путь (правка 21/22): 1e-4 / (0,1 × 0,1) — ровно
+         1e-2 и SIL 1, а значение на один представимый double ниже границы —
+         SIL 2. Обратного пересчёта RRF → PFD нет: он ломал границу. */
+      var decPfd = F.decOf(1);
+      state.ipls.forEach(function (it) {
+        if (it.on) decPfd = decPfd ? F.decMul(decPfd, F.decOf(it.cfg.pfd)) : null;
+      });
+      var decFres = decPfd ? F.decMul(F.decOf(state.fInit), decPfd) : null;
+      var decTarget = F.decOf(state.target);
+      var noReduction = decFres && decTarget
+        ? F.decCmp(decFres, decTarget) <= 0
+        : rrf <= 1;
+      var decRequired = decFres && decTarget ? F.decDiv(decTarget, decFres) : null;
+      var sil = noReduction
+        ? { sil: "—", note: "снижение риска не требуется" }
+        : (decRequired ? F.silOfDec(decRequired) : F.silOfPfd(requiredPfd));
+
       vRes.textContent = fmt(fres) + " /год";
       formula.textContent = fmt(state.fInit) +
         (parts.length ? " × " + parts.join(" × ") : "") +
@@ -165,9 +194,33 @@
       vF.textContent = fmt(fres) + " / " + fmt(state.target) + " = RRF " +
         (rrf >= 10 ? fmtRRF(rrf) : fmt(rrf));
       vSil.textContent = sil.sil;
-      vNote.textContent = "— " + sil.note;
+      vNote.textContent = "— " + sil.note +
+        (sil.sil === "—" ? "" : "; назначение SIL фиксируют отдельным решением");
+
+      /* Границы утверждений тренажёра (правка 22, T05/V06): что проверено
+         числами и что остаётся вне расчёта. */
+      F.scope(out, {
+        status: "requirement",
+        mode: "низкая частота запросов; слои до SIF взяты как независимые",
+        units: "частота\u00a0— 1/год; PFD и RRF\u00a0— безразмерные отношения",
+        checked: [
+          "остаточная частота f_ост = f_инит × Π PFD(enabled IPL)",
+          "отношение f_ост / f_цель и числовая полоса требования"
+        ],
+        unchecked: [
+          "независимость и реальные PFD слоёв защиты",
+          "полнота сценария и частота инициатора",
+          "HFT и архитектура будущей функции",
+          "систематическая полнота SC",
+          "время реакции и жизненный цикл"
+        ],
+        conclusion: noReduction
+          ? "По введённым числам снижение риска не требуется. Это вывод LOPA; SIL функции требует отдельных проверок архитектуры, SC, времени реакции и жизненного цикла."
+          : "Требование рассчитано как числовая полоса. Назначенный SIL и подтверждение функции требуют отдельных проверок: HFT/архитектура, SC, время реакции и жизненный цикл."
+      });
     }
     update();
+    F.installReset(root);
     var fWrap = document.createElement("div");
     fWrap.className = "lopa-formula-wrap";
     fWrap.appendChild(formula);

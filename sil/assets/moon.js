@@ -46,7 +46,7 @@
   var sup = F.sup;
   var fmt = F.fmt;
   var fmtRRF = F.rrf;
-  function silOf(rrf) { return F.silOf(rrf).sil; }
+  function silOf(pfd) { return F.silOfPfd(pfd).sil; }
 
   function C(n, k) {
     var r = 1;
@@ -176,22 +176,24 @@
         ' <span class="lopa-note">формула: ' + (FORMULAS[a.id] || "Σ C(n,k)·qᵏ + βp") +
         '; q = (1 − β)·p, β = ' + F.fmt(Math.round(beta * 1000) / 10) + " %" + "</span>"));
       out.appendChild(line("RRF узла", "<strong>≈ " + fmtRRF(rrf) + "</strong>"));
-      var band = F.bandOf(rrf);
+      var band = F.bandOfPfd(pfd);
       out.appendChild(line("Полоса по PFD (без HFT)",
-        '<span class="lopa-sil"><strong>' + silOf(rrf) + '</strong></span>' +
+        '<span class="lopa-sil"><strong>' + silOf(pfd) + '</strong></span>' +
         (band === 4 ? ' <span class="lopa-note">вне рамок курса</span>' : "") +
         ' <span class="lopa-note">число вероятности, структура — ниже</span>'));
 
       /* Table 6 fixes the minimum HFT by the SIL of the SIF, i.e. by the
          target from LOPA — not by the band the node happens to reach: a node
          whose PFD is better than required must not be failed by the gate. */
-      var need = F.hftField(F.bandOf(target));
+      var decTarget = F.decDiv(F.decOf(1), F.decOf(target));
+      var targetBand = decTarget ? F.silOfDec(decTarget).band : 0;
+      var need = F.hftField(targetBand);
       /* Table 6 (редакция 2018) lives in ONE place — assets/format.js. This
          widget used to compute the stricter 2011 row and then narrate the 2018
          row in a note, which is two sources of truth for one number and made
          the page contradict its own verdict. The course is low-demand
          throughout, so the high-demand column is only named when it differs. */
-      var silTarget = F.bandOf(target);
+      var silTarget = targetBand;
       var needHigh = F.hftByMode(silTarget, true);
       var gateText = need === null
         ? '<span class="pfd-verdict bad">целевой уровень вне шкалы УПБ</span>'
