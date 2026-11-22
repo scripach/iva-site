@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPLAN для АСУ ТП — курс на русском</title>
+<link rel="stylesheet" href="assets/course.css">
+<style>
+.course-list { list-style: none; padding-left: 0; margin-top: 1.6rem; }
+.course-list > li {
+  padding: .95rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+  max-width: var(--measure);
+}
+.course-list > li:last-child { border-bottom: 0; }
+.course-list .num {
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: .2rem;
+}
+.course-list a {
+  font-family: var(--sans);
+  font-size: 1.06rem;
+  font-weight: 640;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+.course-list a:hover { color: var(--accent-2); border-bottom-color: var(--accent-2); }
+.course-list .sub {
+  display: block;
+  font-size: .9rem;
+  color: var(--ink-soft);
+  margin-top: .3rem;
+}
+.course-list .soon {
+  font-family: var(--sans);
+  font-size: .72rem;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: .05rem .35rem;
+  margin-left: .4rem;
+  white-space: nowrap;
+}
+
+.refgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: .7rem;
+  margin: 1.4rem 0;
+  max-width: 760px;
+}
+.refgrid a {
+  display: block;
+  padding: .85rem .95rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--accent-2);
+}
+.refgrid a:hover { border-color: var(--accent-2); background: var(--surface-2); }
+.refgrid .desc {
+  display: block;
+  font-weight: 400;
+  font-size: .8rem;
+  color: var(--ink-faint);
+  margin-top: .25rem;
+}
+</style>
+</head>
+<body data-page="index">
+<div class="wrap">
+
+<header class="lesson-head">
+  <p class="kicker">Курс</p>
+  <h1>EPLAN для шкафов АСУ ТП</h1>
+  <p class="standfirst">От первого запуска до комплекта документации по ГОСТ: электрические схемы, компоновка шкафа, таблицы соединений и спецификации. На русском языке, с практикой в самой программе.</p>
+</header>
+
+<p>Курс рассчитан на инженера, который никогда не открывал EPLAN. Каждый урок — один ощутимый результат за 15–20 минут и обязательное действие в программе. Теория даётся только та, без которой не получится действие.</p>
+
+<h2>Уроки</h2>
+
+<ol class="course-list" id="courseList">
+  <li>
+    <span class="num">Урок 01</span>
+    <a href="lessons/0001-first-launch-with-gost-template.html">Открыть EPLAN и не потеряться</a>
+    <span class="sub">Первый запуск на шаблоне по ГОСТ, шесть зон интерфейса, смысл знаков <code>=</code>, <code>+</code>, <code>-</code>, <code>&amp;</code>.</span>
+  </li>
+  <li>
+    <span class="num">Урок 02</span>
+    <a href="lessons/0002-page-and-document-code.html">Страница и код документа</a>
+    <span class="sub">Как создать лист с правильным кодом вида документа, чтобы содержание альбома собиралось автоматически.</span>
+  </li>
+</ol>
+
+
+<h2>Справочники</h2>
+
+<p>Плотные выжимки, к которым возвращаются чаще, чем к урокам.</p>
+
+<div class="refgrid">
+  <a href="reference/glossary.html">Глоссарий
+    <span class="desc">Термины EPLAN и АСУ ТП в одном месте</span></a>
+  <a href="reference/frames-and-forms.html">Шаблоны КБ-625
+    <span class="desc">Что лежит в комплекте и как читать имена форм</span></a>
+  <a href="reference/asu-tp-composition.html">Состав АСУ ТП
+    <span class="desc">Комплект марки АТМ: документы и листы</span></a>
+  <a href="reference/videos.html">Видеоуроки
+    <span class="desc">Проверенные ролики на русском</span></a>
+</div>
+
+<h2>Комплект шаблонов</h2>
+
+<p>Комплект шаблонов «КБ-625»: три готовых шаблона проекта, пример реального проекта АСУ ТП на 258 листов и документация автора. Комплект распространяется автором свободно и используется в курсе как основа для всех практических заданий.</p>
+
+<div class="downloads">
+  <a class="dl" href="kb625/%D0%9A%D0%91-625/2_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82/%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD/%D0%A1%D0%9F%D0%94%D0%A1_2023.05.20_0.06.zw1" download>
+    <span class="dl-name">СПДС</span>
+    <span class="dl-meta">основной для АСУ ТП · 27 МБ</span>
+  </a>
+  <a class="dl" href="kb625/%D0%9A%D0%91-625/2_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82/%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD/%D0%95%D0%A1%D0%9A%D0%94_2023.05.20_0.06.zw1" download>
+    <span class="dl-name">ЕСКД</span>
+    <span class="dl-meta">конструкторские документы · 27 МБ</span>
+  </a>
+  <a class="dl" href="kb625/%D0%9A%D0%91-625/2_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82/%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD/%D0%93%D0%9E%D0%A1%D0%A2%2034_2023.05.20_0.06.zw1" download>
+    <span class="dl-name">ГОСТ 34</span>
+    <span class="dl-meta">документы АС · 27 МБ</span>
+  </a>
+  <a class="dl" href="kb625/%D0%9A%D0%91-625/2_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82/%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80/%D0%9A%D0%91625.%D0%98%D0%9F%D0%A1.001.23-%D0%90%D0%A2%D0%9C.pdf" download>
+    <span class="dl-name">Пример АТМ</span>
+    <span class="dl-meta">258 листов, PDF · 9,5 МБ</span>
+  </a>
+  <a class="dl" href="kb625/%D0%BE%D1%82%20%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B0.docx" download>
+    <span class="dl-name">От автора</span>
+    <span class="dl-meta">1 страница, DOCX · 22 КБ</span>
+  </a>
+</div>
+
+<div class="callout">
+  <span class="label">Что понадобится</span>
+  <p>EPLAN Electric P8 (в курсе используется версия 2025) и сам комплект шаблонов. Всё остальное — в уроках.</p>
+</div>
+
+<div class="ask-teacher">
+  <p><b>Вопросы приветствуются.</b> Если что-то не получается или непонятно — спрашивайте преподавателя, не проходите мимо.</p>
+</div>
+
+</div>
+<script src="assets/manifest.js"></script>
+<script src="assets/nav.js"></script>
+</body>
+</html>

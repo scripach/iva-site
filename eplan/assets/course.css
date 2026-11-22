@@ -1,0 +1,470 @@
+/* ============================================================
+   EPLAN · общий стиль курса
+   Подключается всеми уроками и справочниками.
+   Экранный дизайн; печатная версия не поддерживается.
+   ============================================================ */
+
+:root {
+  --ink:        #16181d;
+  --ink-soft:   #4a5058;
+  --ink-faint:  #767d87;
+  --rule:       #d8dce2;
+  --rule-soft:  #ebedf1;
+  --surface:    #fbfbf9;
+  --surface-2:  #f3f4f1;
+  --paper:      #ffffff;
+  --accent:     #8a4b12;   /* тёплый «чертёжный» коричневый */
+  --accent-2:   #1f5f6b;   /* холодный техн. синий */
+  --warn:       #9a3412;
+  --ok:         #2f6b3a;
+  --bad:        #a12a2a;
+  --code-bg:    #eef0ec;
+
+  --serif: "Charter", "Georgia", "PT Serif", "Times New Roman", serif;
+  --sans:  "Inter", "Segoe UI", "PT Sans", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+
+  --measure: 68ch;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 17px; }
+
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- каркас ---------- */
+
+.wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 3.2rem 1.6rem 5rem;
+}
+
+header.lesson-head {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1.1rem;
+  margin-bottom: 2.4rem;
+}
+
+.kicker {
+  font-family: var(--sans);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 650;
+  margin: 0 0 .55rem;
+}
+
+h1 {
+  font-family: var(--sans);
+  font-size: 1.95rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -.012em;
+  margin: 0 0 .65rem;
+  max-width: 30ch;
+}
+
+.standfirst {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: var(--measure);
+}
+
+.meta {
+  font-family: var(--sans);
+  font-size: .78rem;
+  color: var(--ink-faint);
+  margin-top: .9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1.1rem;
+}
+
+/* ---------- типографика ---------- */
+
+h2 {
+  font-family: var(--sans);
+  font-size: 1.32rem;
+  font-weight: 680;
+  letter-spacing: -.01em;
+  margin: 3rem 0 .85rem;
+  padding-top: .2rem;
+  max-width: var(--measure);
+}
+
+h2::before {
+  content: "";
+  display: block;
+  width: 2.1rem;
+  height: 3px;
+  background: var(--accent);
+  margin-bottom: .7rem;
+}
+
+h3 {
+  font-family: var(--sans);
+  font-size: 1.03rem;
+  font-weight: 660;
+  margin: 2rem 0 .5rem;
+  max-width: var(--measure);
+}
+
+p, li { max-width: var(--measure); }
+p { margin: 0 0 1rem; }
+
+ul, ol { margin: 0 0 1.15rem; padding-left: 1.35rem; }
+li { margin-bottom: .42rem; }
+li::marker { color: var(--accent); }
+
+a {
+  color: var(--accent-2);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+a:hover { color: var(--accent); }
+
+strong { font-weight: 680; }
+em { font-style: italic; }
+
+code, kbd {
+  font-family: var(--mono);
+  font-size: .86em;
+  background: var(--code-bg);
+  padding: .1em .34em;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  /* длинные пути и идентификаторы не должны ломать вёрстку */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+kbd {
+  font-size: .78em;
+  background: var(--paper);
+  border-bottom-width: 2px;
+  white-space: nowrap;
+}
+
+/* Путь по меню: Файл › Сведения › Свойства проекта */
+.path {
+  font-family: var(--sans);
+  font-size: .95em;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: .1em .4em;
+}
+
+/* ---------- смысловые блоки ---------- */
+
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--paper);
+  padding: 1rem 1.15rem;
+  margin: 1.5rem 0;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.callout > :last-child { margin-bottom: 0; }
+.callout .label {
+  font-family: var(--sans);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  display: block;
+  margin-bottom: .4rem;
+}
+.callout.cold { border-left-color: var(--accent-2); }
+.callout.cold .label { color: var(--accent-2); }
+.callout.warn { border-left-color: var(--warn); }
+.callout.warn .label { color: var(--warn); }
+
+blockquote {
+  margin: 1.3rem 0;
+  padding: .8rem 1.1rem;
+  border-left: 3px solid var(--rule);
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-size: .93rem;
+}
+blockquote p { margin-bottom: .5rem; max-width: var(--measure); }
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ГОСТ-цитата */
+.gost {
+  font-size: .94rem;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: .95rem 1.1rem;
+  margin: 1.4rem 0;
+}
+.gost .src {
+  font-family: var(--sans);
+  font-size: .74rem;
+  color: var(--ink-faint);
+  display: block;
+  margin-top: .55rem;
+  letter-spacing: .02em;
+}
+.gost p:last-child { margin-bottom: 0; }
+
+/* ---------- таблицы ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: .88rem;
+  margin: 1.4rem 0;
+  background: var(--paper);
+}
+
+/* На узких экранах таблица прокручивается, а не ломает страницу. */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4rem 0;
+}
+.table-scroll > table { margin: 0; min-width: 100%; }
+
+@media (max-width: 560px) {
+  table { font-size: .82rem; }
+  th, td { padding: .4rem .45rem; }
+}
+caption {
+  caption-side: top;
+  text-align: left;
+  font-family: var(--sans);
+  font-size: .76rem;
+  color: var(--ink-faint);
+  padding-bottom: .45rem;
+}
+th, td {
+  border: 1px solid var(--rule);
+  padding: .5rem .65rem;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--surface-2);
+  font-weight: 660;
+  font-size: .8rem;
+  letter-spacing: .015em;
+}
+tbody tr:nth-child(even) { background: #fafbf9; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- перекрёстные ссылки справочников ---------- */
+
+.reflinks {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.1rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: .5rem .9rem;
+  max-width: var(--measure);
+}
+.reflinks li {
+  margin: 0;
+  padding: .6rem .8rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: .88rem;
+}
+.reflinks a {
+  font-weight: 620;
+  text-decoration: none;
+  color: var(--accent-2);
+}
+.reflinks a:hover { border-bottom: 1px solid currentColor; }
+.reflinks .desc {
+  display: block;
+  font-size: .78rem;
+  color: var(--ink-faint);
+  margin-top: .15rem;
+}
+
+/* ---------- блок скачивания ---------- */
+
+.downloads {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: .6rem;
+  margin: 1.3rem 0 1.6rem;
+  max-width: var(--measure);
+}
+.downloads .dl {
+  display: block;
+  padding: .8rem .9rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  text-decoration: none;
+  transition: border-color .12s, background .12s;
+}
+.downloads .dl:hover { border-color: var(--accent-2); background: var(--surface-2); }
+.downloads .dl::before {
+  content: "↓";
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--accent-2);
+  margin-right: .38rem;
+}
+.downloads .dl-name {
+  font-family: var(--sans);
+  font-size: .95rem;
+  font-weight: 650;
+  color: var(--ink);
+}
+.downloads .dl-meta {
+  display: block;
+  font-family: var(--sans);
+  font-size: .76rem;
+  color: var(--ink-faint);
+  margin-top: .15rem;
+  margin-left: 1.15rem;
+}
+
+/* ---------- список видеороликов ---------- */
+
+.videolist {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.4rem 0;
+}
+.videolist > li {
+  position: relative;
+  padding: .85rem 1rem .85rem 2.5rem;
+  margin-bottom: .6rem;
+  max-width: var(--measure);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-2);
+  border-radius: 0 4px 4px 0;
+}
+/* треугольник «play» вместо иконки-картинки */
+.videolist > li::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 1.05rem;
+  width: 0; height: 0;
+  border-left: 7px solid var(--accent-2);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.videolist a {
+  display: block;
+  font-family: var(--sans);
+  font-size: .95rem;
+  font-weight: 620;
+  line-height: 1.35;
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.videolist a:hover { border-bottom-color: currentColor; }
+.videolist .by {
+  display: block;
+  font-family: var(--sans);
+  font-size: .76rem;
+  color: var(--ink-faint);
+  margin-top: .2rem;
+  letter-spacing: .02em;
+}
+.videolist .why {
+  display: block;
+  font-size: .84rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-top: .45rem;
+}
+
+/* ---------- шаги ---------- */
+
+ol.steps { list-style: none; padding-left: 0; counter-reset: step; }
+ol.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.6rem;
+  margin-bottom: 1.05rem;
+  max-width: var(--measure);
+}
+ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: .05em;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: .8rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- подписи ссылок ---------- */
+
+a.src {
+  font-family: var(--sans);
+  font-size: .8rem;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent-2);
+}
+a.src::after { content: " ↗"; font-size: .85em; }
+
+/* ---------- сноска-напоминание ---------- */
+
+.ask-teacher {
+  margin-top: 3.5rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1.3rem;
+  font-family: var(--sans);
+  font-size: .88rem;
+  color: var(--ink-soft);
+}
+.ask-teacher b { color: var(--ink); }
+
+/* ---------- навигация между уроками ---------- */
+
+.lesson-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem 1.4rem;
+  margin-top: 2.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: .84rem;
+}
+
+@media (max-width: 640px) {
+  html { font-size: 16px; }
+  .wrap { padding: 2rem 1.05rem 3.5rem; }
+  h1 { font-size: 1.55rem; }
+}
